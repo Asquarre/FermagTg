@@ -14,7 +14,11 @@ const port = process.env.PORT || 3000;
 app.use(
   cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://localhost:3001', 'http://localhost:3002']; // Add allowed origins
+      const allowedOrigins = [
+        'http://localhost:3001',
+        'http://localhost:3002',
+        'https://fermag-tg.vercel.app', // Add your deployed frontend URL here
+      ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
