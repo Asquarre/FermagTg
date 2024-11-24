@@ -104,7 +104,7 @@ const App = () => {
 
   const handleOrderSubmit = (orderDetails) => {
     axios
-      .post('https://fermag-tg.vercel.app/submit-order', {
+      .post('http://localhost:3000/submit-order', {
         address: orderDetails.address,
         phone: orderDetails.phone,
         items: cart,
@@ -144,6 +144,7 @@ const App = () => {
             onAdd={handleAddToCart}
             onRemove={handleRemoveFromCart}
             onBack={() => setView('categories')}
+            onCheckout={handleCheckout} // Pass handleCheckout here
             cart={cart}
           />
           <div className="shopping-cart">
@@ -169,6 +170,7 @@ const App = () => {
               </div>
             )}
           </div>
+          {/* The Checkout button has been moved to ProductList.js */}
         </>
       )}
       {view === 'checkout' && (
