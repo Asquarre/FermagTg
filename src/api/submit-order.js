@@ -1,9 +1,7 @@
 // api/submit-order.js
 
 const { google } = require('googleapis');
-const dotenv = require('dotenv');
 
-dotenv.config();
 
 // Since we can't read files like credentials.json in serverless functions, we'll use environment variables
 const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
