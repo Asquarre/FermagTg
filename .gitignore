@@ -24,5 +24,6 @@ yarn-error.log*
 credentials.json
 backend/credentials.json
 
-.env
-credentials.json
+/backend/.env
+/backend/credentials.json
+node_modules/
