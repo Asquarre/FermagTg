@@ -1,0 +1,423 @@
+/* src/styles.css */
+
+* {
+  font-weight: bold;
+}
+
+
+body {
+  font-family: 'Sf Pro Rounded', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url('/background.png'); /* Add background image */
+  background-size: cover; /* Make sure the background image covers the entire screen */
+  background-position: center; /* Center the background image */
+  background-attachment: fixed; /* Keep the background fixed while scrolling */
+  color: #1d1c1c; /* Text color */
+  text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.);
+  
+}
+  
+  h1, h2, h3 {
+    color: #000000;
+    text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.); /* Add shadow to text */
+
+  }
+  
+  button {
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+  
+  input, textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+
+  /* Styling for the + and - buttons */
+.quantity-button {
+  background-color: #44AF69; /* Blue color for the buttons */
+  color: #ffffff; /* White text */
+  border: none; /* Remove borders */
+  border-radius: 50%; /* Make the buttons circular */
+  width: 40px; /* Set fixed width */
+  height: 40px; /* Set fixed height */
+  font-size: 1.2rem; /* Increase font size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* Show pointer on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.quantity-button:hover {
+  background-color: #FCAB10; /* Darker blue on hover */
+  transform: scale(1.1); /* Slight zoom-in effect */
+}
+
+.quantity-button:active {
+  transform: scale(0.9); /* Slight shrink on click */
+}
+
+/* Optional: Disable focus outline */
+.quantity-button:focus {
+  outline: none;
+}
+/* Styling for the category buttons */
+.category-button {
+  background-color: #FCAB10; /* Green color */
+  color: #ffffff; /* White text */
+  border: none; /* Remove borders */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 20px; /* Padding for the button */
+  font-size: 1rem; /* Font size */
+  text-transform: uppercase; /* Make text uppercase */
+  cursor: pointer; /* Pointer cursor on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+  transition: transform 0.2s ease, background-color 0.3s ease;
+
+  /* Equal button size styles */
+  width: 100%; /* Ensure buttons take full width of their container */
+  text-align: center; /* Center text inside the button */
+}
+
+/* Hover and active states */
+.category-button:hover {
+  background-color: #218838; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.category-button:active {
+  background-color: #44AF69; /* Even darker green on click */
+  transform: translateY(0); /* Reset lift on click */
+}
+
+/* Optional: Disable focus outline */
+.category-button:focus {
+  outline: none;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+header img {
+  border: none; /* Remove borders */
+  padding: 0; /* Remove padding */
+  filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 1)); /* Add drop shadow */
+  transition: transform 0.3s ease; /* Add a smooth hover animation */
+}
+
+header img:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Styling for the search button */
+.search-button {
+  background-color: #44AF69; /* Set the background color (blue) */
+  color: #ffffff; /* Set the text color (white) */
+  border: none; /* Remove the border */
+  border-radius: 20px; /* Make the button rounded */
+  padding: 8px 16px; /* Adjust padding for a better size */
+  font-size: 1rem; /* Set font size */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #0a7005; /* Darker blue on hover */
+  transform: scale(1.1); /* Slight zoom-in effect on hover */
+}
+
+.search-button:active {
+  transform: scale(0.9); /* Slight shrink on click */
+}
+
+.checkout-button {
+  background-color: #44AF69; /* Blue background */
+  color: #ffffff; /* White text */
+  border: none; /* Remove border */
+  border-radius: 20px; /* Rounded corners */
+  padding: 10px 20px; /* Add padding for size */
+  font-size: 1rem; /* Set font size */
+  cursor: pointer; /* Change cursor to pointer */
+  text-transform: uppercase; /* Make text uppercase */
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.checkout-button:hover {
+  background-color: #1fa315; /* Darker blue on hover */
+  transform: scale(1.1); /* Slight zoom-in on hover */
+}
+
+.checkout-button:active {
+  transform: scale(0.9); /* Slight shrink on click */
+}
+
+/* Styling for the search input field */
+.search-input {
+  width: 70%; /* Default width */
+  padding: 10px; /* Padding for better spacing */
+  border: 2px solid #008748; /* Blue border */
+  border-radius: 20px; /* Rounded edges */
+  font-size: 1rem; /* Font size */
+  outline: none; /* Remove default outline */
+  margin-right: 10px; /* Add spacing between input and button */
+  transition: all 0.3s ease; /* Smooth transition for all changes */
+}
+
+.search-input:focus,
+.search-input:hover {
+  width: 75%; /* Slightly increase width */
+  padding: 12px; /* Add more padding */
+  border-color: #1d891d; /* Darker blue border on focus/hover */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5); /* Subtle glow */
+}
+
+
+/* Styling for the search button */
+.search-button {
+  background-color: #44AF69; /* Blue color */
+  color: #ffffff; /* White text */
+  border: none; /* Remove border */
+  border-radius: 20px; /* Rounded edges */
+  padding: 10px 20px; /* Add padding */
+  font-size: 1rem; /* Adjust font size */
+  cursor: pointer; /* Pointer cursor */
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #34870a; /* Darker blue on hover */
+  transform: scale(1.1); /* Slight zoom-in */
+}
+
+.search-button:active {
+  transform: scale(0.9); /* Slight shrink on click */
+}
+
+/* Styling for the Go Back button */
+.go-back-button {
+  background-color: #44AF69; /* Blue background */
+  color: #ffffff; /* White text */
+  border: none; /* Remove border */
+  border-radius: 20px; /* Rounded edges */
+  padding: 10px 20px; /* Padding for size */
+  font-size: 1rem; /* Font size */
+  cursor: pointer; /* Pointer cursor */
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  text-transform: uppercase; /* Make text uppercase */
+  display: inline-flex; /* Allow inline-flex for alignment */
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.go-back-button:hover {
+  background-color: #0bbc4c; /* Darker blue on hover */
+  transform: scale(1.05); /* Slight zoom-in on hover */
+}
+
+.go-back-button:active {
+  transform: scale(0.95); /* Slight shrink on click */
+}
+
+/* Optional: Disable focus outline */
+.go-back-button:focus {
+  outline: none;
+}
+
+/* Styling for the Back to Categories button */
+.back-to-categories-button {
+  background-color: #44AF69; /* Blue background */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 20px; /* Rounded edges */
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  text-transform: uppercase; /* Make text uppercase */
+  display: inline-flex; /* Inline-flex for alignment */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.back-to-categories-button:hover {
+  background-color: #44AF69; /* Darker blue */
+  transform: scale(1.05); /* Slight zoom-in effect */
+}
+
+.back-to-categories-button:active {
+  transform: scale(0.95); /* Slight shrink on click */
+}
+
+/* Optional: Disable focus outline */
+.back-to-categories-button:focus {
+  outline: none;
+}
+
+/* Styling for the Submit Order button */
+.submit-order-button {
+  background-color: #44AF69; /* Green background */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 20px; /* Rounded edges */
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  text-transform: uppercase; /* Make text uppercase */
+  display: inline-flex; /* Inline-flex for alignment */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  width: 100%; /* Make button take full width of the container */
+  max-width: 300px; /* Limit the maximum width */
+  margin: 20px auto; /* Center button */
+}
+
+.submit-order-button:hover {
+  background-color: #218838; /* Darker green */
+  transform: scale(1.05); /* Slight zoom-in effect */
+}
+
+.submit-order-button:active {
+  transform: scale(0.95); /* Slight shrink on click */
+}
+
+/* Optional: Disable focus outline */
+.submit-order-button:focus {
+  outline: none;
+}
+
+.view-wrapper {
+  position: relative; /* Needed for absolute positioning of child views */
+  width: 100%; /* Full width */
+  min-height: 100px; /* Adjust to your content */
+  overflow: hidden; /* Prevent content overflow during transitions */
+}
+
+/* Common styles for all transitions */
+.menu-enter,
+.menu-exit {
+  position: absolute; /* Ensure views stack on top of each other */
+  width: 100%; /* Full width */
+}
+
+/* Slide in from the right */
+.menu-enter {
+  transform: translateX(100%); /* Start off-screen to the right */
+  opacity: 0;
+}
+.menu-enter-active {
+  transform: translateX(0); /* Slide into view */
+  opacity: 1;
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+}
+
+/* Slide out to the left */
+.menu-exit {
+  transform: translateX(0); /* Start in place */
+  opacity: 1;
+}
+.menu-exit-active {
+  transform: translateX(-100%); /* Slide off-screen to the left */
+  opacity: 0;
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+}
+
+.product-item {
+  border: none; /* Remove border */
+  background-color: #f4e3c3; /* Light beige background */
+  border-radius: 10px; /* Add rounded corners */
+  padding: 15px; /* Add padding */
+  margin: 10px 0; /* Spacing between products */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-item:hover {
+  transform: scale(1.00); /* Slight zoom on hover */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.25); /* Increase shadow on hover */
+}
+
+/* Styling for the shopping cart container */
+.shopping-cart {
+  background-color: #ffffff; /* White background for readability */
+  border-radius: 10px; /* Rounded corners */
+  padding: 15px; /* Inner padding for spacing */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for better separation */
+  margin-top: 15px; /* Space from the content above */
+}
+
+.shopping-cart h3, .shopping-cart p {
+  color: #333; /* Darker text for contrast */
+  text-shadow: none; /* Remove unnecessary shadows inside the box */
+}
+
+.shopping-cart ul {
+  list-style-type: none; /* Remove default bullet points */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+.shopping-cart li {
+  margin-bottom: 10px; /* Add spacing between cart items */
+}
+
+.shopping-cart .total {
+  font-size: 1.2rem; /* Larger font for total */
+  font-weight: bold;
+  margin-top: 15px; /* Space above total */
+  text-align: right; /* Align total to the right */
+}
+
+/* Checkout Order Summary Styling */
+.checkout-order-summary {
+  background-color: #ffffff; /* White background */
+  padding: 15px; /* Add padding for spacing */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  margin-bottom: 20px; /* Spacing below the box */
+  color: #333; /* Text color */
+}
+
+.checkout-order-summary ul {
+  list-style: none; /* Remove default list styling */
+  padding: 0; /* Remove padding */
+}
+
+.checkout-order-summary li {
+  margin-bottom: 10px; /* Add spacing between list items */
+}
+
+/* Input Box Styling */
+.input-box {
+  width: 100%; /* Full width */
+  padding: 10px; /* Add padding for spacing */
+  border: 1px solid #ccc; /* Light border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 1rem; /* Adjust font size */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.input-box:focus {
+  outline: none; /* Remove default focus outline */
+  border-color: #44AF69; /* Green border on focus */
+  box-shadow: 0 0 8px rgba(68, 175, 105, 0.5); /* Glow effect on focus */
+}
