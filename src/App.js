@@ -105,6 +105,7 @@ const App = () => {
   const handleOrderSubmit = (orderDetails) => {
     axios
       .post('/api/submit-order', {
+        user_id: orderDetails.user_id || '', // Include user_id
         address: orderDetails.address,
         phone: orderDetails.phone,
         items: cart,
@@ -119,7 +120,6 @@ const App = () => {
         alert('There was an error submitting your order.');
       });
   };
-
   return (
     <div style={{ padding: '20px' }}>
       <header style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

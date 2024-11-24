@@ -23,13 +23,15 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { address, phone, items, timestamp } = req.body;
+    const { user_id, address, phone, items, timestamp } = req.body;
 
-    const orderData = [[timestamp, address, phone, JSON.stringify(items)]];
+    const orderData = [
+      [timestamp, user_id || '', address, phone, JSON.stringify(items)],
+    ];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: 'Orders!A:D',
+      range: 'Orders!A:E', // Adjusted range to include column E
       valueInputOption: 'RAW',
       resource: { values: orderData },
     });
