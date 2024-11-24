@@ -124,7 +124,7 @@ const App = () => {
     <div style={{ padding: '20px' }}>
       <header style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <img
-          src="/logo.png"
+          src="/Logo.png"
           alt="Grocery Store Logo"
           style={{ width: '150px', height: '150px' }}
         />
