@@ -15,7 +15,7 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
         style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}
       >
         <button className="back-to-categories-button" onClick={onBack}>
-          &larr; Back to Categories
+          &larr; Back 
         </button>
         <button className="checkout-button" onClick={onCheckout}>
           Checkout
