@@ -104,7 +104,7 @@ const App = () => {
 
   const handleOrderSubmit = (orderDetails) => {
     axios
-      .post('https://fermag-tg.vercel.app/submit-order', {
+      .post('https://fermag-tg.vercel.app', {
         address: orderDetails.address,
         phone: orderDetails.phone,
         items: cart,
