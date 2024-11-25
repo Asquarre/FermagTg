@@ -39,9 +39,9 @@ const App = () => {
       { id: 403, name: 'Croissant', price: 2.0 },
     ],
     Фермаг: [
-      { id: 401, name: 'Блин', price: 1.8 },
-      { id: 402, name: 'не блин', price: 1.2 },
-      { id: 403, name: '🥩', price: 2.0 },
+      { id: 501, name: 'Блин', price: 1.8 },
+      { id: 502, name: 'не блин', price: 1.2 },
+      { id: 503, name: '🥩', price: 2.0 },
     ],
   });
 
