@@ -4,9 +4,41 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
 
+  // Added handlePhoneChange function
+  const handlePhoneChange = (e) => {
+    const input = e.target.value.replace(/\D/g, ''); // Remove all non-digit characters
+
+    let formattedPhone = '';
+
+    if (input.startsWith('8')) {
+      formattedPhone = '+8';
+    } else {
+      formattedPhone = '+8';
+      input = '8' + input;
+    }
+
+    if (input.length > 1) {
+      formattedPhone += '(' + input.slice(1, 4);
+    }
+    if (input.length >= 4) {
+      formattedPhone += ')-' + input.slice(4, 7);
+    }
+    if (input.length >= 7) {
+      formattedPhone += '-' + input.slice(7, 11);
+    }
+
+    setPhone(formattedPhone);
+  };
+
   const handleSubmit = () => {
     if (!address || !phone) {
       alert('Please fill in all fields.');
+      return;
+    }
+
+    // Added validation to ensure phone number is complete
+    if (phone.length < 15) {
+      alert('Please enter a complete phone number.');
       return;
     }
 
@@ -59,7 +91,7 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
         <input
           type="text"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={handlePhoneChange}
           placeholder="Enter your phone number"
           className="input-box"
         />
