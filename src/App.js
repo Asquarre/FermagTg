@@ -14,7 +14,7 @@ const App = () => {
     { id: 2, name: 'Vegetables' },
     { id: 3, name: 'Dairy' },
     { id: 4, name: 'Bakery' },
-    { id: 5, name: 'Фермаг🍎' },
+    { id: 5, name: 'Фермаг' },
   ]);
 
   const [allProducts] = useState({
