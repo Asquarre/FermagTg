@@ -52,40 +52,42 @@ const App = () => {
     setView('products');
   };
 
-  const handleAddToCart = (productId) => {
+  const handleAddToCart = (productId, quantity = 1) => {
     const product = products.find((p) => p.id === productId);
     const existingItem = cart.find((item) => item.id === productId);
-
+  
     if (existingItem) {
       setCart(
         cart.map((item) =>
           item.id === productId
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + quantity }
             : item
         )
       );
     } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
+      setCart([...cart, { ...product, quantity }]);
     }
   };
+  
 
-  const handleRemoveFromCart = (productId) => {
+  const handleRemoveFromCart = (productId, quantity = 1) => {
     const existingItem = cart.find((item) => item.id === productId);
-
+  
     if (existingItem) {
-      if (existingItem.quantity === 1) {
+      if (existingItem.quantity <= quantity) {
         setCart(cart.filter((item) => item.id !== productId));
       } else {
         setCart(
           cart.map((item) =>
             item.id === productId
-              ? { ...item, quantity: item.quantity - 1 }
+              ? { ...item, quantity: existingItem.quantity - quantity }
               : item
           )
         );
       }
     }
   };
+  
 
   const handleSearch = (term) => {
     if (term.trim() === '') {
