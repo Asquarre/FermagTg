@@ -7,20 +7,19 @@
 
 body {
   font-family: 'Sf Pro Rounded', sans-serif;
-  background-image: url('/background.png'); /* Add background image */
-  background-size: cover; /* Ensure the background image covers the entire screen */
-  background-position: center; /* Center the background image */
-  background-repeat: no-repeat; /* Prevent the background from repeating */
-  color: #1d1c1c; /* Text color */
+  margin: 0;
+  padding: 0;
+  color: #1d1c1c;
   text-shadow: 2px 2px 9px rgba(240, 240, 240, 0);
   overflow-x: hidden; /* Prevent horizontal scrolling */
+  background-color: #BDA47D; /* The 'emergency' background color */
+  background-image: url('/background.png'); /* The original background image */
+  background-repeat: no-repeat; /* Do not repeat the background image */
+  background-position: top center; /* Position the background image at the top center */
+  background-size: auto; /* Use the image's original size */
+  background-attachment: scroll; /* Ensure the background scrolls with the content */
 }
-
-
-body {
-  background-attachment: scroll;
-}
-
+  
   h1, h2, h3 {
     color: #000000;
     text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.); /* Add shadow to text */
@@ -426,9 +425,3 @@ header img:hover {
   box-shadow: 0 0 8px rgba(68, 175, 105, 0.5); /* Glow effect on focus */
 }
 
-
-@media (max-width: 768px) {
-  body {
-    background-attachment: scroll; /* Ensure background scrolls on mobile */
-  }
-}
