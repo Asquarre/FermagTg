@@ -7,17 +7,20 @@
 
 body {
   font-family: 'Sf Pro Rounded', sans-serif;
-  margin: 0;
-  padding: 0;
   background-image: url('/background.png'); /* Add background image */
-  background-size: cover; /* Make sure the background image covers the entire screen */
+  background-size: cover; /* Ensure the background image covers the entire screen */
   background-position: center; /* Center the background image */
-  background-attachment: fixed; /* Keep the background fixed while scrolling */
+  background-repeat: no-repeat; /* Prevent the background from repeating */
   color: #1d1c1c; /* Text color */
-  text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.);
-  
+  text-shadow: 2px 2px 9px rgba(240, 240, 240, 0);
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
-  
+
+
+body {
+  background-attachment: scroll;
+}
+
   h1, h2, h3 {
     color: #000000;
     text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.); /* Add shadow to text */
@@ -349,7 +352,7 @@ header img:hover {
   margin: 10px 0; /* Spacing between products */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: block;
+ 
 }
 
 .product-item:hover {
@@ -421,4 +424,11 @@ header img:hover {
   outline: none; /* Remove default focus outline */
   border-color: #44AF69; /* Green border on focus */
   box-shadow: 0 0 8px rgba(68, 175, 105, 0.5); /* Glow effect on focus */
+}
+
+
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll; /* Ensure background scrolls on mobile */
+  }
 }
