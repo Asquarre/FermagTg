@@ -1,75 +1,82 @@
+// src/components/ProductList.js
+
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Flipper, Flipped } from 'react-flip-toolkit';
 
-const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) => {
-  const getProductQuantity = (productId) => {
-    const item = cart.find((item) => item.id === productId);
-    return item ? item.quantity : 0;
-  };
-
+const ProductList = ({
+  products,
+  searchTerm,
+  onAdd,
+  onRemove,
+  onBack,
+  onCheckout,
+  cart,
+}) => {
   return (
     <div>
-      {/* Top Buttons */}
-      <div
-        className="top-buttons"
-        style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}
-      >
-        <button className="back-to-categories-button" onClick={onBack}>
-          &larr; Back 
-        </button>
-        <button className="checkout-button" onClick={onCheckout}>
-          Checkout
-        </button>
-      </div>
+      {/* Back to Categories Button */}
+      <button className="back-to-categories-button" onClick={onBack}>
+        &larr; Back to Categories
+      </button>
 
+      {/* Product List */}
       <h2>Products</h2>
-      {products.length === 0 ? (
-        <p>No products available in this category.</p>
+      {products.length > 0 ? (
+        <Flipper flipKey={products.map((product) => product.id).join(',')}>
+          <div>
+            {products.map((product) => {
+              // Highlight matching search term
+              const regex = new RegExp(`(${searchTerm})`, 'gi');
+              const productNameHighlighted = product.name.replace(
+                regex,
+                '<mark>$1</mark>'
+              );
+
+              return (
+                <Flipped key={product.id} flipId={product.id}>
+                  <div className="product-item">
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: productNameHighlighted,
+                      }}
+                    ></span>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: '10px',
+                        marginTop: '10px',
+                      }}
+                    >
+                      <button
+                        className="quantity-button"
+                        onClick={() => onAdd(product.id)}
+                      >
+                        +
+                      </button>
+                      <button
+                        className="quantity-button"
+                        onClick={() => onRemove(product.id)}
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
+                </Flipped>
+              );
+            })}
+          </div>
+        </Flipper>
       ) : (
-        <div className="row">
-          {products.map((product) => (
-            <div key={product.id} className="product-item">
-              <h3>{product.name}</h3>
-              <p>Price: ${product.price.toFixed(2)}</p>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <button className="quantity-button" onClick={() => onRemove(product.id)}>
-                  -
-                </button>
-                <span style={{ margin: '0 10px' }}>
-                  {getProductQuantity(product.id)}
-                </span>
-                <button className="quantity-button" onClick={() => onAdd(product.id)}>
-                  +
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+        <p>No products available.</p>
       )}
+
+      {/* Shopping Cart */}
+      {/* ... existing shopping cart code ... */}
+
+      {/* Button Container */}
+      {/* ... existing button container code ... */}
     </div>
   );
-};
-
-ProductList.propTypes = {
-  products: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  onAdd: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
-  onBack: PropTypes.func.isRequired,
-  onCheckout: PropTypes.func.isRequired, // Added this line
-  cart: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      quantity: PropTypes.number.isRequired,
-    })
-  ).isRequired,
 };
 
 export default ProductList;
