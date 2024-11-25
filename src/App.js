@@ -18,24 +18,24 @@ const App = () => {
 
   const [allProducts] = useState({
     Fruits: [
-      { id: 101, name: 'Apple', unit: 'kg' },
-      { id: 102, name: 'Banana', unit: 'kg' },
-      { id: 103, name: 'Orange', unit: 'kg' },
+      { id: 101, name: 'Apple', price: 1.2 },
+      { id: 102, name: 'Banana', price: 0.8 },
+      { id: 103, name: 'Orange', price: 1.0 },
     ],
     Vegetables: [
-      { id: 201, name: 'Carrot', unit: 'kg' },
-      { id: 202, name: 'Broccoli', unit: 'kg'},
-      { id: 203, name: 'Spinach', unit: 'kg'},
+      { id: 201, name: 'Carrot', price: 0.5 },
+      { id: 202, name: 'Broccoli', price: 1.0 },
+      { id: 203, name: 'Spinach', price: 0.7 },
     ],
     Dairy: [
-      { id: 301, name: 'Milk', unit: 'kg'},
-      { id: 302, name: 'Cheese', unit: 'kg' },
-      { id: 303, name: 'Yogurt', unit: 'kg'},
+      { id: 301, name: 'Milk', price: 2.5 },
+      { id: 302, name: 'Cheese', price: 3.0 },
+      { id: 303, name: 'Yogurt', price: 1.5 },
     ],
     Bakery: [
-      { id: 401, name: 'Bread', unit: 'pcs' },
-      { id: 402, name: 'Bagel', unit: 'pcs' },
-      { id: 403, name: 'Croissant', unit: 'pcs' },
+      { id: 401, name: 'Bread', price: 1.8 },
+      { id: 402, name: 'Bagel', price: 1.2 },
+      { id: 403, name: 'Croissant', price: 2.0 },
     ],
   });
 
@@ -55,62 +55,55 @@ const App = () => {
   const handleAddToCart = (productId) => {
     const product = products.find((p) => p.id === productId);
     const existingItem = cart.find((item) => item.id === productId);
-  
-    const increment = product.unit === 'kg' ? 0.1 : 1; // Adjust increment based on unit
-  
+
     if (existingItem) {
       setCart(
         cart.map((item) =>
           item.id === productId
-            ? { ...item, quantity: parseFloat((item.quantity + increment).toFixed(2)) }
+            ? { ...item, quantity: item.quantity + 1 }
             : item
         )
       );
     } else {
-      setCart([...cart, { ...product, quantity: increment }]);
+      setCart([...cart, { ...product, quantity: 1 }]);
     }
   };
-  
 
   const handleRemoveFromCart = (productId) => {
-    const product = products.find((p) => p.id === productId);
     const existingItem = cart.find((item) => item.id === productId);
-  
+
     if (existingItem) {
-      const decrement = product.unit === 'kg' ? 0.1 : 1; // Adjust decrement based on unit
-      const newQuantity = parseFloat((existingItem.quantity - decrement).toFixed(2));
-  
-      if (newQuantity <= 0) {
+      if (existingItem.quantity === 1) {
         setCart(cart.filter((item) => item.id !== productId));
       } else {
         setCart(
           cart.map((item) =>
             item.id === productId
-              ? { ...item, quantity: newQuantity }
+              ? { ...item, quantity: item.quantity - 1 }
               : item
           )
         );
       }
     }
   };
-  
-  const handleSearch = (term) => {
-    if (term.trim() === '') {
-      setFilteredProducts(products);
-      return;
-    }
-  
-    const termLower = term.toLowerCase();
-  
-    const reordered = products.slice().sort((a, b) => {
-      const aMatches = a.name.toLowerCase().includes(termLower) ? 1 : 0;
-      const bMatches = b.name.toLowerCase().includes(termLower) ? 1 : 0;
-      // Sort so that matching products come first
-      return bMatches - aMatches;
-    });
-  
-    setFilteredProducts(reordered);
-  };
+
+const handleSearch = (term) => {
+  if (term.trim() === '') {
+    setFilteredProducts(products);
+    return;
+  }
+
+  const termLower = term.toLowerCase();
+
+  const reordered = products.slice().sort((a, b) => {
+    const aMatches = a.name.toLowerCase().includes(termLower) ? 1 : 0;
+    const bMatches = b.name.toLowerCase().includes(termLower) ? 1 : 0;
+    // Sort so that matching products come first
+    return bMatches - aMatches;
+  });
+
+  setFilteredProducts(reordered);
+};
 
   const handleCheckout = () => {
     setView('checkout');
