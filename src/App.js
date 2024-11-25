@@ -92,10 +92,17 @@ const App = () => {
       setFilteredProducts(products);
       return;
     }
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(term.toLowerCase())
-    );
-    setFilteredProducts(filtered);
+  
+    const termLower = term.toLowerCase();
+  
+    const reordered = products.slice().sort((a, b) => {
+      const aMatches = a.name.toLowerCase().includes(termLower) ? 1 : 0;
+      const bMatches = b.name.toLowerCase().includes(termLower) ? 1 : 0;
+      // Sort so that matching products come first
+      return bMatches - aMatches;
+    });
+  
+    setFilteredProducts(reordered);
   };
 
   const handleCheckout = () => {
@@ -120,6 +127,7 @@ const App = () => {
         alert('There was an error submitting your order.');
       });
   };
+  
   return (
     <div style={{ padding: '20px' }}>
       <header style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
