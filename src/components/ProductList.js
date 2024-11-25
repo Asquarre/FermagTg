@@ -1,30 +1,15 @@
 // src/components/ProductList.js
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-const ProductList = ({ products, onAdd, onBack, onCheckout, cart }) => {
-  const [quantities, setQuantities] = useState({});
-
-  const handleQuantityChange = (productId, value) => {
-    setQuantities({
-      ...quantities,
-      [productId]: value,
-    });
-  };
-
-  const handleAddClick = (productId) => {
-    const quantity = parseFloat(quantities[productId]);
-    if (quantity > 0) {
-      onAdd(productId, quantity);
-      setQuantities({ ...quantities, [productId]: '' }); // Reset input
-    } else {
-      alert('Please enter a valid quantity.');
-    }
-  };
-
+const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) => {
   const getProductQuantity = (productId) => {
     const item = cart.find((item) => item.id === productId);
     return item ? item.quantity : 0;
+  };
+
+  const getStepValue = (unit) => {
+    return unit === 'kg' ? 0.1 : 1;
   };
 
   return (
@@ -55,28 +40,22 @@ const ProductList = ({ products, onAdd, onBack, onCheckout, cart }) => {
             <div key={product.id} className="product-item">
               <h3>{product.name}</h3>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <input
-                  type="number"
-                  step={product.unit === 'kg' ? '0.01' : '1'}
-                  min="0"
-                  placeholder={`Quantity in ${product.unit}`}
-                  value={quantities[product.id] || ''}
-                  onChange={(e) =>
-                    handleQuantityChange(product.id, e.target.value)
-                  }
-                  style={{ width: '150px', marginRight: '10px' }}
-                />
                 <button
                   className="quantity-button"
-                  onClick={() => handleAddClick(product.id)}
+                  onClick={() => onRemove(product.id)}
                 >
-                  Add to Cart
+                  -
+                </button>
+                <span style={{ margin: '0 10px' }}>
+                  {getProductQuantity(product.id)} {product.unit}
+                </span>
+                <button
+                  className="quantity-button"
+                  onClick={() => onAdd(product.id)}
+                >
+                  +
                 </button>
               </div>
-              {/* Display current quantity in cart */}
-              <p>
-                In Cart: {getProductQuantity(product.id)} {product.unit}
-              </p>
             </div>
           ))}
         </div>
@@ -94,14 +73,14 @@ ProductList.propTypes = {
     })
   ).isRequired,
   onAdd: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
   onBack: PropTypes.func.isRequired,
   onCheckout: PropTypes.func.isRequired,
   cart: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      unit: PropTypes.string.isRequired, // Changed from price to unit
       quantity: PropTypes.number.isRequired,
+      unit: PropTypes.string.isRequired, // Changed from price to unit
     })
   ).isRequired,
 };
