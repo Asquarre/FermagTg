@@ -38,6 +38,11 @@ const App = () => {
       { id: 402, name: 'Bagel', price: 1.2 },
       { id: 403, name: 'Croissant', price: 2.0 },
     ],
+    Фермаг: [
+      { id: 401, name: 'Блин', price: 1.8 },
+      { id: 402, name: 'не блин', price: 1.2 },
+      { id: 403, name: '🥩', price: 2.0 },
+    ],
   });
 
   const [selectedCategory, setSelectedCategory] = useState(null);
