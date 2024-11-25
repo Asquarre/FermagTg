@@ -71,10 +71,39 @@ const ProductList = ({
       )}
 
       {/* Shopping Cart */}
-      {/* ... existing shopping cart code ... */}
+      <div className="shopping-cart">
+        <h3>Shopping Cart</h3>
+        {cart.length > 0 ? (
+          <ul>
+            {cart.map((item) => (
+              <li key={item.id}>
+                {item.name} - {item.quantity} x ${item.price.toFixed(2)} = $
+                {(item.quantity * item.price).toFixed(2)}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Your cart is empty.</p>
+        )}
+        {cart.length > 0 && (
+          <div className="total">
+            Total: $
+            {cart
+              .reduce((acc, item) => acc + item.quantity * item.price, 0)
+              .toFixed(2)}
+          </div>
+        )}
+      </div>
 
       {/* Button Container */}
-      {/* ... existing button container code ... */}
+      <div className="button-container">
+        <button className="back-to-categories-button" onClick={onBack}>
+          Back to Categories
+        </button>
+        <button className="checkout-button" onClick={onCheckout}>
+          Checkout
+        </button>
+      </div>
     </div>
   );
 };
