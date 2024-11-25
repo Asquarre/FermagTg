@@ -16,10 +16,16 @@ body {
   background-image: url('/background.png'); /* The original background image */
   background-repeat: no-repeat; /* Do not repeat the background image */
   background-position: top center; /* Position the background image at the top center */
-  background-size: auto; /* Use the image's original size */
+  background-size: auto; /* Default background size */
   background-attachment: scroll; /* Ensure the background scrolls with the content */
 }
-  
+
+/* Adjust background size for larger screens */
+@media (min-width: 768px) {
+  body {
+    background-size: 100% auto; /* Scale image to full width on desktop */
+  }
+}
   h1, h2, h3 {
     color: #000000;
     text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.); /* Add shadow to text */
