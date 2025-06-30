@@ -71,7 +71,7 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
             ))}
           </ul>
         ) : (
-          <p>Your cart is empty.</p>
+          <p>Ваша корзина пуста.</p>
         )}
       </div>
 

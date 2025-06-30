@@ -380,7 +380,7 @@ const handleSearch = (term) => {
             cart={cart}
           />
           <div className="shopping-cart">
-            <h3>Shopping Cart</h3>
+            <h3>корзина</h3>
             {cart.length > 0 ? (
               <ul>
                 {cart.map((item) => (
@@ -391,7 +391,7 @@ const handleSearch = (term) => {
                 ))}
               </ul>
             ) : (
-              <p>Your cart is empty.</p>
+              <p>Ваша Корзина Пуста.</p>
             )}
             {cart.length > 0 && (
               <div className="total">
