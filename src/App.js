@@ -11,7 +11,7 @@ import axios from 'axios';
 const App = () => {
   const [categories] = useState([
 
-    { id: 5, name: 'Блины🥞' },
+    { id: 5, name: 'Блины!!!🥞' },
     { id: 6, name: 'Блюда из мяса🥩' },
     { id: 7, name: 'Блюда из птицы🍗' },
     { id: 8, name: 'Блюда из рыбы🐟' },
