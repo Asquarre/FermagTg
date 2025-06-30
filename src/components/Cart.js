@@ -9,9 +9,9 @@ const Cart = ({ cartItems }) => {
 
   return (
     <div>
-      <h2>Shopping Cart</h2>
+      <h2>Корзина</h2>
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p>Ваша корзина пуста.</p>
       ) : (
         <>
           <ul style={{ listStyleType: 'none', padding: 0 }}>
