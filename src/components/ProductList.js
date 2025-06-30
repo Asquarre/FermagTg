@@ -15,14 +15,14 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
         style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}
       >
         <button className="back-to-categories-button" onClick={onBack}>
-          &larr; Back 
+          &larr; Назад 
         </button>
         <button className="checkout-button" onClick={onCheckout}>
-          Checkout
+          Оформить Заказ
         </button>
       </div>
 
-      <h2>Products</h2>
+      <h2>Продукты</h2>
       {products.length === 0 ? (
         <p>No products available in this category.</p>
       ) : (
