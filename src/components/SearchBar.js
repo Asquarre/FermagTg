@@ -20,7 +20,7 @@ const SearchBar = ({ onSearch }) => {
         value={term}
         onChange={(e) => setTerm(e.target.value)}
         onKeyPress={handleKeyPress}
-        placeholder="Search for products..."
+        placeholder="Искать продукты..."
         className="search-input"
       />
       <button className="search-button" onClick={handleSearch}>
