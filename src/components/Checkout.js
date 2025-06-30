@@ -53,14 +53,14 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
     <div>
       {/* Back Button */}
       <button className="go-back-button" onClick={onBack}>
-        &larr; Go Back
+        &larr; Назад
       </button>
 
-      <h2>Checkout</h2>
+      <h2>Корзина</h2>
 
       {/* Order Summary in White Box */}
       <div className="checkout-order-summary">
-        <h3>Your Order:</h3>
+        <h3>Ваш Заказ:</h3>
         {cart.length > 0 ? (
           <ul>
             {cart.map((item) => (
@@ -77,29 +77,29 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
 
       {/* Address and Phone Inputs */}
       <div style={{ marginBottom: '10px' }}>
-        <label>Address:</label>
+        <label>Адрес:</label>
         <textarea
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           rows="3"
-          placeholder="Enter your address"
+          placeholder="Введите адрес доставки"
           className="input-box"
         ></textarea>
       </div>
       <div style={{ marginBottom: '20px' }}>
-        <label>Phone:</label>
+        <label>Номер:</label>
         <input
           type="text"
           value={phone}
           onChange={handlePhoneChange}
-          placeholder="Enter your phone number"
+          placeholder="Введите ваш мобильный номер"
           className="input-box"
         />
       </div>
 
       {/* Submit Order Button */}
       <button className="submit-order-button" onClick={handleSubmit}>
-        Submit Order
+        Заказать
       </button>
     </div>
   );
