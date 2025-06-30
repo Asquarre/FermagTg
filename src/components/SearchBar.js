@@ -24,7 +24,7 @@ const SearchBar = ({ onSearch }) => {
         className="search-input"
       />
       <button className="search-button" onClick={handleSearch}>
-        Search
+        Найти
       </button>
     </div>
   );
