@@ -362,7 +362,7 @@ const handleSearch = (term) => {
         />
         <h1></h1>
       </header>
-      {view === 'categories' && (
+      {view === 'категории' && (
         <Categories
           categories={categories}
           onSelectCategory={handleSelectCategory}
