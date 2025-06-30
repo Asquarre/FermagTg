@@ -395,7 +395,7 @@ const handleSearch = (term) => {
             )}
             {cart.length > 0 && (
               <div className="total">
-                Total: $
+                Сумма Заказа: $
                 {cart
                   .reduce((acc, item) => acc + item.quantity * item.price, 0)
                   .toFixed(2)}
