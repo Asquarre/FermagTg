@@ -1,59 +1,20 @@
 
-// src/components/Checkout.js
-
 import React, { useState } from 'react';
+import InputMask from 'react-input-mask';
 
 const Checkout = ({ onSubmit, cart, onBack }) => {
   const [address, setAddress] = useState('');
-  const [rawPhone, setRawPhone] = useState('');
-  const [editingPhone, setEditingPhone] = useState(false);
-
-  // Only digits, up to 11 total (leading 8 + up to 10 more)
-  const handlePhoneChange = (e) => {
-    const digits = e.target.value.replace(/\D/g, '').slice(0, 11);
-    setRawPhone(digits);
-  };
-
-  const handlePhoneFocus = () => {
-    setEditingPhone(true);
-  };
-  const handlePhoneBlur = () => {
-    setEditingPhone(false);
-  };
-
-  // Format on blur
-  const formatPhoneNumber = (digits) => {
-    if (!digits) return '';
-    let d = digits;
-    // Ensure leading 8
-    if (!d.startsWith('8')) d = '8' + d;
-    // remove any extras
-    const core = d.slice(1); // drop the leading 8 for grouping
-    let formatted = '+8';
-    if (core.length > 0) {
-      formatted += '(' + core.slice(0, 3);
-    }
-    if (core.length >= 3) {
-      formatted += ')-' + core.slice(3, 6);
-    }
-    if (core.length >= 6) {
-      formatted += '-' + core.slice(6, 10);
-    }
-    return formatted;
-  };
-
-  const displayedPhone = editingPhone
-    ? rawPhone
-    : formatPhoneNumber(rawPhone);
+  const [phone, setPhone] = useState('');
 
   const handleSubmit = () => {
-    if (!address.trim() || rawPhone.length < 11) {
+    const digits = phone.replace(/\D/g, '');
+    if (!address.trim() || digits.length < 11) {
       alert('Пожалуйста, введите адрес и полный номер телефона.');
       return;
     }
     onSubmit({
       address: address.trim(),
-      phone: formatPhoneNumber(rawPhone),
+      phone,
       timestamp: new Date().toISOString(),
     });
   };
@@ -94,15 +55,20 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
 
       <div style={{ margin: '10px 0' }}>
         <label>Номер:</label>
-        <input
-          className="input-box"
-          type="text"
-          placeholder="+8(XXX)-XXX-XXXX"
-          value={displayedPhone}
-          onChange={handlePhoneChange}
-          onFocus={handlePhoneFocus}
-          onBlur={handlePhoneBlur}
-        />
+        <InputMask
+          mask="+8(999)-999-9999"
+          value={phone}
+          onChange={e => setPhone(e.target.value)}
+          placeholder="+8(___)-___-____"
+        >
+          {inputProps => (
+            <input
+              {...inputProps}
+              type="text"
+              className="input-box"
+            />
+          )}
+        </InputMask>
       </div>
 
       <button className="submit-order-button" onClick={handleSubmit}>
