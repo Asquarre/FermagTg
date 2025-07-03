@@ -1,81 +1,75 @@
 
-import React, { useState, useRef } from 'react';
+// src/components/Checkout.js
+
+import React, { useState } from 'react';
 
 const Checkout = ({ onSubmit, cart, onBack }) => {
   const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  // Keep track of the *raw* digits from the last change
-  const lastRaw = useRef('');
+  const [rawPhone, setRawPhone] = useState('');
+  const [editingPhone, setEditingPhone] = useState(false);
 
-  // Format a string of digits into "+8(XXX)-XXX-XXXX"
+  // Only digits, up to 11 total (leading 8 + up to 10 more)
+  const handlePhoneChange = (e) => {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, 11);
+    setRawPhone(digits);
+  };
+
+  const handlePhoneFocus = () => {
+    setEditingPhone(true);
+  };
+  const handlePhoneBlur = () => {
+    setEditingPhone(false);
+  };
+
+  // Format on blur
   const formatPhoneNumber = (digits) => {
+    if (!digits) return '';
+    let d = digits;
+    // Ensure leading 8
+    if (!d.startsWith('8')) d = '8' + d;
+    // remove any extras
+    const core = d.slice(1); // drop the leading 8 for grouping
     let formatted = '+8';
-    // digits already stripped of non-digits, but drop any leading 8 we added
-    let d = digits.startsWith('8') ? digits.slice(1) : digits;
-
-    if (d.length > 0) {
-      formatted += '(' + d.slice(0, 3);
+    if (core.length > 0) {
+      formatted += '(' + core.slice(0, 3);
     }
-    if (d.length >= 3) {
-      formatted += ')-' + d.slice(3, 6);
+    if (core.length >= 3) {
+      formatted += ')-' + core.slice(3, 6);
     }
-    if (d.length >= 6) {
-      formatted += '-' + d.slice(6, 10);
+    if (core.length >= 6) {
+      formatted += '-' + core.slice(6, 10);
     }
     return formatted;
   };
 
-  const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    // strip out everything but digits
-    const raw = value.replace(/\D/g, '');
-
-    // if the new raw is shorter than before, user is deleting:
-    if (raw.length < lastRaw.current.length) {
-      // just let them delete through the formatted string
-      setPhone(value);
-      lastRaw.current = raw;
-    } else {
-      // user is adding digits: apply formatting
-      const formatted = formatPhoneNumber(raw);
-      setPhone(formatted);
-      lastRaw.current = raw;
-    }
-  };
+  const displayedPhone = editingPhone
+    ? rawPhone
+    : formatPhoneNumber(rawPhone);
 
   const handleSubmit = () => {
-    if (!address || !phone) {
-      alert('Please fill in all fields.');
-      return;
-    }
-    // require at least 11 digits (8 + 10 more) before allowing submit
-    const digitCount = phone.replace(/\D/g, '').length;
-    if (digitCount < 11) {
-      alert('Please enter a complete phone number.');
+    if (!address.trim() || rawPhone.length < 11) {
+      alert('Пожалуйста, введите адрес и полный номер телефона.');
       return;
     }
     onSubmit({
-      address,
-      phone,
+      address: address.trim(),
+      phone: formatPhoneNumber(rawPhone),
       timestamp: new Date().toISOString(),
     });
   };
 
   return (
     <div>
-      {/* Back Button */}
       <button className="go-back-button" onClick={onBack}>
         &larr; Назад
       </button>
 
       <h2>Корзина</h2>
-
-      {/* Order Summary */}
       <div className="checkout-order-summary">
-        <h3>Ваш Заказ:</h3>
-        {cart.length > 0 ? (
+        <h3>Ваш заказ:</h3>
+        {cart.length ? (
           <ul>
-            {cart.map((item) => (
+            {cart.map(item => (
               <li key={item.id}>
                 {item.name} — {item.quantity} × ${item.price.toFixed(2)} = $
                 {(item.quantity * item.price).toFixed(2)}
@@ -87,31 +81,30 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
         )}
       </div>
 
-      {/* Address Input */}
-      <div style={{ marginBottom: '10px' }}>
+      <div style={{ margin: '10px 0' }}>
         <label>Адрес:</label>
         <textarea
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          className="input-box"
           rows="3"
           placeholder="Введите адрес доставки"
-          className="input-box"
+          value={address}
+          onChange={e => setAddress(e.target.value)}
         />
       </div>
 
-      {/* Phone Input */}
-      <div style={{ marginBottom: '20px' }}>
+      <div style={{ margin: '10px 0' }}>
         <label>Номер:</label>
         <input
-          type="text"
-          value={phone}
-          onChange={handlePhoneChange}
-          placeholder="+8(XXX)-XXX-XXXX"
           className="input-box"
+          type="text"
+          placeholder="+8(XXX)-XXX-XXXX"
+          value={displayedPhone}
+          onChange={handlePhoneChange}
+          onFocus={handlePhoneFocus}
+          onBlur={handlePhoneBlur}
         />
       </div>
 
-      {/* Submit Order Button */}
       <button className="submit-order-button" onClick={handleSubmit}>
         Заказать
       </button>
