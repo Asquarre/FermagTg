@@ -1,33 +1,46 @@
-import React, { useState } from 'react';
+
+import React, { useState, useRef } from 'react';
 
 const Checkout = ({ onSubmit, cart, onBack }) => {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  // Keep track of the *raw* digits from the last change
+  const lastRaw = useRef('');
 
-  // Added handlePhoneChange function
+  // Format a string of digits into "+8(XXX)-XXX-XXXX"
+  const formatPhoneNumber = (digits) => {
+    let formatted = '+8';
+    // digits already stripped of non-digits, but drop any leading 8 we added
+    let d = digits.startsWith('8') ? digits.slice(1) : digits;
+
+    if (d.length > 0) {
+      formatted += '(' + d.slice(0, 3);
+    }
+    if (d.length >= 3) {
+      formatted += ')-' + d.slice(3, 6);
+    }
+    if (d.length >= 6) {
+      formatted += '-' + d.slice(6, 10);
+    }
+    return formatted;
+  };
+
   const handlePhoneChange = (e) => {
-    const input = e.target.value.replace(/\D/g, ''); // Remove all non-digit characters
+    const value = e.target.value;
+    // strip out everything but digits
+    const raw = value.replace(/\D/g, '');
 
-    let formattedPhone = '';
-
-    if (input.startsWith('8')) {
-      formattedPhone = '+8';
+    // if the new raw is shorter than before, user is deleting:
+    if (raw.length < lastRaw.current.length) {
+      // just let them delete through the formatted string
+      setPhone(value);
+      lastRaw.current = raw;
     } else {
-      formattedPhone = '+8';
-      input = '8' + input;
+      // user is adding digits: apply formatting
+      const formatted = formatPhoneNumber(raw);
+      setPhone(formatted);
+      lastRaw.current = raw;
     }
-
-    if (input.length > 1) {
-      formattedPhone += '(' + input.slice(1, 4);
-    }
-    if (input.length >= 4) {
-      formattedPhone += ')-' + input.slice(4, 7);
-    }
-    if (input.length >= 7) {
-      formattedPhone += '-' + input.slice(7, 11);
-    }
-
-    setPhone(formattedPhone);
   };
 
   const handleSubmit = () => {
@@ -35,13 +48,12 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
       alert('Please fill in all fields.');
       return;
     }
-
-    // Added validation to ensure phone number is complete
-    if (phone.length < 15) {
+    // require at least 11 digits (8 + 10 more) before allowing submit
+    const digitCount = phone.replace(/\D/g, '').length;
+    if (digitCount < 11) {
       alert('Please enter a complete phone number.');
       return;
     }
-
     onSubmit({
       address,
       phone,
@@ -58,14 +70,14 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
 
       <h2>Корзина</h2>
 
-      {/* Order Summary in White Box */}
+      {/* Order Summary */}
       <div className="checkout-order-summary">
         <h3>Ваш Заказ:</h3>
         {cart.length > 0 ? (
           <ul>
             {cart.map((item) => (
               <li key={item.id}>
-                {item.name} - {item.quantity} x ${item.price.toFixed(2)} = $
+                {item.name} — {item.quantity} × ${item.price.toFixed(2)} = $
                 {(item.quantity * item.price).toFixed(2)}
               </li>
             ))}
@@ -75,7 +87,7 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
         )}
       </div>
 
-      {/* Address and Phone Inputs */}
+      {/* Address Input */}
       <div style={{ marginBottom: '10px' }}>
         <label>Адрес:</label>
         <textarea
@@ -84,15 +96,17 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
           rows="3"
           placeholder="Введите адрес доставки"
           className="input-box"
-        ></textarea>
+        />
       </div>
+
+      {/* Phone Input */}
       <div style={{ marginBottom: '20px' }}>
         <label>Номер:</label>
         <input
           type="text"
           value={phone}
           onChange={handlePhoneChange}
-          placeholder="Введите ваш мобильный номер"
+          placeholder="+8(XXX)-XXX-XXXX"
           className="input-box"
         />
       </div>
