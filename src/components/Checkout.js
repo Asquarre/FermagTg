@@ -1,3 +1,4 @@
+// src/components/Checkout.js
 
 import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
@@ -8,8 +9,8 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
 
   const handleSubmit = () => {
     const digits = phone.replace(/\D/g, '');
-    if (!address.trim() || digits.length < 11) {
-      alert('Пожалуйста, введите адрес и полный номер телефона.');
+    if (!address.trim() || !(digits.startsWith('7') || digits.startsWith('8')) || digits.length < 11) {
+      alert('Пожалуйста, введите адрес и полный номер телефона, начинающийся с +7 или +8.');
       return;
     }
     onSubmit({
@@ -56,10 +57,12 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
       <div style={{ margin: '10px 0' }}>
         <label>Номер:</label>
         <InputMask
-          mask="+8(999)-999-9999"
+          // Support both +7(...)-...-.... and +8(...)-...-....
+          mask={['+7(999)-999-9999', '+8(999)-999-9999']}
+          maskChar={null}
           value={phone}
           onChange={e => setPhone(e.target.value)}
-          placeholder="+8(___)-___-____"
+          placeholder="+7(___)-___-____"
         >
           {inputProps => (
             <input
