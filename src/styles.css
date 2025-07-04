@@ -7,6 +7,10 @@
 html {
   background-color: #BDA47D;
   height: 100%;
+  background-image: url('/background.png');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
 }
 
 

@@ -343,12 +343,12 @@ const handleSearch = (term) => {
         timestamp: orderDetails.timestamp,
       })
       .then(() => {
-        alert('Order submitted successfully!');
+        alert('Мы приняли ваш заказ!');
         setCart([]);
         setView('categories');
       })
       .catch(() => {
-        alert('There was an error submitting your order.');
+        alert('Ошибка!');
       });
   };
   
