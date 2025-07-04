@@ -4,6 +4,11 @@
   font-weight: bold;
 }
 
+html {
+  background-color: #BDA47D;
+  height: 100%;
+}
+
 
 body {
   font-family: 'Sf Pro Rounded', sans-serif;
@@ -16,8 +21,9 @@ body {
   background-image: url('/background.png'); /* The original background image */
   background-repeat: no-repeat; /* Do not repeat the background image */
   background-position: top center; /* Position the background image at the top center */
-  background-size: auto; /* Default background size */
+  background-size: cover;
   background-attachment: scroll; /* Ensure the background scrolls with the content */
+  min-height: 100vh;
 }
 
 /* Adjust background size for larger screens */
