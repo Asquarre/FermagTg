@@ -4,6 +4,10 @@
   font-weight: bold;
 }
 
+html {
+  background-color: #BDA47D;
+  height: 100%;
+}
 
 body {
   font-family: 'Sf Pro Rounded', sans-serif;
