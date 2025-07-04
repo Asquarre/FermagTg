@@ -4,15 +4,6 @@
   font-weight: bold;
 }
 
-html {
-  background-color: #BDA47D;
-  height: 100%;
-  background-image: url('/background.png');
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: cover;
-}
-
 
 body {
   font-family: 'Sf Pro Rounded', sans-serif;
@@ -25,15 +16,8 @@ body {
   background-image: url('/background.png'); /* The original background image */
   background-repeat: no-repeat; /* Do not repeat the background image */
   background-position: top center; /* Position the background image at the top center */
-  background-size: cover;
+  background-size: auto; /* Default background size */
   background-attachment: scroll; /* Ensure the background scrolls with the content */
-  min-height: 100vh;
-}
-
-@supports (height: 100dvh) {
-  body {
-    min-height: 100dvh;
-  }
 }
 
 /* Adjust background size for larger screens */
