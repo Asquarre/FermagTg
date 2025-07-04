@@ -26,6 +26,12 @@ body {
   min-height: 100vh;
 }
 
+@supports (height: 100dvh) {
+  body {
+    min-height: 100dvh;
+  }
+}
+
 /* Adjust background size for larger screens */
 @media (min-width: 768px) {
   body {
