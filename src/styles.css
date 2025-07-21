@@ -34,7 +34,11 @@ body {
     color: #000000;
     text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.); /* Add shadow to text */
 
-  }
+  }.categories-heading {
+  font-family: 'Poppins', sans-serif;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
   
   button {
     transition: background-color 0.3s ease;
@@ -93,7 +97,7 @@ body {
   background-color: #FCAB10; /* Green color */
   color: #ffffff; /* White text */
   border: none; /* Remove borders */
-  border-radius: 8px; /* Rounded corners */
+  border-radius: 10px; /* Rounded corners */
   padding: 20px 40px; /* Padding for the button */
   font-size: 1.5rem; /* Font size */
   text-transform: uppercase; /* Make text uppercase */
