@@ -94,8 +94,8 @@ body {
   color: #ffffff; /* White text */
   border: none; /* Remove borders */
   border-radius: 8px; /* Rounded corners */
-  padding: 10px 20px; /* Padding for the button */
-  font-size: 1rem; /* Font size */
+  padding: 15px 30px; /* Padding for the button */
+  font-size: 1.2rem; /* Font size */
   text-transform: uppercase; /* Make text uppercase */
   cursor: pointer; /* Pointer cursor on hover */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
@@ -103,6 +103,7 @@ body {
 
   /* Equal button size styles */
   width: 100%; /* Ensure buttons take full width of their container */
+  max-width: 400px;
   text-align: center; /* Center text inside the button */
 }
 
