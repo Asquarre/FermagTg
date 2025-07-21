@@ -17,12 +17,12 @@ const Cart = ({ cartItems }) => {
           <ul style={{ listStyleType: 'none', padding: 0 }}>
             {cartItems.map((item) => (
               <li key={item.id} style={{ marginBottom: '10px' }}>
-                {item.name} - {item.quantity} x ${item.price.toFixed(2)} = $
+                {item.name} - {item.quantity} x ₸{item.price.toFixed(2)} = ₸
                 {(item.price * item.quantity).toFixed(2)}
               </li>
             ))}
           </ul>
-          <h3>Total: ${total.toFixed(2)}</h3>
+          <h3>Total: ₸{total.toFixed(2)}</h3>
         </>
       )}
     </div>

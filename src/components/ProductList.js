@@ -30,7 +30,7 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
           {products.map((product) => (
             <div key={product.id} className="product-item">
               <h3>{product.name}</h3>
-              <p>Цена: ${product.price.toFixed(2)}</p>
+              <p>Цена: ₸{product.price.toFixed(2)}</p>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <button className="quantity-button" onClick={() => onRemove(product.id)}>
                   -

@@ -277,7 +277,7 @@ const handleSearch = (term) => {
               <ul>
                 {cart.map((item) => (
                   <li key={item.id}>
-                    {item.name} - {item.quantity} x ${item.price.toFixed(2)} = $
+                    {item.name} - {item.quantity} x ₸{item.price.toFixed(2)} = ₸
                     {(item.quantity * item.price).toFixed(2)}
                   </li>
                 ))}
@@ -287,7 +287,7 @@ const handleSearch = (term) => {
             )}
             {cart.length > 0 && (
               <div className="total">
-                Сумма Заказа: $
+                Сумма Заказа: ₸
                 {cart
                   .reduce((acc, item) => acc + item.quantity * item.price, 0)
                   .toFixed(2)}

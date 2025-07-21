@@ -32,7 +32,7 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
           <ul>
             {cart.map(item => (
               <li key={item.id}>
-                {item.name} — {item.quantity} × ${item.price.toFixed(2)} = $
+                {item.name} — {item.quantity} × ₸{item.price.toFixed(2)} = ₸
                 {(item.quantity * item.price).toFixed(2)}
               </li>
             ))}
