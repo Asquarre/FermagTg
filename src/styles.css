@@ -38,6 +38,7 @@ body {
   font-family: 'Sf Pro Rounded', sans-serif;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
 }
   
   button {
