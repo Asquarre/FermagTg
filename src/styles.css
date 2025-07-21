@@ -8,9 +8,15 @@ html {
   background-color: #BDA47D;
   height: 100%;
 }
+@font-face {
+  font-family: 'SF Pro Rounded';
+  src: local('SF Pro Rounded'), local('SFProRounded-Regular');
+  font-style: normal;
+  font-weight: normal;
+}
 
 body {
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: 'SF Pro Rounded', sans-serif;
   margin: 0;
   padding: 0;
   color: #1d1c1c;
@@ -35,7 +41,7 @@ body {
     text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.); /* Add shadow to text */
 
   }.categories-heading {
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: 'SF Pro Rounded', sans-serif;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
