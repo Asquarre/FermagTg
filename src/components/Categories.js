@@ -3,7 +3,7 @@ import React from 'react';
 const Categories = ({ categories, onSelectCategory }) => {
   return (
     <div>
-      <h2>Категории</h2>
+      <h2 className="categories-heading">КАТЕГОРИИ</h2>
       <ul
         style={{
           listStyleType: 'none',
