@@ -22,7 +22,7 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
         </button>
       </div>
 
-      <h2>Продукты</h2>
+      <h2 className="products-heading">Продукты</h2>
       {products.length === 0 ? (
         <p>No products available in this category.</p>
       ) : (
