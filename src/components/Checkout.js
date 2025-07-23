@@ -43,7 +43,7 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
       </div>
 
       <div style={{ margin: '10px 0' }}>
-        <label>Адрес:</label>
+        <label className="checkout-label">Адрес:</label>
         <textarea
           className="input-box"
           rows="3"
@@ -54,7 +54,7 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
       </div>
 
       <div style={{ margin: '10px 0' }}>
-        <label>Номер:</label>
+        <label className="checkout-label">Номер:</label>
         <InputMask
           mask="+8(999)-999-9999"
           value={phone}
