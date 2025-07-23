@@ -475,7 +475,7 @@ header img:hover {
 /* Fade-in animation for category items */
 .fade-in {
   opacity: 0;
-  animation: fadeIn 0.5s forwards;
+  animation: fadeIn 0.8s forwards;
 }
 
 @keyframes fadeIn {
