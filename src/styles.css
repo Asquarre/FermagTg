@@ -40,7 +40,7 @@ body {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   font-weight: bold;
 }
-.Products-heading{
+.products-heading{
   font-family: 'Sf Pro Rounded', sans-serif;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -51,7 +51,7 @@ body {
   color: #ffffff;
    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.85);
   font-weight: bold;
-  margin: 15px 0;
+  margin: 12px 0;
 }
 
 .checkout-label {
