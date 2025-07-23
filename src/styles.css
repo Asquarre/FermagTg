@@ -104,8 +104,8 @@ body {
   background-color: #FCAB10; /* Green color */
   color: #ffffff; /* White text */
   border: none; /* Remove borders */
-  border-radius: 3px; /* Rounded corners */
-  padding: 25px 50px; /* Padding for the button */
+  border-radius: 15px; /* Rounded corners */
+  padding: 23px 46px; /* Padding for the button */
   font-size: 1.5rem; /* Font size */
   text-transform: uppercase; /* Make text uppercase */
   cursor: pointer; /* Pointer cursor on hover */
