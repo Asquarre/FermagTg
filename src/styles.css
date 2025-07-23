@@ -49,15 +49,16 @@ body {
 .checkout-heading {
   font-family: 'Sf Pro Rounded', sans-serif;
   color: #ffffff;
-   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
   font-weight: bold;
 }
 
 .checkout-label {
   font-family: 'Sf Pro Rounded', sans-serif;
   color: #ffffff;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
   font-weight: bold;
+  font-size: 130%;
 }
   
   button {
