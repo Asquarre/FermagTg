@@ -8,6 +8,10 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
+    if (cart.length === 0) {
+      alert('Ваша корзина пуста.');
+      return;
+    }
     const digits = phone.replace(/\D/g, '');
     if (!address.trim() || digits.length < 11) {
       alert('Пожалуйста, введите адрес и полный номер телефона.');

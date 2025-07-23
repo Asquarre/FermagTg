@@ -24,7 +24,10 @@ module.exports = async (req, res) => {
 
   try {
     const { user_id, address, phone, items, timestamp } = req.body;
-
+    if (!items || items.length === 0) {
+      res.status(400).json({ error: 'Empty order' });
+      return;
+    }
     const orderData = [
       [timestamp, user_id || '', address, phone, JSON.stringify(items)],
     ];

@@ -216,6 +216,10 @@ const handleSearch = (term) => {
 };
 
   const handleCheckout = () => {
+    if (cart.length === 0) {
+      alert('Ваша корзина пуста.');
+      return;
+    }
     setView('checkout');
   };
 
