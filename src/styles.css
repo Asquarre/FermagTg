@@ -471,6 +471,24 @@ header img:hover {
   height: 24px;
   animation: spin 1s linear infinite;
 }
+
+/* Fade-in animation for category items */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

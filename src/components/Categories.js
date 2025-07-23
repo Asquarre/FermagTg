@@ -14,8 +14,12 @@ const Categories = ({ categories, onSelectCategory }) => {
           gap: '10px', // Add spacing between buttons
         }}
       >
-        {categories.map((category) => (
-          <li key={category.id} style={{ width: '100%' }}>
+        {categories.map((category, index) => (
+          <li
+            key={category.id}
+            style={{ width: '100%', animationDelay: `${index * 0.1}s` }}
+            className="fade-in"
+          >
             <button
               className="category-button"
               onClick={() => onSelectCategory(category.name)}
