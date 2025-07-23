@@ -220,7 +220,7 @@ const handleSearch = (term) => {
   };
 
   const handleOrderSubmit = (orderDetails) => {
-    axios
+    return axios
       .post('/api/submit-order', {
         user_id: orderDetails.user_id || '', // Include user_id
         address: orderDetails.address,
@@ -235,6 +235,7 @@ const handleSearch = (term) => {
       })
       .catch(() => {
         alert('Ошибка!');
+        throw new Error('Order submission failed');
       });
   };
   

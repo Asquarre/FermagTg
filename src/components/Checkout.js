@@ -5,6 +5,7 @@ import InputMask from 'react-input-mask';
 const Checkout = ({ onSubmit, cart, onBack }) => {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = () => {
     const digits = phone.replace(/\D/g, '');
@@ -12,11 +13,15 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
       alert('Пожалуйста, введите адрес и полный номер телефона.');
       return;
     }
+    
     onSubmit({
       address: address.trim(),
       phone,
       timestamp: new Date().toISOString(),
-    });
+     })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -71,8 +76,12 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
         </InputMask>
       </div>
 
-      <button className="submit-order-button" onClick={handleSubmit}>
-        Заказать
+      <button
+        className="submit-order-button"
+        onClick={handleSubmit}
+        disabled={isLoading}
+      >
+        {isLoading ? <div className="loading-spinner" /> : 'Заказать'}
       </button>
     </div>
   );
