@@ -9,7 +9,7 @@ const Categories = ({ categories, onSelectCategory }) => {
           listStyleType: 'none',
           padding: 0,
           display: 'flex', // Enable flexbox
-          flexDirection: 'column', // Stack buttons vertically
+          flexDirection: 'column', // Stack buttons  vertically
           alignItems: 'flex-start', // Align to the left (can change to 'center' if needed)
           gap: '10px', // Add spacing between buttons
         }}
