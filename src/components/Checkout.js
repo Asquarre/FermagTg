@@ -7,21 +7,22 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
   const [phone, setPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const digits = phone.replace(/\D/g, '');
     if (!address.trim() || digits.length < 11) {
       alert('Пожалуйста, введите адрес и полный номер телефона.');
       return;
     }
-    
-    onSubmit({
-      address: address.trim(),
-      phone,
-      timestamp: new Date().toISOString(),
-     })
-      .finally(() => {
-        setIsLoading(false);
+    setIsLoading(true);
+    try {
+      await onSubmit({
+        address: address.trim(),
+        phone,
+        timestamp: new Date().toISOString(),
       });
+      } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
