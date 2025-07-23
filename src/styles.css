@@ -46,6 +46,12 @@ body {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   font-weight: bold;
 }
+.checkout-heading {
+  font-family: 'Sf Pro Rounded', sans-serif;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+}
   
   button {
     transition: background-color 0.3s ease;
