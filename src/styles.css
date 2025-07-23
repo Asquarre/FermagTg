@@ -51,6 +51,7 @@ body {
   color: #ffffff;
    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.85);
   font-weight: bold;
+  margin: 15px 0;
 }
 
 .checkout-label {
