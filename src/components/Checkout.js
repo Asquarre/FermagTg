@@ -25,7 +25,7 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
         &larr; Назад
       </button>
 
-      <h2>Корзина</h2>
+      <h2 className="checkout-heading">Корзина</h2>
       <div className="checkout-order-summary">
         <h3>Ваш заказ:</h3>
         {cart.length ? (
