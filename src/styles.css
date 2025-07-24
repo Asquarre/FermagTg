@@ -427,6 +427,9 @@ header img:hover {
   font-weight: 600;
 }
 
+.product-item span {
+  font-size: 1.2em;
+}
 
 
 .product-item:hover {
