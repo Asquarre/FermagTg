@@ -9,7 +9,8 @@ const Categories = ({ categories, onSelectCategory, onRepeatOrder, showRepeatBut
           style={{ position: 'absolute', top: 0, right: 0 }}
           onClick={onRepeatOrder}
         >
-          Повторить заказ
+          Повторить 
+          заказ
         </button>
       )}
       <h2 className="categories-heading">КАТЕГОРИИ</h2>
