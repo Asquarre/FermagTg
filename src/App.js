@@ -268,20 +268,30 @@ const handleSearch = (term) => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <header style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <header
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          justifyContent: 'space-between',
+        }}
+      >
         <img
           src="/Logo.png"
           alt="Grocery Store Logo"
           style={{ width: '150px', height: '150px' }}
         />
-        <h1></h1>
+        {view === 'categories' && lastOrder && lastOrder.length > 0 && (
+          <button className="repeat-order-button" onClick={handleRepeatOrder}>
+            Повторить заказ
+          </button>
+        )}
       </header>
       {view === 'categories' && (
         <Categories
           categories={categories}
           onSelectCategory={handleSelectCategory}
-          onRepeatOrder={handleRepeatOrder}
-          showRepeatButton={!!lastOrder}
+
         />
       )}
       {view === 'products' && (

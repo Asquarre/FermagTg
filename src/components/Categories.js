@@ -1,18 +1,8 @@
 import React from 'react';
 
-const Categories = ({ categories, onSelectCategory, onRepeatOrder, showRepeatButton }) => {
+const Categories = ({ categories, onSelectCategory }) => {
   return (
-    <div style={{ position: 'relative', paddingTop: '60px' }}>
-      {showRepeatButton && (
-        <button
-          className="repeat-order-button"
-          style={{ position: 'absolute', top: 0, right: 0 }}
-          onClick={onRepeatOrder}
-        >
-          Повторить 
-          заказ
-        </button>
-      )}
+    <div>
       <h2 className="categories-heading">КАТЕГОРИИ</h2>
       <ul
         style={{
