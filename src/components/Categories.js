@@ -2,7 +2,7 @@ import React from 'react';
 
 const Categories = ({ categories, onSelectCategory, onRepeatOrder, showRepeatButton }) => {
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', paddingTop: '60px' }}>
       {showRepeatButton && (
         <button
           className="repeat-order-button"

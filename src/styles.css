@@ -207,7 +207,7 @@ header img:hover {
 }
 
 .repeat-order-button {
-  background-color: #44AF69;
+  background-color: #FCAB10;
   color: #ffffff;
   border: none;
   border-radius: 20px;
@@ -219,11 +219,12 @@ header img:hover {
 }
 
 .repeat-order-button:hover {
-  background-color: #1fa315;
+  background-color: #218838;
   transform: scale(1.1);
 }
 
 .repeat-order-button:active {
+  background-color: #44AF69;
   transform: scale(0.9);
 }
 
