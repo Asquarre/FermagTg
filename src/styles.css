@@ -468,7 +468,7 @@ header img:hover {
   outline: none; /* Remove default focus outline */
   border-color: #44AF69; /* Green border on focus */
   box-shadow: 0 0 8px rgba(68, 175, 105, 0.5); /* Glow effect on focus */
-  transform: scaleY(1.05);
+  transform: scale(1.03);
 }
 
 /* Loading spinner */
