@@ -461,12 +461,14 @@ header img:hover {
   border-radius: 5px; /* Rounded corners */
   font-size: 1rem; /* Adjust font size */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-box:focus {
   outline: none; /* Remove default focus outline */
   border-color: #44AF69; /* Green border on focus */
   box-shadow: 0 0 8px rgba(68, 175, 105, 0.5); /* Glow effect on focus */
+  transform: scale(1.05);
 }
 
 /* Loading spinner */
