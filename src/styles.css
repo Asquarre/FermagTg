@@ -417,7 +417,16 @@ header img:hover {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
  
+  }
+
+/* Product name, price and quantity styling */
+.product-item h3,
+.product-item p,
+.product-item span {
+  color: #363020;
 }
+
+
 
 .product-item:hover {
   transform: scale(1.00); /* Slight zoom on hover */
