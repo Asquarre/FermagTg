@@ -283,7 +283,7 @@ const handleSearch = (term) => {
         />
         {view === 'categories' && lastOrder && lastOrder.length > 0 && (
           <button className="repeat-order-button" onClick={handleRepeatOrder}>
-             🔁 Повторить заказ
+              Повторить прошлый заказ 🔁
           </button>
         )}
       </header>
