@@ -29,6 +29,8 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
     }
   };
 
+  const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
+
   return (
     <div>
       <button className="go-back-button" onClick={onBack}>
@@ -39,14 +41,19 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
       <div className="checkout-order-summary">
         <h3>Ваш заказ:</h3>
         {cart.length ? (
-          <ul>
-            {cart.map(item => (
-              <li key={item.id}>
-                {item.name} — {item.quantity} × ₸{item.price.toFixed(2)} = ₸
-                {(item.quantity * item.price).toFixed(2)}
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul>
+              {cart.map((item) => (
+                <li key={item.id}>
+                  {item.name} — {item.quantity} × ₸{item.price.toFixed(2)} = ₸
+                  {(item.quantity * item.price).toFixed(2)}
+                </li>
+              ))}
+            </ul>
+            <div className="total">
+              Сумма Заказа: ₸{total.toFixed(2)}
+            </div>
+          </>
         ) : (
           <p>Ваша корзина пуста.</p>
         )}

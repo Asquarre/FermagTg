@@ -446,6 +446,13 @@ header img:hover {
   margin-bottom: 10px; /* Add spacing between list items */
 }
 
+.checkout-order-summary .total {
+  font-size: 1.2rem; /* Larger font for total */
+  font-weight: bold;
+  margin-top: 15px; /* Space above total */
+  text-align: right; /* Align total to the right */
+}
+
 /* Input Box Styling */
 .input-box {
   width: 100%; /* Full width */
