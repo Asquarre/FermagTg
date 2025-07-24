@@ -424,6 +424,7 @@ header img:hover {
 .product-item p,
 .product-item span {
   color: #363020;
+  font-weight: 600;
 }
 
 
