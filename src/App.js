@@ -1,6 +1,6 @@
 import './styles.css';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Categories from './components/Categories';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
@@ -153,7 +153,19 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [cart, setCart] = useState([]);
+  const [lastOrder, setLastOrder] = useState(null);
   const [view, setView] = useState('categories'); // 'categories', 'products', 'checkout'
+
+   useEffect(() => {
+    const saved = localStorage.getItem('lastOrder');
+    if (saved) {
+      try {
+        setLastOrder(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to parse saved order', e);
+      }
+    }
+  }, []);
 
   const handleSelectCategory = (categoryName) => {
     setSelectedCategory(categoryName);
@@ -234,6 +246,8 @@ const handleSearch = (term) => {
       })
       .then(() => {
         alert('Мы приняли ваш заказ!');
+        localStorage.setItem('lastOrder', JSON.stringify(cart));
+        setLastOrder(cart);
         setCart([]);
         setView('categories');
       })
@@ -242,7 +256,16 @@ const handleSearch = (term) => {
         throw new Error('Order submission failed');
       });
   };
-  
+
+  const handleRepeatOrder = () => {
+    if (lastOrder && lastOrder.length > 0) {
+      setCart(lastOrder);
+      setView('checkout');
+    } else {
+      alert('Предыдущий заказ отсутствует.');
+    }
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <header style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -257,6 +280,8 @@ const handleSearch = (term) => {
         <Categories
           categories={categories}
           onSelectCategory={handleSelectCategory}
+          onRepeatOrder={handleRepeatOrder}
+          showRepeatButton={!!lastOrder}
         />
       )}
       {view === 'products' && (

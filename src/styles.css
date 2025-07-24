@@ -206,6 +206,28 @@ header img:hover {
   transform: scale(0.9); /* Slight shrink on click */
 }
 
+.repeat-order-button {
+  background-color: #44AF69;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.repeat-order-button:hover {
+  background-color: #1fa315;
+  transform: scale(1.1);
+}
+
+.repeat-order-button:active {
+  transform: scale(0.9);
+}
+
+
 /* Styling for the search input field */
 .search-input {
   width: 70%; /* Default width */
