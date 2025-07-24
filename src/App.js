@@ -260,6 +260,12 @@ const handleSearch = (term) => {
   const handleRepeatOrder = () => {
     if (lastOrder && lastOrder.length > 0) {
       setCart(lastOrder);
+      if (categories.length > 0) {
+        const firstCategoryName = categories[0].name;
+        setSelectedCategory(firstCategoryName);
+        setProducts(allProducts[firstCategoryName]);
+        setFilteredProducts(allProducts[firstCategoryName]);
+      }
       setView('checkout');
     } else {
       alert('Предыдущий заказ отсутствует.');
@@ -282,8 +288,11 @@ const handleSearch = (term) => {
           style={{ width: '150px', height: '150px' }}
         />
         {view === 'categories' && lastOrder && lastOrder.length > 0 && (
-          <button className="repeat-order-button" onClick={handleRepeatOrder}>
-              Повторить прошлый заказ 🔁
+          <button
+            className="repeat-order-button fade-in"
+            onClick={handleRepeatOrder}
+          >
+            Повторить прошлый заказ 🔁
           </button>
         )}
       </header>
