@@ -90,8 +90,8 @@ body {
   color: #ffffff; /* White text */
   border: none; /* Remove borders */
   border-radius: 50%; /* Make the buttons circular */
-  width: 30px; /* Set fixed width */
-  height: 30px; /* Set fixed height */
+  width: 32px; /* Set fixed width */
+  height: 32px; /* Set fixed height */
   font-size: 1rem; /* Font size adjusted */
   display: flex;
   align-items: center;
@@ -156,8 +156,8 @@ body {
   color: #ffffff;
   border: none;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   font-size: 1rem;
   display: flex;
   align-items: center;
