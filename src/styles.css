@@ -17,7 +17,12 @@ body {
   text-shadow: 2px 2px 9px rgba(240, 240, 240, 0);
   overflow-x: hidden; /* Prevent horizontal scrolling */
   background-color: #BDA47D; /* The 'emergency' background color */
-  background-image: url('/background.png'); /* The original background image */
+  background-image: url('/background.png'); /* Fallback background image */
+  background-image: image-set(
+    url('/background.avif') type('image/avif'),
+    url('/background.webp') type('image/webp'),
+    url('/background.png') type('image/png')
+  ); /* Preferred background images */
   background-repeat: no-repeat; /* Do not repeat the background image */
   background-position: top center; /* Position the background image at the top center */
   background-size: auto; /* Default background size */

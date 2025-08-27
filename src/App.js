@@ -288,11 +288,15 @@ const handleSearch = (term) => {
           justifyContent: 'space-between',
         }}
       >
-        <img
-          src="/Logo.png"
-          alt="Grocery Store Logo"
-          style={{ width: '150px', height: '150px' }}
-        />
+        <picture>
+          <source srcSet="/Logo.avif" type="image/avif" />
+          <source srcSet="/Logo.webp" type="image/webp" />
+          <img
+            src="/Logo.png"
+            alt="Grocery Store Logo"
+            style={{ width: '150px', height: '150px' }}
+          />
+        </picture>
         {view === 'categories' && lastOrder && lastOrder.length > 0 && (
           <button
             className="repeat-order-button fade-in"
