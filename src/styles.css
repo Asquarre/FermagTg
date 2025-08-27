@@ -90,8 +90,8 @@ body {
   color: #ffffff; /* White text */
   border: none; /* Remove borders */
   border-radius: 50%; /* Make the buttons circular */
-  width: 32px; /* Set fixed width */
-  height: 32px; /* Set fixed height */
+  width: 36px; /* Set fixed width */
+  height: 36px; /* Set fixed height */
   font-size: 1rem; /* Font size adjusted */
   display: flex;
   align-items: center;
@@ -121,7 +121,7 @@ body {
   align-items: center;
   gap: 6px;
   margin-bottom: 8px;
-  padding: 6px 8px;
+  padding: 6px 4px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 12px;
   animation: fadeIn 0.3s ease;
@@ -156,8 +156,8 @@ body {
   color: #ffffff;
   border: none;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -537,7 +537,7 @@ header img:hover {
 /* Checkout Order Summary Styling */
 .checkout-order-summary {
   background-color: #ffffff; /* White background */
-  padding: 15px; /* Add padding for spacing */
+  padding: 15px 10px; 
   border-radius: 10px; /* Rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
   margin-bottom: 20px; /* Spacing below the box */
