@@ -1,7 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -11,6 +11,19 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+const loadStyles = () => {
+  import('bootstrap/dist/css/bootstrap.min.css');
+  import('./index.css');
+};
+
+if (typeof window !== 'undefined') {
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadStyles);
+  } else {
+    setTimeout(loadStyles, 0);
+  }
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

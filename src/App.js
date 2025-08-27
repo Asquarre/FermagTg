@@ -9,6 +9,9 @@ import SearchBar from './components/SearchBar';
 import axios from 'axios';
 
 const App = () => {
+    useEffect(() => {
+    import('./styles.css');
+  }, []);
   const [categories] = useState([
 
     { id: 5, name: 'П/ф замороженная продукция❄️' },
