@@ -116,9 +116,9 @@ body {
 }
 
 .checkout-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 120px 80px 40px;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
   padding: 8px 12px;
@@ -128,13 +128,21 @@ body {
 }
 
 .checkout-item-name {
-  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .checkout-item-quantity {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
+  width: 100%;
+}
+
+.quantity-value {
+  width: 24px;
+  text-align: center;
 }
 
 .checkout-item-price {
