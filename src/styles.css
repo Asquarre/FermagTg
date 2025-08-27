@@ -16,7 +16,7 @@ body {
   color: #1d1c1c;
   text-shadow: 2px 2px 9px rgba(240, 240, 240, 0);
   overflow-x: hidden; /* Prevent horizontal scrolling */
-  background-color: #BDA47D; /* The 'emergency' background color */
+  background: #BDA47D url('/background.png') no-repeat top center; 
   background-image: url('/background.png'); /* Fallback background image */
   background-image: image-set(
     url('/background.avif') type('image/avif'),

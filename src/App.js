@@ -288,7 +288,7 @@ const handleSearch = (term) => {
           justifyContent: 'space-between',
         }}
       >
-        <picture>
+       <picture>
           <source srcSet="/Logo.avif" type="image/avif" />
           <source srcSet="/Logo.webp" type="image/webp" />
           <img
