@@ -279,7 +279,7 @@ const handleSearch = (term) => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '10px' }}>
       <header
         style={{
           display: 'flex',
