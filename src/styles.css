@@ -118,13 +118,30 @@ body {
 .checkout-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  animation: fadeIn 0.3s ease;
 }
 
 .checkout-item-name {
   flex: 1;
 }
+
+.checkout-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.checkout-item-price {
+  min-width: 80px;
+  text-align: right;
+}
+
 
 .remove-item-button {
   background-color: #dc3545;

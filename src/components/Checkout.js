@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
-import InputMask from 'react-input-mask';
+import React, { useState } from "react";
+import InputMask from "react-input-mask";
 
 const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
@@ -44,28 +44,25 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
           <>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
               {cart.map((item) => (
-                <li
-                  key={item.id}
-                  className="checkout-item"
-                >
-                  <span className="checkout-item-name">
-                    {item.name}
-                  </span>
-                  <button
-                    className="quantity-button"
-                    onClick={() => onRemove(item.id)}
-                  >
-                    -
-                  </button>
-                  <span>{item.quantity}</span>
-                  <button
-                    className="quantity-button"
-                    onClick={() => onAdd(item.id)}
-                  >
-                    +
-                  </button>
-                  <span>
-                    = ₸{(item.quantity * item.price).toFixed(2)}
+                <li key={item.id} className="checkout-item">
+                  <span className="checkout-item-name">{item.name}</span>
+                  <div className="checkout-item-quantity">
+                    <button
+                      className="quantity-button"
+                      onClick={() => onRemove(item.id)}
+                    >
+                      -
+                    </button>
+                    <span className="quantity-value">{item.quantity}</span>
+                    <button
+                      className="quantity-button"
+                      onClick={() => onAdd(item.id)}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <span className="checkout-item-price">
+                    ₸{(item.quantity * item.price).toFixed(2)}
                   </span>
                   <button
                     className="remove-item-button"
