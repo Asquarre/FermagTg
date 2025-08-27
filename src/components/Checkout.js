@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
 
-const Checkout = ({ onSubmit, cart, onBack }) => {
+const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -42,11 +42,37 @@ const Checkout = ({ onSubmit, cart, onBack }) => {
         <h3>Ваш заказ:</h3>
         {cart.length ? (
           <>
-            <ul>
+            <ul style={{ listStyleType: 'none', padding: 0 }}>
               {cart.map((item) => (
-                <li key={item.id}>
-                  {item.name} — {item.quantity} × ₸{item.price.toFixed(2)} = ₸
-                  {(item.quantity * item.price).toFixed(2)}
+                <li
+                  key={item.id}
+                  className="checkout-item"
+                >
+                  <span className="checkout-item-name">
+                    {item.name}
+                  </span>
+                  <button
+                    className="quantity-button"
+                    onClick={() => onRemove(item.id)}
+                  >
+                    -
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button
+                    className="quantity-button"
+                    onClick={() => onAdd(item.id)}
+                  >
+                    +
+                  </button>
+                  <span>
+                    = ₸{(item.quantity * item.price).toFixed(2)}
+                  </span>
+                  <button
+                    className="remove-item-button"
+                    onClick={() => onDelete(item.id)}
+                  >
+                    🗑️
+                  </button>
                 </li>
               ))}
             </ul>

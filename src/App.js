@@ -208,6 +208,9 @@ const App = () => {
       }
     }
   };
+  const handleDeleteFromCart = (productId) => {
+    setCart(cart.filter((item) => item.id !== productId));
+  };
 
 const handleSearch = (term) => {
   if (term.trim() === '') {
@@ -345,6 +348,9 @@ const handleSearch = (term) => {
           cart={cart}
           onSubmit={handleOrderSubmit}
           onBack={() => setView('products')}
+          onAdd={handleAddToCart}
+          onRemove={handleRemoveFromCart}
+          onDelete={handleDeleteFromCart}
         />
       )}
     </div>

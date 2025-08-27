@@ -114,6 +114,47 @@ body {
 .quantity-button:focus {
   outline: none;
 }
+
+.checkout-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.checkout-item-name {
+  flex: 1;
+}
+
+.remove-item-button {
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.remove-item-button:hover {
+  background-color: #c82333;
+  transform: scale(1.1);
+}
+
+.remove-item-button:active {
+  transform: scale(0.9);
+}
+
+.remove-item-button:focus {
+  outline: none;
+}
+
 /* Styling for the category buttons */
 .category-button {
   background-color: #FCAB10; /* Green color */
