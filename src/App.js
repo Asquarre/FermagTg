@@ -294,7 +294,7 @@ const handleSearch = (term) => {
           <img
             src="/Logo.png"
             alt="Grocery Store Logo"
-            style={{ width: '150px', height: '150px' }}
+            style={{ width: "150px", height: "150px", marginLeft: "-10px" }}
           />
         </picture>
         {view === 'categories' && lastOrder && lastOrder.length > 0 && (
