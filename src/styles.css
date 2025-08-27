@@ -291,6 +291,7 @@ header img:hover {
   transition: transform 0.2s ease, background-color 0.3s ease,
     box-shadow 0.2s ease;
   margin-top: -40px;
+  margin-left: auto;
 }
 
 .repeat-order-button:hover {
