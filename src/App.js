@@ -1,4 +1,4 @@
-
+import './styles.css';
 
 import React, { useState, useEffect } from 'react';
 import Categories from './components/Categories';
@@ -9,7 +9,9 @@ import SearchBar from './components/SearchBar';
 import axios from 'axios';
 
 const App = () => {
-    
+    useEffect(() => {
+    import('./styles.css');
+  }, []);
   const [categories] = useState([
 
     { id: 5, name: 'П/ф замороженная продукция❄️' },
@@ -278,16 +280,23 @@ const handleSearch = (term) => {
 
   return (
     <div style={{ padding: '16px' }}>
-      <header>
-        
+      <header
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '15px',
+          justifyContent: 'flex-start',
+          marginBottom: '-4px',
+        }}
+      >
        <picture>
           <source srcSet="/Logo.avif" type="image/avif" />
           <source srcSet="/Logo.webp" type="image/webp" />
-            <img
-              src="/Logo.png"
-              alt="Grocery Store Logo"
-              className="logo"
-            />
+          <img
+            src="/Logo.png"
+            alt="Grocery Store Logo"
+            style={{ width: "150px", height: "150px", marginLeft: "-30px" }}
+          />
         </picture>
         {view === 'categories' && lastOrder && lastOrder.length > 0 && (
           <button
