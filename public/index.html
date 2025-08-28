@@ -30,24 +30,19 @@
     -->
     <title>Fermag</title>
     <style data-critical>
+      :root {
+        --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      }
       body {
         margin: 0;
-        font-family: 'Sf Pro Rounded', sans-serif;
+        font-family: "Poppins", var(--font-sans);
         background-color: #BDA47D;
         color: #1d1c1c;
       }
-      header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        justify-content: flex-start;
-        padding: 20px;
-      }
-      nav {
-        display: flex;
-        gap: 10px;
-      }
+      header { display:flex; align-items:center; gap:10px; justify-content:flex-start; padding:20px; }
+      nav { display:flex; gap:10px; }
     </style>
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
