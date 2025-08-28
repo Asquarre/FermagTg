@@ -40,13 +40,7 @@ body {
     color: #000000;
     text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.); /* Add shadow to text */
 
-  }.categories-heading {
-  font-family: 'Sf Pro Rounded', sans-serif;
-  color: #ffffff;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.85);
-  font-weight: bold;
-  margin: 0 0 12px;
-}
+  }
 .products-heading{
   font-family: 'Sf Pro Rounded', sans-serif;
   color: #ffffff;

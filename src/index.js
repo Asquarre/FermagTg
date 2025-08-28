@@ -15,6 +15,7 @@ root.render(
 const loadStyles = () => {
   import('bootstrap/dist/css/bootstrap.min.css');
   import('./index.css');
+  import('./styles.css');
 };
 
 if (typeof window !== 'undefined') {

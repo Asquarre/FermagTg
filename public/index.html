@@ -3,7 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/my-icon.png" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" as="style">
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+      <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"></noscript>
+      <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrFJDUcHtA.woff2">
+      <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLEj6Uw.woff2">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#DBD4B5" />
     <meta
@@ -25,26 +31,38 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Fermag</title>
     <style data-critical>
-      body {
-        margin: 0;
-        font-family: 'Sf Pro Rounded', sans-serif;
-        background-color: #BDA47D;
-        color: #1d1c1c;
-      }
-      header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        justify-content: flex-start;
-        padding: 20px;
-      }
-      nav {
-        display: flex;
-        gap: 10px;
-      }
-    </style>
+        body {
+          margin: 0;
+          font-family: 'Sf Pro Rounded', sans-serif;
+          background-color: #BDA47D;
+          color: #1d1c1c;
+        }
+        header {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          justify-content: flex-start;
+          padding: 20px;
+          margin-bottom: -4px;
+        }
+        nav {
+          display: flex;
+          gap: 10px;
+        }
+        .logo {
+          width: 150px;
+          height: 150px;
+          margin-left: -30px;
+        }
+        .categories-heading {
+          font-family: 'Sf Pro Rounded', sans-serif;
+          color: #ffffff;
+          text-shadow: 0 4px 8px rgba(0, 0, 0, 0.85);
+          font-weight: bold;
+          margin: 0 0 12px;
+        }
+      </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
