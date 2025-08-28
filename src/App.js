@@ -284,7 +284,7 @@ const handleSearch = (term) => {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '10px',
+          gap: '15px',
           justifyContent: 'flex-start',
         }}
       >
