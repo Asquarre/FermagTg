@@ -96,10 +96,10 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       <div style={{ margin: '10px 0' }}>
         <label className="checkout-label">Номер:</label>
         <InputMask
-          mask="+8(999)-999-9999"
+          mask="+7(999)-999-9999"
           value={phone}
           onChange={e => setPhone(e.target.value)}
-          placeholder="+8(___)-___-____"
+          placeholder="+7(___)-___-____"
         >
           {inputProps => (
             <input
