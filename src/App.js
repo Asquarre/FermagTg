@@ -286,6 +286,7 @@ const handleSearch = (term) => {
           alignItems: 'center',
           gap: '15px',
           justifyContent: 'flex-start',
+          marginBottom: '5px',
         }}
       >
        <picture>
