@@ -279,12 +279,12 @@ const handleSearch = (term) => {
   };
 
   return (
-    <div style={{ padding: '16px' }}>
+    <div style={{ padding: '10px' }}>
       <header
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '15px',
+          gap: '20px',
           justifyContent: 'flex-start',
         }}
       >
