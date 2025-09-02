@@ -637,7 +637,7 @@ header img:hover {
   display: inline-block;
   min-width: 1ch;
   height: 1.2em;
-  overflow: hidden;
+  overflow-y: hidden;
   padding-right: 2px;
 }
 
