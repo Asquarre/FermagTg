@@ -626,15 +626,17 @@ header img:hover {
 
 /* AnimatedNumber styles */
 .animated-number {
-  display: inline-flex;
+  display: inline-block;
   font-variant-numeric: tabular-nums;
-  align-items: center;
+  line-height: 1;
+  vertical-align: middle;
 }
 
 .digit-wrapper {
   position: relative;
+  display: inline-block;
   width: 1ch;
-  height: 1em;
+  height: 1.2em;
   overflow: hidden;
 }
 
@@ -643,14 +645,13 @@ header img:hover {
   top: 50%;
   left: 0;
   width: 100%;
-  text-align: center;
-  line-height: 1em;
+  line-height: 1.2em;
   will-change: transform;
   transform: translateY(-50%);
 }
 
 .digit-up-enter {
-  transform: translateY(100%);
+  transform: translateY(50%);
 }
 
 
@@ -660,31 +661,31 @@ header img:hover {
 }
 
 .digit-up-exit {
-  transform: translateY(0);
+  transform: translateY(-50%);
 }
 
 
 .digit-up-exit-active {
-  transform: translateY(-100%);
+  transform: translateY(-150%);
   transition: transform 0.15s ease-out;
 }
 
 .digit-down-enter {
-  transform: translateY(-100%);
+  transform: translateY(-150%);
 }
 
 
 .digit-down-enter-active {
-  transform: translateY(0);
+  transform: translateY(-50%);
   transition: transform 0.15s ease-out;
 }
 
 .digit-down-exit {
-  transform: translateY(0);
+  transform: translateY(-50%);
 }
 
 
 .digit-down-exit-active {
-  transform: translateY(100%);
+  transform: translateY(50px);
   transition: transform 0.15s ease-out;
 }
