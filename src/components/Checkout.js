@@ -1,7 +1,6 @@
 
 import React, { useState } from "react";
 import InputMask from "react-input-mask";
-import AnimatedNumber from './AnimatedNumber';
 
 const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [address, setAddress] = useState("");
@@ -75,7 +74,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
               ))}
             </ul>
             <div className="total">
-              Сумма Заказа: ₸<AnimatedNumber value={total.toFixed(2)} />
+              Сумма Заказа: ₸{total.toFixed(2)}
             </div>
           </>
         ) : (
