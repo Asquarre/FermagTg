@@ -635,12 +635,13 @@ header img:hover {
 .digit-wrapper {
   position: relative;
   display: inline-block;
-  min-width: 1.35ch;
+  min-width: 1ch;
   height: 1.2em;
   overflow-y: hidden;
   overflow-x: visible;
   padding: 0 3px; 
 }
+.qty-inline .digit-wrapper { min-width: 1.35ch; }
 
 .digit {
   position: absolute;
