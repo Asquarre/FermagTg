@@ -18,8 +18,8 @@ const AnimatedNumber = ({ value, className = '' }) => {
           <span key={index} className="digit-wrapper">
             <TransitionGroup component={null}>
               <CSSTransition
-                key={char}
-                timeout={300}
+                key={`${char}-${index}`}
+                timeout={150}
                 classNames={`digit-${direction}`}
               >
                 <span className="digit">{char}</span>

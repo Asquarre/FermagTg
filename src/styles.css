@@ -623,10 +623,12 @@ header img:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 /* AnimatedNumber styles */
 .animated-number {
   display: inline-flex;
   font-variant-numeric: tabular-nums;
+  align-items: baseline;
 }
 
 .digit-wrapper {
@@ -634,46 +636,55 @@ header img:hover {
   width: 1ch;
   height: 1em;
   overflow: hidden;
+  line-height: 1em;
 }
 
 .digit {
-  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   text-align: center;
+  line-height: 1em;
+  will-change: transform;
 }
 
 .digit-up-enter {
   transform: translateY(100%);
 }
 
+
 .digit-up-enter-active {
   transform: translateY(0);
-  transition: transform 0.3s ease;
+  transition: transform 0.15s ease-out;
 }
 
 .digit-up-exit {
   transform: translateY(0);
 }
 
+
 .digit-up-exit-active {
   transform: translateY(-100%);
-  transition: transform 0.3s ease;
+  transition: transform 0.15s ease-out;
 }
 
 .digit-down-enter {
   transform: translateY(-100%);
 }
 
+
 .digit-down-enter-active {
   transform: translateY(0);
-  transition: transform 0.3s ease;
+  transition: transform 0.15s ease-out;
 }
 
 .digit-down-exit {
   transform: translateY(0);
 }
 
+
 .digit-down-exit-active {
   transform: translateY(100%);
-  transition: transform 0.3s ease;
+  transition: transform 0.15s ease-out;
 }
