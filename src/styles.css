@@ -623,3 +623,57 @@ header img:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+/* AnimatedNumber styles */
+.animated-number {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+}
+
+.digit-wrapper {
+  position: relative;
+  width: 1ch;
+  height: 1em;
+  overflow: hidden;
+}
+
+.digit {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+.digit-up-enter {
+  transform: translateY(100%);
+}
+
+.digit-up-enter-active {
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.digit-up-exit {
+  transform: translateY(0);
+}
+
+.digit-up-exit-active {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.digit-down-enter {
+  transform: translateY(-100%);
+}
+
+.digit-down-enter-active {
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.digit-down-exit {
+  transform: translateY(0);
+}
+
+.digit-down-exit-active {
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}

@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import InputMask from "react-input-mask";
+import AnimatedNumber from './AnimatedNumber';
 
 const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [address, setAddress] = useState("");
@@ -53,7 +54,10 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                     >
                       -
                     </button>
-                    <span className="quantity-value">{item.quantity}</span>
+                    <AnimatedNumber
+                      value={item.quantity}
+                      className="quantity-value"
+                    />
                     <button
                       className="quantity-button"
                       onClick={() => onAdd(item.id)}
@@ -62,7 +66,10 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                     </button>
                   </div>
                   <span className="checkout-item-price">
-                    ₸{(item.quantity * item.price).toFixed(2)}
+                    ₸
+                    <AnimatedNumber
+                      value={(item.quantity * item.price).toFixed(2)}
+                    />
                   </span>
                   <button
                     className="remove-item-button"
@@ -74,7 +81,8 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
               ))}
             </ul>
             <div className="total">
-              Сумма Заказа: ₸{total.toFixed(2)}
+              Сумма Заказа: ₸
+              <AnimatedNumber value={total.toFixed(2)} />
             </div>
           </>
         ) : (

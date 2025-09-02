@@ -7,6 +7,7 @@ import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import SearchBar from './components/SearchBar';
 import axios from 'axios';
+import AnimatedNumber from './components/AnimatedNumber';
 
 const App = () => {
     useEffect(() => {
@@ -340,7 +341,10 @@ const handleSearch = (term) => {
                         >
                           -
                         </button>
-                        <span className="quantity-value">{item.quantity}</span>
+                        <AnimatedNumber
+                          value={item.quantity}
+                          className="quantity-value"
+                        />
                         <button
                           className="quantity-button"
                           onClick={() => handleAddToCart(item.id)}
@@ -349,7 +353,10 @@ const handleSearch = (term) => {
                         </button>
                       </div>
                       <span className="checkout-item-price">
-                        ₸{(item.quantity * item.price).toFixed(2)}
+                        ₸
+                        <AnimatedNumber
+                          value={(item.quantity * item.price).toFixed(2)}
+                        />
                       </span>
                       <button
                         className="remove-item-button"
@@ -362,9 +369,11 @@ const handleSearch = (term) => {
                 </ul>
                 <div className="total">
                   Сумма Заказа: ₸
-                  {cart
-                    .reduce((acc, item) => acc + item.quantity * item.price, 0)
-                    .toFixed(2)}
+                  <AnimatedNumber
+                    value={cart
+                      .reduce((acc, item) => acc + item.quantity * item.price, 0)
+                      .toFixed(2)}
+                  />
                 </div>
               </>
             ) : (
