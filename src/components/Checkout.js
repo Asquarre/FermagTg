@@ -39,7 +39,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
 
       <h2 className="checkout-heading">Корзина</h2>
       <div className="checkout-order-summary">
-        <h3>Ваш заказ:</h3>
+        <h3>Ваш заказ</h3>
         {cart.length ? (
           <>
             <ul style={{ listStyleType: 'none', padding: 0 }}>

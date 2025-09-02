@@ -552,6 +552,12 @@ header img:hover {
   color: #333; /* Text color */
 }
 
+.checkout-order-summary h3 {
+  text-align: center;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+
 .checkout-order-summary ul {
   list-style: none; /* Remove default list styling */
   padding: 0; /* Remove padding */

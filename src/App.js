@@ -326,7 +326,7 @@ const handleSearch = (term) => {
             cart={cart}
           />
 <div className="checkout-order-summary">
-            <h3>Ваш заказ:</h3>
+            <h3>Ваш заказ</h3>
             {cart.length ? (
               <>
                 <ul style={{ listStyleType: 'none', padding: 0 }}>
