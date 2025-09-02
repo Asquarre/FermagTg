@@ -36,9 +36,10 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
                 <button className="quantity-button" onClick={() => onRemove(product.id)}>
                   -
                 </button>
-                <span style={{ margin: '0 10px' }}>
-                  <AnimatedNumber value={getProductQuantity(product.id)} />
-                </span>
+                <AnimatedNumber
+                  value={getProductQuantity(product.id)}
+                  className="quantity-value"
+                />
                 <button className="quantity-button" onClick={() => onAdd(product.id)}>
                   +
                 </button>

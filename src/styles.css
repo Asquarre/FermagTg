@@ -148,8 +148,10 @@ body {
 }
 
 .quantity-value {
-  width: 24px;
+  min-width: 32px;
   text-align: center;
+  margin: 0 10px;
+  display: inline-block;
 }
 
 .checkout-item-price {
