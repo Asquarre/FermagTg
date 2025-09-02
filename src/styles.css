@@ -635,7 +635,7 @@ header img:hover {
 .digit-wrapper {
   position: relative;
   display: inline-block;
-  min-width: 1ch;
+  min-width: 1.35ch;
   height: 1.2em;
   overflow-y: hidden;
   overflow-x: visible;
