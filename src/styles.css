@@ -680,20 +680,24 @@ header img:hover {
 
 .digit-down-enter {
   transform: translateY(-150%);
+  filter: blur(3px);
 }
 
 
 .digit-down-enter-active {
   transform: translateY(-50%);
-  transition: transform 0.15s ease-out;
+  filter: blur(0);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .digit-down-exit {
   transform: translateY(-50%);
+  filter: blur(0);
 }
 
 
 .digit-down-exit-active {
-  transform: translateY(50px);
-  transition: transform 0.15s ease-out;
+  transform: translateY(150%);
+  filter: blur(3px);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
