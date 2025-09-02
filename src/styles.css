@@ -641,7 +641,7 @@ header img:hover {
   overflow-x: visible;
   padding: 0 3px; 
 }
-.qty-inline .digit-wrapper { min-width: 1.35ch; }
+.qty-inline .digit-wrapper { min-width: 1.2ch; }
 
 .digit {
   position: absolute;
