@@ -638,8 +638,7 @@ header img:hover {
   min-width: 1ch;
   height: 1.2em;
   overflow-y: hidden;
-  overflow-x: visible;
-  padding-right: 2px;
+  padding: 0 3px;
 }
 
 .digit {
