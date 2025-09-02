@@ -325,27 +325,51 @@ const handleSearch = (term) => {
             onCheckout={handleCheckout} // Pass handleCheckout here
             cart={cart}
           />
-          <div className="shopping-cart">
-            <h3>корзина</h3>
-            {cart.length > 0 ? (
-              <ul>
-                {cart.map((item) => (
-                  <li key={item.id}>
-                    {item.name} - {item.quantity} x ₸{item.price.toFixed(2)} = ₸
-                    {(item.quantity * item.price).toFixed(2)}
-                  </li>
-                ))}
-              </ul>
+<div className="checkout-order-summary">
+            <h3>Ваш заказ:</h3>
+            {cart.length ? (
+              <>
+                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                  {cart.map((item) => (
+                    <li key={item.id} className="checkout-item">
+                      <span className="checkout-item-name">{item.name}</span>
+                      <div className="checkout-item-quantity">
+                        <button
+                          className="quantity-button"
+                          onClick={() => handleRemoveFromCart(item.id)}
+                        >
+                          -
+                        </button>
+                        <span className="quantity-value">{item.quantity}</span>
+                        <button
+                          className="quantity-button"
+                          onClick={() => handleAddToCart(item.id)}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <span className="checkout-item-price">
+                        ₸{(item.quantity * item.price).toFixed(2)}
+                      </span>
+                      <button
+                        className="remove-item-button"
+                        onClick={() => handleDeleteFromCart(item.id)}
+                      >
+                        🗑️
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <div className="total">
+                  Сумма Заказа: ₸
+                  {cart
+                    .reduce((acc, item) => acc + item.quantity * item.price, 0)
+                    .toFixed(2)}
+                </div>
+              </>
             ) : (
-              <p>Ваша Корзина Пуста.</p>
-            )}
-            {cart.length > 0 && (
-              <div className="total">
-                Сумма Заказа: ₸
-                {cart
-                  .reduce((acc, item) => acc + item.quantity * item.price, 0)
-                  .toFixed(2)}
-              </div>
+            <p>Ваша Корзина Пуста.</p>
+
             )}
           </div>
           {/* The Checkout button has been moved to ProductList.js */}
