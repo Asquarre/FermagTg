@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AnimatedNumber from './AnimatedNumber';
+import { formatPrice } from '../utils';
 
 const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) => {
   const getProductQuantity = (productId) => {
@@ -31,7 +32,7 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
           {products.map((product) => (
             <div key={product.id} className="product-item">
               <h3>{product.name}</h3>
-              <p>Цена: ₸{product.price.toFixed(2)}</p>
+              <p>Цена: ₸{formatPrice(product.price)}</p>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <button className="quantity-button" onClick={() => onRemove(product.id)}>
                   -

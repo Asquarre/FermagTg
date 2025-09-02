@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import InputMask from "react-input-mask";
 import AnimatedNumber from './AnimatedNumber';
+import { formatPrice } from '../utils';
 
 const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [address, setAddress] = useState("");
@@ -68,7 +69,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                   <span className="checkout-item-price">
                     ₸
                     <AnimatedNumber
-                      value={(item.quantity * item.price).toFixed(2)}
+                      value={formatPrice(item.quantity * item.price)}
                     />
                   </span>
                   <button
@@ -82,7 +83,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
             </ul>
             <div className="total">
               Сумма Заказа: ₸
-              <AnimatedNumber value={total.toFixed(2)} />
+              <AnimatedNumber value={formatPrice(total)} />
             </div>
           </>
         ) : (

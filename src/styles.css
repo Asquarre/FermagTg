@@ -147,10 +147,10 @@ body {
   width: 100%;
 }
 
-.quantity-value {
-  width: 24px;
-  text-align: center;
-}
+.quantity-value {              /* lets 1–3 digits fit without cropping */
+   min-width: 2.6ch;
+   text-align: center;
+ }
 
 .checkout-item-price {
   min-width: 70px;
@@ -638,7 +638,8 @@ header img:hover {
   min-width: 1ch;
   height: 1.2em;
   overflow-y: hidden;
-  padding: 0 3px;
+  overflow-x: visible;
+  padding: 0 3px; 
 }
 
 .digit {

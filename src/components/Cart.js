@@ -1,6 +1,7 @@
 // src/components/Cart.js
 import React from 'react';
 import AnimatedNumber from './AnimatedNumber';
+import { formatPrice } from '../utils';
 
 const Cart = ({ cartItems }) => {
   const total = cartItems.reduce(
@@ -19,13 +20,13 @@ const Cart = ({ cartItems }) => {
             {cartItems.map((item) => (
               <li key={item.id} style={{ marginBottom: '10px' }}>
                 {item.name} - <AnimatedNumber value={item.quantity} /> x ₸
-                {item.price.toFixed(2)} = ₸
-                <AnimatedNumber value={(item.price * item.quantity).toFixed(2)} />
+                {formatPrice(item.price)} = ₸
+                <AnimatedNumber value={formatPrice(item.price * item.quantity)} />
               </li>
             ))}
           </ul>
                     <h3>
-            Total: ₸<AnimatedNumber value={total.toFixed(2)} />
+            Total: ₸<AnimatedNumber value={formatPrice(total)} />
           </h3>
         </>
       )}

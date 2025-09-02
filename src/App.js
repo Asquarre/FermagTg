@@ -8,6 +8,7 @@ import Checkout from './components/Checkout';
 import SearchBar from './components/SearchBar';
 import axios from 'axios';
 import AnimatedNumber from './components/AnimatedNumber';
+import { formatPrice } from './utils';
 
 const App = () => {
     useEffect(() => {
@@ -355,7 +356,7 @@ const handleSearch = (term) => {
                       <span className="checkout-item-price">
                         ₸
                         <AnimatedNumber
-                          value={(item.quantity * item.price).toFixed(2)}
+                          value={formatPrice(item.quantity * item.price)}
                         />
                       </span>
                       <button
@@ -370,9 +371,12 @@ const handleSearch = (term) => {
                 <div className="total">
                   Сумма Заказа: ₸
                   <AnimatedNumber
-                    value={cart
-                      .reduce((acc, item) => acc + item.quantity * item.price, 0)
-                      .toFixed(2)}
+                    value={formatPrice(
+                      cart.reduce(
+                        (acc, item) => acc + item.quantity * item.price,
+                        0
+                      )
+                    )}
                   />
                 </div>
               </>
