@@ -649,28 +649,33 @@ header img:hover {
   left: 0;
   width: 100%;
   line-height: 1.2em;
-  will-change: transform;
+  will-change: transform, filter;
   transform: translateY(-50%);
+  filter: blur(0);
 }
 
 .digit-up-enter {
   transform: translateY(50%);
+  filter: blur(3px);
 }
 
 
 .digit-up-enter-active {
   transform: translateY(0);
-  transition: transform 0.15s ease-out;
+  filter: blur(0);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .digit-up-exit {
   transform: translateY(-50%);
+  filter: blur(0);
 }
 
 
 .digit-up-exit-active {
   transform: translateY(-150%);
-  transition: transform 0.15s ease-out;
+  filter: blur(3px);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .digit-down-enter {
