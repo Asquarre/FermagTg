@@ -1,5 +1,6 @@
 // src/components/Cart.js
 import React from 'react';
+import AnimatedNumber from './AnimatedNumber';
 
 const Cart = ({ cartItems }) => {
   const total = cartItems.reduce(
@@ -22,7 +23,9 @@ const Cart = ({ cartItems }) => {
               </li>
             ))}
           </ul>
-          <h3>Total: ₸{total.toFixed(2)}</h3>
+                    <h3>
+            Total: ₸<AnimatedNumber value={total.toFixed(2)} />
+          </h3>
         </>
       )}
     </div>

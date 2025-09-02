@@ -1,0 +1,41 @@
+.animated-number {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+}
+
+.digit-container {
+  position: relative;
+  overflow: hidden;
+  height: 1em;
+  width: 0.65em;
+}
+
+.digit {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.digit.prev {
+  transform: translateY(0);
+}
+
+.digit.curr {
+  transform: translateY(100%);
+}
+
+.digit-container.animate .digit.prev {
+  transform: translateY(-100%);
+}
+
+.digit-container.animate .digit.curr {
+  transform: translateY(0);
+}
+
+.static-char {
+  display: inline-block;
+  width: 0.65em;
+  text-align: center;
+}
