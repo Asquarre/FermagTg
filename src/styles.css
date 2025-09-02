@@ -628,7 +628,7 @@ header img:hover {
 .animated-number {
   display: inline-flex;
   font-variant-numeric: tabular-nums;
-  align-items: baseline;
+  align-items: center;
 }
 
 .digit-wrapper {
@@ -636,17 +636,17 @@ header img:hover {
   width: 1ch;
   height: 1em;
   overflow: hidden;
-  line-height: 1em;
 }
 
 .digit {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
   width: 100%;
   text-align: center;
   line-height: 1em;
   will-change: transform;
+  transform: translateY(-50%);
 }
 
 .digit-up-enter {
