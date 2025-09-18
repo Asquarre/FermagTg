@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
       res.status(400).json({ error: 'Empty order' });
       return;
     }
-    const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
+     const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
 
     const timestampString =
       typeof timestamp === 'string' || typeof timestamp === 'number'
@@ -97,7 +97,7 @@ module.exports = async (req, res) => {
               range: {
                 sheetId,
                 startRowIndex: 0,
-                endRowIndex: 3,
+                endRowIndex: 4,
                 startColumnIndex: 0,
                 endColumnIndex: 1,
               },
@@ -114,8 +114,8 @@ module.exports = async (req, res) => {
             repeatCell: {
               range: {
                 sheetId,
-                startRowIndex: 4,
-                endRowIndex: 5,
+                startRowIndex: 5,
+                endRowIndex: 6,
                 startColumnIndex: 0,
                 endColumnIndex: 2,
               },
