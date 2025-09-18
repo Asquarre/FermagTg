@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
       : `Order_${uniqueSuffix}`;
     const sanitizedSheetTitle = `${sheetTitleBase}_${uniqueSuffix}`.slice(0, 99);
 
-    await sheets.spreadsheets.batchUpdate({
+    const addSheetResponse = await sheets.spreadsheets.batchUpdate({
       spreadsheetId,
       resource: {
         requests: [
@@ -55,6 +55,12 @@ module.exports = async (req, res) => {
         ],
       },
     });
+
+    const sheetId =
+      addSheetResponse.data?.replies?.[0]?.addSheet?.properties?.sheetId;
+    if (typeof sheetId !== 'number') {
+      throw new Error('Failed to create order sheet');
+    }
 
     const orderTotal = items.reduce(
       (sum, item) => sum + (Number(item.quantity) || 0) * (Number(item.price) || 0),
@@ -79,6 +85,50 @@ module.exports = async (req, res) => {
       range: `${sanitizedSheetTitle}!A1`,
       valueInputOption: 'RAW',
       resource: { values: orderRows },
+    });
+
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      resource: {
+        requests: [
+          {
+            repeatCell: {
+              range: {
+                sheetId,
+                startRowIndex: 0,
+                endRowIndex: 3,
+                startColumnIndex: 0,
+                endColumnIndex: 1,
+              },
+              cell: {
+                userEnteredFormat: {
+                  backgroundColor: { red: 1, green: 1, blue: 0 },
+                  textFormat: { bold: true },
+                },
+              },
+              fields: 'userEnteredFormat(backgroundColor,textFormat)',
+            },
+          },
+          {
+            repeatCell: {
+              range: {
+                sheetId,
+                startRowIndex: 4,
+                endRowIndex: 5,
+                startColumnIndex: 0,
+                endColumnIndex: 2,
+              },
+              cell: {
+                userEnteredFormat: {
+                  backgroundColor: { red: 1, green: 1, blue: 0 },
+                  textFormat: { bold: true },
+                },
+              },
+              fields: 'userEnteredFormat(backgroundColor,textFormat)',
+            },
+          },
+        ],
+      },
     });
 
     res.status(200).json({ message: 'Order submitted successfully!' });
