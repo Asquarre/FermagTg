@@ -30,16 +30,29 @@ module.exports = async (req, res) => {
     }
      const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
 
-    const timestampString =
-      typeof timestamp === 'string' || typeof timestamp === 'number'
-        ? String(timestamp)
-        : new Date().toISOString();
-    const sanitizedIdentifier = timestampString.replace(/[^0-9A-Za-z]/g, '');
-    const uniqueSuffix = Date.now();
-    const sheetTitleBase = sanitizedIdentifier
-      ? `Order_${sanitizedIdentifier}`
-      : `Order_${uniqueSuffix}`;
-    const sanitizedSheetTitle = `${sheetTitleBase}_${uniqueSuffix}`.slice(0, 99);
+    const resolveOrderDate = (value) => {
+      if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
+        const parsed = new Date(value);
+        if (!Number.isNaN(parsed.getTime())) {
+          return parsed;
+        }
+      }
+      return new Date();
+    };
+
+    const orderDate = resolveOrderDate(timestamp);
+    const day = String(orderDate.getDate()).padStart(2, '0');
+    const month = String(orderDate.getMonth() + 1).padStart(2, '0');
+
+    const sanitizedAddress = (address || '')
+      .trim()
+      .replace(/[\n\r]+/g, ' ')
+      .replace(/[\[\]:*?/\\]/g, '')
+      .replace(/\s+/g, ' ')
+      .slice(0, 80);
+
+    const addressPart = sanitizedAddress || 'Adress';
+    const sanitizedSheetTitle = `${addressPart}_${day}.${month}`.slice(0, 99);
 
     const addSheetResponse = await sheets.spreadsheets.batchUpdate({
       spreadsheetId,
@@ -73,12 +86,12 @@ module.exports = async (req, res) => {
       ['Телефон:', phone || ''],
       ['Итог:', orderTotal],
       ['', ''],
-      ['Наименование', 'кол-во'],
+      ['Наименование', 'Кол-во'],
       ...items.map((item) => [
         item.name || item.title || '',
         item.quantity != null ? item.quantity : '',
       ]),
-      ['Итог', orderTotal],
+      ['ИТОГ:', orderTotal],
     ];
 
     await sheets.spreadsheets.values.update({
