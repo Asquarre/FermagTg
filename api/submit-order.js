@@ -132,6 +132,30 @@ module.exports = async (req, res) => {
       spreadsheetId,
       resource: {
         requests: [
+            {
+            updateDimensionProperties: {
+              range: {
+                sheetId,
+                dimension: 'COLUMNS',
+                startIndex: 0,
+                endIndex: 1,
+              },
+              properties: { pixelSize: 260 },
+              fields: 'pixelSize',
+            },
+          },
+          {
+            updateDimensionProperties: {
+              range: {
+                sheetId,
+                dimension: 'COLUMNS',
+                startIndex: 1,
+                endIndex: 2,
+              },
+              properties: { pixelSize: 160 },
+              fields: 'pixelSize',
+            },
+          },
           {
             repeatCell: {
               range: {
