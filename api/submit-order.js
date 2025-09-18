@@ -111,7 +111,7 @@ module.exports = async (req, res) => {
       ['Адрес:', address || ''],
       ['Покупатель:', user_id || ''],
       ['Телефон:', phone || ''],
-      ['Итог:', orderTotal || ''],
+      ['Итог:', orderTotal],
       ['', ''],
       ['Наименование', 'Кол-во'],
       ...items.map((item) => [
