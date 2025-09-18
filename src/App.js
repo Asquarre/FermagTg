@@ -246,6 +246,7 @@ const handleSearch = (term) => {
   const handleOrderSubmit = (orderDetails) => {
     return axios
       .post('/api/submit-order', {
+        customerName: orderDetails.customerName || '',
         user_id: orderDetails.user_id || '', // Include user_id
         address: orderDetails.address,
         phone: orderDetails.phone,

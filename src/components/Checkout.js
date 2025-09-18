@@ -5,6 +5,7 @@ import AnimatedNumber from './AnimatedNumber';
 import { formatPrice } from '../utils';
 
 const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
+  const [customerName, setCustomerName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -15,13 +16,14 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       return;
     }
     const digits = phone.replace(/\D/g, '');
-    if (!address.trim() || digits.length < 11) {
-      alert('Пожалуйста, введите адрес и полный номер телефона.');
+    if (!customerName.trim() || !address.trim() || digits.length < 11) {
+      alert('Пожалуйста, введите наименование заказчика, адрес и полный номер телефона.');
       return;
     }
     setIsLoading(true);
     try {
       await onSubmit({
+        customerName: customerName.trim(),
         address: address.trim(),
         phone,
         timestamp: new Date().toISOString(),
@@ -83,14 +85,23 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
             </ul>
             <div className="total">
               Сумма Заказа: ₸
-              <AnimatedNumber value={formatPrice(total)} />
+              <AnimatedNumber value={total.toFixed(2)} />
             </div>
           </>
         ) : (
           <p>Ваша корзина пуста.</p>
         )}
       </div>
-
+        <div style={{ margin: '10px 0' }}>
+        <label className="checkout-label">Наименование заказчика:</label>
+        <input
+          className="input-box"
+          type="text"
+          placeholder="Введите наименование заказчика"
+          value={customerName}
+          onChange={e => setCustomerName(e.target.value)}
+        />
+      </div>
       <div style={{ margin: '10px 0' }}>
         <label className="checkout-label">Адрес:</label>
         <textarea

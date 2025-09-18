@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { user_id, address, phone, items, timestamp } = req.body;
+    const { user_id, customerName, address, phone, items, timestamp } = req.body;
     if (!items || items.length === 0) {
       res.status(400).json({ error: 'Empty order' });
       return;
@@ -109,7 +109,7 @@ module.exports = async (req, res) => {
 
     const orderRows = [
       ['Адрес:', address || ''],
-      ['Покупатель:', user_id || ''],
+      ['Покупатель:', customerName || user_id || ''],
       ['Телефон:', phone || ''],
       ['Итог:', orderTotal],
       ['', ''],
