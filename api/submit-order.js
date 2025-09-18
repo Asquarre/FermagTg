@@ -28,15 +28,57 @@ module.exports = async (req, res) => {
       res.status(400).json({ error: 'Empty order' });
       return;
     }
-    const orderData = [
-      [timestamp, user_id || '', address, phone, JSON.stringify(items)],
+    const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
+
+    const timestampString =
+      typeof timestamp === 'string' || typeof timestamp === 'number'
+        ? String(timestamp)
+        : new Date().toISOString();
+    const sanitizedIdentifier = timestampString.replace(/[^0-9A-Za-z]/g, '');
+    const uniqueSuffix = Date.now();
+    const sheetTitleBase = sanitizedIdentifier
+      ? `Order_${sanitizedIdentifier}`
+      : `Order_${uniqueSuffix}`;
+    const sanitizedSheetTitle = `${sheetTitleBase}_${uniqueSuffix}`.slice(0, 99);
+
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      resource: {
+        requests: [
+          {
+            addSheet: {
+              properties: {
+                title: sanitizedSheetTitle,
+              },
+            },
+          },
+        ],
+      },
+    });
+
+    const orderTotal = items.reduce(
+      (sum, item) => sum + (Number(item.quantity) || 0) * (Number(item.price) || 0),
+      0,
+    );
+
+    const orderRows = [
+      ['Адрес', address || ''],
+      ['Покупатель', user_id || ''],
+      ['Телефон', phone || ''],
+      ['', ''],
+      ['Наименование', 'кол-во'],
+      ...items.map((item) => [
+        item.name || item.title || '',
+        item.quantity != null ? item.quantity : '',
+      ]),
+      ['Итог', orderTotal],
     ];
 
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-      range: 'Orders!A:E', // Adjusted range to include column E
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `${sanitizedSheetTitle}!A1`,
       valueInputOption: 'RAW',
-      resource: { values: orderData },
+      resource: { values: orderRows },
     });
 
     res.status(200).json({ message: 'Order submitted successfully!' });
