@@ -44,15 +44,15 @@ module.exports = async (req, res) => {
     const day = String(orderDate.getDate()).padStart(2, '0');
     const month = String(orderDate.getMonth() + 1).padStart(2, '0');
 
-    const sanitizedAddress = (address || '')
+    const sanitizedCustomerName = (customerName || user_id || address || '')
       .trim()
       .replace(/[\n\r]+/g, ' ')
       .replace(/[\[\]:*?/\\]/g, '')
       .replace(/\s+/g, ' ')
       .slice(0, 80);
 
-    const addressPart = sanitizedAddress || 'Adress';
-    const baseSheetTitle = `${addressPart}_${day}.${month}`.slice(0, 99);
+    const customerPart = sanitizedCustomerName || 'Customer';
+    const baseSheetTitle = `${customerPart}_${day}.${month}`.slice(0, 99);
 
     const { data: spreadsheetInfo } = await sheets.spreadsheets.get({
       spreadsheetId,
