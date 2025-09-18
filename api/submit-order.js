@@ -121,6 +121,14 @@ module.exports = async (req, res) => {
       ['ИТОГ:', orderTotal],
     ];
 
+    const finalTotalRowIndex = orderRows.length - 1;
+    const initialTotalRowIndex = orderRows.findIndex(
+      ([label], index) =>
+        index !== finalTotalRowIndex &&
+        typeof label === 'string' &&
+        label.trim().toLowerCase() === 'итог:',
+    );
+
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `${sanitizedSheetTitle}!A1`,
@@ -128,71 +136,118 @@ module.exports = async (req, res) => {
       resource: { values: orderRows },
     });
 
+ const formattingRequests = [
+      {
+        updateDimensionProperties: {
+          range: {
+            sheetId,
+            dimension: 'COLUMNS',
+            startIndex: 0,
+            endIndex: 1,
+          },
+          properties: { pixelSize: 260 },
+          fields: 'pixelSize',
+        },
+      },
+      {
+        updateDimensionProperties: {
+          range: {
+            sheetId,
+            dimension: 'COLUMNS',
+            startIndex: 1,
+            endIndex: 2,
+          },
+          properties: { pixelSize: 160 },
+          fields: 'pixelSize',
+        },
+      },
+      {
+        repeatCell: {
+          range: {
+            sheetId,
+            startRowIndex: 0,
+            endRowIndex: 4,
+            startColumnIndex: 0,
+            endColumnIndex: 1,
+          },
+          cell: {
+            userEnteredFormat: {
+              backgroundColor: { red: 1, green: 1, blue: 0 },
+              textFormat: { bold: true },
+            },
+          },
+          fields: 'userEnteredFormat(backgroundColor,textFormat)',
+        },
+      },
+      {
+        repeatCell: {
+          range: {
+            sheetId,
+            startRowIndex: 5,
+            endRowIndex: 6,
+            startColumnIndex: 0,
+            endColumnIndex: 2,
+          },
+          cell: {
+            userEnteredFormat: {
+              backgroundColor: { red: 1, green: 1, blue: 0 },
+              textFormat: { bold: true },
+            },
+          },
+          fields: 'userEnteredFormat(backgroundColor,textFormat)',
+        },
+      },
+    ];
+
+    if (initialTotalRowIndex >= 0) {
+      formattingRequests.push({
+        repeatCell: {
+          range: {
+            sheetId,
+            startRowIndex: initialTotalRowIndex,
+            endRowIndex: initialTotalRowIndex + 1,
+            startColumnIndex: 1,
+            endColumnIndex: 2,
+          },
+          cell: {
+            userEnteredFormat: {
+              numberFormat: {
+                type: 'CURRENCY',
+                pattern: '[$₸-kk_KZ] #,##0.00',
+              },
+              
+            },
+          },
+          fields: 'userEnteredFormat.numberFormat',
+        },
+      });
+    }
+
+    formattingRequests.push({
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: finalTotalRowIndex,
+          endRowIndex: finalTotalRowIndex + 1,
+          startColumnIndex: 1,
+          endColumnIndex: 2,
+        },
+        cell: {
+          userEnteredFormat: {
+            numberFormat: {
+              type: 'CURRENCY',
+              pattern: '[$₸-kk_KZ] #,##0.00',
+            },
+          },
+        },
+        fields: 'userEnteredFormat.numberFormat',
+      },
+    });
+
     await sheets.spreadsheets.batchUpdate({
       spreadsheetId,
       resource: {
-        requests: [
-            {
-            updateDimensionProperties: {
-              range: {
-                sheetId,
-                dimension: 'COLUMNS',
-                startIndex: 0,
-                endIndex: 1,
-              },
-              properties: { pixelSize: 260 },
-              fields: 'pixelSize',
-            },
-          },
-          {
-            updateDimensionProperties: {
-              range: {
-                sheetId,
-                dimension: 'COLUMNS',
-                startIndex: 1,
-                endIndex: 2,
-              },
-              properties: { pixelSize: 160 },
-              fields: 'pixelSize',
-            },
-          },
-          {
-            repeatCell: {
-              range: {
-                sheetId,
-                startRowIndex: 0,
-                endRowIndex: 4,
-                startColumnIndex: 0,
-                endColumnIndex: 1,
-              },
-              cell: {
-                userEnteredFormat: {
-                  backgroundColor: { red: 1, green: 1, blue: 0 },
-                  textFormat: { bold: true },
-                },
-              },
-              fields: 'userEnteredFormat(backgroundColor,textFormat)',
-            },
-          },
-          {
-            repeatCell: {
-              range: {
-                sheetId,
-                startRowIndex: 5,
-                endRowIndex: 6,
-                startColumnIndex: 0,
-                endColumnIndex: 2,
-              },
-              cell: {
-                userEnteredFormat: {
-                  backgroundColor: { red: 1, green: 1, blue: 0 },
-                  textFormat: { bold: true },
-                },
-              },
-              fields: 'userEnteredFormat(backgroundColor,textFormat)',
-            },
-          },
-        ],
+        requests: formattingRequests,
       },
     });
 
