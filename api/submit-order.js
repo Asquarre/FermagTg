@@ -68,9 +68,10 @@ module.exports = async (req, res) => {
     );
 
     const orderRows = [
-      ['Адрес', address || ''],
-      ['Покупатель', user_id || ''],
-      ['Телефон', phone || ''],
+      ['Адрес:', address || ''],
+      ['Покупатель:', user_id || ''],
+      ['Телефон:', phone || ''],
+      ['Итог:', orderTotal],
       ['', ''],
       ['Наименование', 'кол-во'],
       ...items.map((item) => [
