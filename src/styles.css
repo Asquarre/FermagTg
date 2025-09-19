@@ -460,7 +460,7 @@ header img:hover {
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.3s ease;
   text-transform: uppercase; /* Make text uppercase */
-  display: inline-flex; /* Inline-flex for alignment */
+  display: flex; /* Inline-flex for alignment */
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
