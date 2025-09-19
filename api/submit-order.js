@@ -143,8 +143,8 @@ module.exports = async (req, res) => {
       ['Адрес:', address || ''],
       ['Покупатель:', customerName || user_id || ''],
       ['Телефон:', phone || ''],
-      ['Итог:', orderTotal],
       ['Доставка/самовывоз:', fulfillmentValue],
+      ['Итог:', orderTotal],
       ['', ''],
       ['Наименование', 'Кол-во'],
       ...items.map((item) => [
@@ -201,7 +201,7 @@ module.exports = async (req, res) => {
             startRowIndex: 0,
             endRowIndex: 5,
             startColumnIndex: 0,
-            endColumnIndex: 2,
+            endColumnIndex: 1,
           },
           cell: {
             userEnteredFormat: {
