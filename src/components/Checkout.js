@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputMask from "react-input-mask";
 import AnimatedNumber from './AnimatedNumber';
 import { formatPrice } from '../utils';
@@ -10,28 +10,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fulfillmentType, setFulfillmentType] = useState("delivery");
-  const [animationDirection, setAnimationDirection] = useState(null);
 
-  useEffect(() => {
-    if (!animationDirection) {
-      return undefined;
-    }
-
-    const timeout = setTimeout(() => {
-      setAnimationDirection(null);
-    }, 650);
-
-    return () => clearTimeout(timeout);
-  }, [animationDirection]);
-
-  const handleFulfillmentChange = (nextType) => {
-    if (nextType === fulfillmentType) {
-      return;
-    }
-
-    setAnimationDirection(nextType === "delivery" ? "to-delivery" : "to-pickup");
-    setFulfillmentType(nextType);
-  };
   const handleSubmit = async () => {
     if (cart.length === 0) {
       alert('Ваша корзина пуста.');
@@ -65,11 +44,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   };
 
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-  const toggleClasses = ['delivery-toggle', fulfillmentType];
 
-  if (animationDirection) {
-    toggleClasses.push('is-animating', animationDirection);
-  }
   return (
     <div>
       <button className="go-back-button" onClick={onBack}>
@@ -127,23 +102,18 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
           <p>Ваша корзина пуста.</p>
         )}
         </div>
-      <div
-        className={toggleClasses.join(' ')}
-        role="group"
-        aria-label="Способ получения"
-      >
-        <span className="delivery-toggle-indicator" aria-hidden="true" />
+      <div className="delivery-toggle" role="group" aria-label="Способ получения">
         <button
           type="button"
           className={`delivery-toggle-option ${fulfillmentType === 'delivery' ? 'active' : ''}`}
-          onClick={() => handleFulfillmentChange('delivery')}
+          onClick={() => setFulfillmentType('delivery')}
         >
           Доставка
         </button>
         <button
           type="button"
           className={`delivery-toggle-option ${fulfillmentType === 'pickup' ? 'active' : ''}`}
-          onClick={() => handleFulfillmentChange('pickup')}
+          onClick={() => setFulfillmentType('pickup')}
         >
           Самовывоз
         </button>
