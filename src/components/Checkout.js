@@ -9,6 +9,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [fulfillmentType, setFulfillmentType] = useState("delivery");
 
   const handleSubmit = async () => {
     if (cart.length === 0) {
@@ -16,8 +17,16 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       return;
     }
     const digits = phone.replace(/\D/g, '');
-    if (!customerName.trim() || !address.trim() || digits.length < 11) {
-      alert('Пожалуйста, введите наименование заказчика, адрес и полный номер телефона.');
+    if (
+      !customerName.trim() ||
+      (fulfillmentType === 'delivery' && !address.trim()) ||
+      digits.length < 11
+    ) {
+      alert(
+        fulfillmentType === 'delivery'
+          ? 'Пожалуйста, введите наименование заказчика, адрес и полный номер телефона.'
+          : 'Пожалуйста, введите наименование заказчика и полный номер телефона.'
+      );
       return;
     }
     setIsLoading(true);
@@ -26,6 +35,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
         customerName: customerName.trim(),
         address: address.trim(),
         phone,
+        fulfillmentType: fulfillmentType === 'delivery' ? 'Доставка' : 'Самовывоз',
         timestamp: new Date().toISOString(),
       });
       } finally {
@@ -91,6 +101,22 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
         ) : (
           <p>Ваша корзина пуста.</p>
         )}
+        </div>
+      <div className="delivery-toggle" role="group" aria-label="Способ получения">
+        <button
+          type="button"
+          className={`delivery-toggle-option ${fulfillmentType === 'delivery' ? 'active' : ''}`}
+          onClick={() => setFulfillmentType('delivery')}
+        >
+          Доставка
+        </button>
+        <button
+          type="button"
+          className={`delivery-toggle-option ${fulfillmentType === 'pickup' ? 'active' : ''}`}
+          onClick={() => setFulfillmentType('pickup')}
+        >
+          Самовывоз
+        </button>
       </div>
         <div style={{ margin: '10px 0' }}>
         <label className="checkout-label">Наименование заказчика:</label>
@@ -107,7 +133,11 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
         <textarea
           className="input-box"
           rows="3"
-          placeholder="Введите адрес доставки"
+          placeholder={
+            fulfillmentType === 'delivery'
+              ? 'Введите адрес доставки'
+              : 'Введите комментарий или адрес (если требуется)'
+          }
           value={address}
           onChange={e => setAddress(e.target.value)}
         />

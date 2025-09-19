@@ -186,6 +186,44 @@ body {
 .remove-item-button:focus {
   outline: none;
 }
+.delivery-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 6px;
+  margin: 20px auto;
+  width: fit-content;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.delivery-toggle-option {
+  border: none;
+  background: transparent;
+  color: #9a9a9a;
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-family: 'Sf Pro Rounded', sans-serif;
+}
+
+.delivery-toggle-option.active {
+  background: #44AF69;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(68, 175, 105, 0.35);
+}
+
+.delivery-toggle-option:focus {
+  outline: none;
+}
+
+.delivery-toggle-option:disabled {
+  cursor: not-allowed;
+}
 
 /* Styling for the category buttons */
 .category-button {
