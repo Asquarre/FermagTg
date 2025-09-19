@@ -23,7 +23,15 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { user_id, customerName, address, phone, items, timestamp } = req.body;
+    const {
+      user_id,
+      customerName,
+      address,
+      phone,
+      items,
+      fulfillmentType,
+      timestamp,
+    } = req.body;
     if (!items || items.length === 0) {
       res.status(400).json({ error: 'Empty order' });
       return;
@@ -106,12 +114,17 @@ module.exports = async (req, res) => {
       (sum, item) => sum + (Number(item.quantity) || 0) * (Number(item.price) || 0),
       0,
     );
+    const fulfillmentValue =
+      typeof fulfillmentType === 'string' && fulfillmentType.trim()
+        ? fulfillmentType.trim()
+        : 'Не указан';
 
     const orderRows = [
       ['Адрес:', address || ''],
       ['Покупатель:', customerName || user_id || ''],
       ['Телефон:', phone || ''],
       ['Итог:', orderTotal],
+      [`Доставка/самовывоз: ${fulfillmentValue}`, ''],
       ['', ''],
       ['Наименование', 'Кол-во'],
       ...items.map((item) => [
@@ -136,7 +149,7 @@ module.exports = async (req, res) => {
       resource: { values: orderRows },
     });
 
- const formattingRequests = [
+    const formattingRequests = [
       {
         updateDimensionProperties: {
           range: {
@@ -166,7 +179,7 @@ module.exports = async (req, res) => {
           range: {
             sheetId,
             startRowIndex: 0,
-            endRowIndex: 4,
+            endRowIndex: 5,
             startColumnIndex: 0,
             endColumnIndex: 1,
           },
@@ -183,8 +196,8 @@ module.exports = async (req, res) => {
         repeatCell: {
           range: {
             sheetId,
-            startRowIndex: 5,
-            endRowIndex: 6,
+            startRowIndex: 6,
+            endRowIndex: 7,
             startColumnIndex: 0,
             endColumnIndex: 2,
           },
