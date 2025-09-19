@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
 import AnimatedNumber from './AnimatedNumber';
 import { formatPrice } from '../utils';
@@ -11,6 +11,23 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fulfillmentType, setFulfillmentType] = useState("delivery");
 
+  const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
+  const DELIVERY_THRESHOLD = 30000;
+  const isDeliveryAvailable = total >= DELIVERY_THRESHOLD;
+
+  useEffect(() => {
+    if (!isDeliveryAvailable && fulfillmentType === 'delivery') {
+      setFulfillmentType('pickup');
+    }
+  }, [isDeliveryAvailable, fulfillmentType]);
+
+  const handleFulfillmentChange = (type) => {
+    if (type === 'delivery' && !isDeliveryAvailable) {
+      alert('Доставка доступна только для заказов на сумму от 30 000 тенге.');
+      return;
+    }
+    setFulfillmentType(type);
+  };
   const handleSubmit = async () => {
     if (cart.length === 0) {
       alert('Ваша корзина пуста.');
@@ -43,7 +60,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
     }
   };
 
-  const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
+  
 
   return (
     <div>
@@ -105,15 +122,16 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       <div className="delivery-toggle" role="group" aria-label="Способ получения">
         <button
           type="button"
-          className={`delivery-toggle-option ${fulfillmentType === 'delivery' ? 'active' : ''}`}
-          onClick={() => setFulfillmentType('delivery')}
+          className={`delivery-toggle-option ${fulfillmentType === 'delivery' ? 'active' : ''} ${!isDeliveryAvailable ? 'disabled' : ''}`}
+          onClick={() => handleFulfillmentChange('delivery')}
+          aria-disabled={!isDeliveryAvailable}
         >
           Доставка
         </button>
         <button
           type="button"
           className={`delivery-toggle-option ${fulfillmentType === 'pickup' ? 'active' : ''}`}
-          onClick={() => setFulfillmentType('pickup')}
+          onClick={() => handleFulfillmentChange('pickup')}
         >
           Самовывоз
         </button>

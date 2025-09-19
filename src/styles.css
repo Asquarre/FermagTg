@@ -221,8 +221,11 @@ body {
   outline: none;
 }
 
-.delivery-toggle-option:disabled {
+.delivery-toggle-option.disabled {
   cursor: not-allowed;
+  color: #c0c0c0;
+  background: #f2f2f2;
+  box-shadow: none;
 }
 /* Styling for the category buttons */
 .category-button {
