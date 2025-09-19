@@ -187,27 +187,63 @@ body {
   outline: none;
 }
 .delivery-toggle {
+  --toggle-padding: 6px;
+  position: relative;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  gap: 8px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 999px;
-  padding: 6px;
+  padding: var(--toggle-padding);
   margin: 20px auto;
   width: fit-content;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+   overflow: hidden;
+  gap: 0;
+}
+
+.delivery-toggle-indicator {
+  position: absolute;
+  top: var(--toggle-padding);
+  bottom: var(--toggle-padding);
+  left: var(--toggle-padding);
+  width: calc(50% - var(--toggle-padding));
+  border-radius: 999px;
+  background: linear-gradient(135deg, #44af69, #2f8249);
+  box-shadow: 0 8px 16px rgba(68, 175, 105, 0.45);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  z-index: 0;
+}
+
+.delivery-toggle.pickup .delivery-toggle-indicator {
+  transform: translateX(100%);
+}
+
+.delivery-toggle.is-animating .delivery-toggle-indicator {
+  transition: none;
+}
+
+.delivery-toggle.is-animating.to-pickup .delivery-toggle-indicator {
+  animation: toggle-stretch-forward 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.delivery-toggle.is-animating.to-delivery .delivery-toggle-indicator {
+  animation: toggle-stretch-backward 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .delivery-toggle-option {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
   border: none;
   background: transparent;
-  color: #9a9a9a;
+  color: #5f5f5f;
   border-radius: 999px;
-  padding: 10px 24px;
-  font-size: 1.1rem;
+  padding: 12px 30px;
+  font-size: 1.05rem;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: color 0.25s ease-in-out, transform 0.3s ease;
   font-family: 'Sf Pro Rounded', sans-serif;
 }
 
@@ -223,6 +259,36 @@ body {
 
 .delivery-toggle-option:disabled {
   cursor: not-allowed;
+}
+
+@keyframes toggle-stretch-forward {
+  0% {
+    transform: translateX(0) scaleX(1);
+  }
+  35% {
+    transform: translateX(20%) scaleX(1.2);
+  }
+  65% {
+    transform: translateX(85%) scaleX(0.9);
+  }
+  100% {
+    transform: translateX(100%) scaleX(1);
+  }
+}
+
+@keyframes toggle-stretch-backward {
+  0% {
+    transform: translateX(100%) scaleX(1);
+  }
+  35% {
+    transform: translateX(80%) scaleX(1.2);
+  }
+  65% {
+    transform: translateX(15%) scaleX(0.9);
+  }
+  100% {
+    transform: translateX(0) scaleX(1);
+  }
 }
 
 /* Styling for the category buttons */
