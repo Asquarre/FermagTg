@@ -250,6 +250,7 @@ const handleSearch = (term) => {
         user_id: orderDetails.user_id || '', // Include user_id
         address: orderDetails.address,
         phone: orderDetails.phone,
+        fulfillmentType: orderDetails.fulfillmentType || '',
         items: cart,
         timestamp: orderDetails.timestamp,
       })

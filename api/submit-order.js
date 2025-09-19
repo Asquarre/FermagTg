@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
       res.status(400).json({ error: 'Empty order' });
       return;
     }
-     const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
+    const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
 
     const resolveOrderDate = (value) => {
       if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
@@ -114,17 +114,37 @@ module.exports = async (req, res) => {
       (sum, item) => sum + (Number(item.quantity) || 0) * (Number(item.price) || 0),
       0,
     );
-    const fulfillmentValue =
-      typeof fulfillmentType === 'string' && fulfillmentType.trim()
-        ? fulfillmentType.trim()
-        : 'Не указан';
+    const normalizeFulfillmentType = (value) => {
+      if (typeof value !== 'string') {
+        return 'Не указан';
+      }
+
+      const trimmed = value.trim();
+      if (!trimmed) {
+        return 'Не указан';
+      }
+
+      const lowerCased = trimmed.toLowerCase();
+
+      if (lowerCased === 'delivery' || lowerCased === 'доставка') {
+        return 'Доставка';
+      }
+
+      if (lowerCased === 'pickup' || lowerCased === 'самовывоз') {
+        return 'Самовывоз';
+      }
+
+      return trimmed;
+    };
+
+    const fulfillmentValue = normalizeFulfillmentType(fulfillmentType);
 
     const orderRows = [
       ['Адрес:', address || ''],
       ['Покупатель:', customerName || user_id || ''],
       ['Телефон:', phone || ''],
       ['Итог:', orderTotal],
-      [`Доставка/самовывоз: ${fulfillmentValue}`, ''],
+      ['Доставка/самовывоз:', fulfillmentValue],
       ['', ''],
       ['Наименование', 'Кол-во'],
       ...items.map((item) => [
@@ -181,7 +201,7 @@ module.exports = async (req, res) => {
             startRowIndex: 0,
             endRowIndex: 5,
             startColumnIndex: 0,
-            endColumnIndex: 1,
+            endColumnIndex: 2,
           },
           cell: {
             userEnteredFormat: {
