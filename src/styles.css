@@ -223,9 +223,8 @@ body {
 
 .delivery-toggle-option.disabled {
   cursor: not-allowed;
-  color: #c0c0c0;
-  background: #f2f2f2;
-  box-shadow: none;
+  color: #c0c0c0db;
+  
 }
 /* Styling for the category buttons */
 .category-button {
