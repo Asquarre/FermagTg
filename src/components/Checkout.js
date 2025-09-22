@@ -130,14 +130,14 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
           onClick={() => handleFulfillmentChange('delivery')}
           aria-disabled={!isDeliveryAvailable}
         >
-          Доставка
+            <span className="delivery-toggle-label">Доставка</span>
         </button>
         <button
           type="button"
           className={`delivery-toggle-option ${fulfillmentType === 'pickup' ? 'active' : ''}`}
           onClick={() => handleFulfillmentChange('pickup')}
         >
-          Самовывоз
+          <span className="delivery-toggle-label">Самовывоз</span>
         </button>
       </div>
         <div style={{ margin: '10px 0' }}>

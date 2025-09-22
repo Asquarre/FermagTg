@@ -212,10 +212,34 @@ body {
   font-family: 'Sf Pro Rounded', sans-serif;
 }
 
+.delivery-toggle-option .delivery-toggle-label {
+  display: inline-block;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
 .delivery-toggle-option.active {
   background: #44AF69;
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(68, 175, 105, 0.35);
+}
+
+.delivery-toggle-option.active .delivery-toggle-label {
+  transform: scale(1.08);
+  animation: deliveryToggleLabelPop 0.3s ease forwards;
+}
+
+@keyframes deliveryToggleLabelPop {
+  0% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1.08);
+  }
 }
 
 .delivery-toggle-option:focus {
