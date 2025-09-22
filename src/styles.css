@@ -662,81 +662,34 @@ header img:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
-/* AnimatedNumber styles */
+/* Keep it crisp and stable-width */
 .animated-number {
-  display: inline-block;
+  display: inline-flex;
   font-variant-numeric: tabular-nums;
   line-height: 1;
   vertical-align: middle;
+  gap: 0.02em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Each digit “slot” */
 .digit-wrapper {
   position: relative;
   display: inline-block;
-  min-width: 1ch;
-  height: 1.2em;
-  overflow-y: hidden;
-  overflow-x: visible;
-  padding: 0 3px; 
+  min-width: 1ch;     /* fixed width per char to prevent jitter */
+  height: 1.2em;      /* controls travel distance visually */
+  overflow: hidden;   /* hide sliding content */
+  padding: 0 3px;
 }
+
 .qty-inline .digit-wrapper { min-width: 1.2ch; }
 
+/* The animated element itself */
 .digit {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
+  display: inline-block;
   line-height: 1.2em;
-  will-change: transform, filter;
-  transform: translateY(-50%);
-  filter: blur(0);
-}
-
-.digit-up-enter {
-  transform: translateY(50%);
-  filter: blur(3px);
-}
-
-
-.digit-up-enter-active {
-  transform: translateY(0);
-  filter: blur(0);
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-.digit-up-exit {
-  transform: translateY(-50%);
-  filter: blur(0);
-}
-
-
-.digit-up-exit-active {
-  transform: translateY(-150%);
-  filter: blur(3px);
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-.digit-down-enter {
-  transform: translateY(-150%);
-  filter: blur(3px);
-}
-
-
-.digit-down-enter-active {
-  transform: translateY(-50%);
-  filter: blur(0);
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-.digit-down-exit {
-  transform: translateY(-50%);
-  filter: blur(0);
-}
-
-
-.digit-down-exit-active {
-  transform: translateY(150%);
-  filter: blur(3px);
-  transition: transform 0.3s ease, filter 0.3s ease;
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
+  transform: translate3d(0,0,0);
 }
