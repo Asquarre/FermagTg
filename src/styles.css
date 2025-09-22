@@ -226,7 +226,7 @@ body {
 }
 
 .delivery-toggle-option.active .delivery-toggle-label {
-  transform: scale(1.08);
+  transform: scale(1.12);
   animation: deliveryToggleLabelPop 0.3s ease forwards;
 }
 
@@ -235,10 +235,10 @@ body {
     transform: scale(1);
   }
   70% {
-    transform: scale(1.17);
+    transform: scale(1.19);
   }
   100% {
-    transform: scale(1.10);
+    transform: scale(1.12);
   }
 }
 
