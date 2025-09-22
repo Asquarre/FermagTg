@@ -593,8 +593,7 @@ header img:hover {
 
 .checkout-order-summary h3 {
   text-align: center;
-  border-top: 3px solid #3e3e3e;
-  border-bottom: 3px solid #3e3e3e;
+  
 }
 
 .checkout-order-summary ul {
