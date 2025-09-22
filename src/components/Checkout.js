@@ -74,8 +74,12 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
         {cart.length ? (
           <>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-              {cart.map((item) => (
-                <li key={item.id} className="checkout-item">
+              {cart.map((item, index) => (
+                <li
+                  key={item.id}
+                  className="checkout-item"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <span className="checkout-item-name">{item.name}</span>
                   <div className="checkout-item-quantity">
                     <button
