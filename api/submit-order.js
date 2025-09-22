@@ -51,7 +51,11 @@ module.exports = async (req, res) => {
     const orderDate = resolveOrderDate(timestamp);
     const day = String(orderDate.getDate()).padStart(2, '0');
     const month = String(orderDate.getMonth() + 1).padStart(2, '0');
-
+    const year = orderDate.getFullYear();
+    const hours = String(orderDate.getHours()).padStart(2, '0');
+    const minutes = String(orderDate.getMinutes()).padStart(2, '0');
+    const formattedOrderDateTime = `${day}.${month}.${year} ${hours}:${minutes}`;
+    
     const sanitizedCustomerName = (customerName || user_id || address || '')
       .trim()
       .replace(/[\n\r]+/g, ' ')
@@ -311,6 +315,7 @@ module.exports = async (req, res) => {
     });
 
     const messageLines = [
+      formattedOrderDateTime,
       '🛒 Новый заказ',
       `Покупатель: ${customerName || user_id || 'Не указан'}`,
       `Телефон: ${phone || 'Не указан'}`,
@@ -330,7 +335,7 @@ module.exports = async (req, res) => {
       text: messageText,
     });
 
-    
+
     res.status(200).json({ message: 'Order submitted successfully!' });
   } catch (error) {
     console.error('Error submitting order:', error);
