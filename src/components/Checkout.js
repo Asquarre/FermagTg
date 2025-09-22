@@ -28,6 +28,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
     return () => clearTimeout(timeoutId);
   }, [fulfillmentType]);
 
+
   const handleFulfillmentChange = (type) => {
     if (type === 'delivery' && !isDeliveryAvailable) {
       alert('Доставка доступна только для заказов на сумму от 30 000 тенге.');
