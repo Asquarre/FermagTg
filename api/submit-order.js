@@ -327,6 +327,7 @@ module.exports = async (req, res) => {
 
     const messageLines = [
       formattedOrderDateTime,
+      '',
       '🛒 Новый заказ',
       `👨Покупатель: ${customerName || user_id || 'Не указан'}`,
       `📞Телефон: ${phone || 'Не указан'}`,
