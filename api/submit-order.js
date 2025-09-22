@@ -155,11 +155,11 @@ module.exports = async (req, res) => {
     const fulfillmentValue = normalizeFulfillmentType(fulfillmentType);
 
     const orderRows = [
-      ['📍Адрес:', address || ''],
-      ['👨‍💼Покупатель:', customerName || user_id || ''],
-      ['📞Телефон:', phone || ''],
-      ['🚛Доставка/самовывоз:', fulfillmentValue],
-      ['💰Итог:', orderTotal],
+      ['Адрес:', address || ''],
+      ['Покупатель:', customerName || user_id || ''],
+      ['Телефон:', phone || ''],
+      ['Доставка/самовывоз:', fulfillmentValue],
+      ['Итог:', orderTotal],
       ['', ''],
       ['Наименование', 'Кол-во'],
       ...items.map((item) => [
@@ -328,10 +328,10 @@ module.exports = async (req, res) => {
     const messageLines = [
       formattedOrderDateTime,
       '🛒 Новый заказ',
-      `Покупатель: ${customerName || user_id || 'Не указан'}`,
-      `Телефон: ${phone || 'Не указан'}`,
-      `Адрес: ${address || 'Не указан'}`,
-      `Доставка/самовывоз: ${fulfillmentValue}`,
+      `👨Покупатель: ${customerName || user_id || 'Не указан'}`,
+      `📞Телефон: ${phone || 'Не указан'}`,
+      `📍Адрес: ${address || 'Не указан'}`,
+      `🚛Доставка/самовывоз: ${fulfillmentValue}`,
       '',
       'Товары:',
       ...itemLines,
