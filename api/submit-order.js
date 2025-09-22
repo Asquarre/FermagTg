@@ -49,11 +49,22 @@ module.exports = async (req, res) => {
     };
 
     const orderDate = resolveOrderDate(timestamp);
-    const day = String(orderDate.getDate()).padStart(2, '0');
-    const month = String(orderDate.getMonth() + 1).padStart(2, '0');
-    const year = orderDate.getFullYear();
-    const hours = String(orderDate.getHours()).padStart(2, '0');
-    const minutes = String(orderDate.getMinutes()).padStart(2, '0');
+    const formatGmtPlusFiveDate = (date) => {
+      const gmtPlusFiveOffsetMinutes = 5 * 60;
+      const gmtPlusFiveDate = new Date(
+        date.getTime() + gmtPlusFiveOffsetMinutes * 60 * 1000,
+      );
+
+      return {
+        day: String(gmtPlusFiveDate.getUTCDate()).padStart(2, '0'),
+        month: String(gmtPlusFiveDate.getUTCMonth() + 1).padStart(2, '0'),
+        year: String(gmtPlusFiveDate.getUTCFullYear()),
+        hours: String(gmtPlusFiveDate.getUTCHours()).padStart(2, '0'),
+        minutes: String(gmtPlusFiveDate.getUTCMinutes()).padStart(2, '0'),
+      };
+    };
+
+    const { day, month, year, hours, minutes } = formatGmtPlusFiveDate(orderDate);
     const formattedOrderDateTime = `${day}.${month}.${year} ${hours}:${minutes}`;
     
     const sanitizedCustomerName = (customerName || user_id || address || '')
@@ -144,11 +155,11 @@ module.exports = async (req, res) => {
     const fulfillmentValue = normalizeFulfillmentType(fulfillmentType);
 
     const orderRows = [
-      ['Адрес:', address || ''],
-      ['Покупатель:', customerName || user_id || ''],
-      ['Телефон:', phone || ''],
-      ['Доставка/самовывоз:', fulfillmentValue],
-      ['Итог:', orderTotal],
+      ['📍Адрес:', address || ''],
+      ['👨‍💼Покупатель:', customerName || user_id || ''],
+      ['📞Телефон:', phone || ''],
+      ['🚛Доставка/самовывоз:', fulfillmentValue],
+      ['💰Итог:', orderTotal],
       ['', ''],
       ['Наименование', 'Кол-во'],
       ...items.map((item) => [
