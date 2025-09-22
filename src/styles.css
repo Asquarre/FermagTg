@@ -662,121 +662,81 @@ header img:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-/* AnimatedNumber.css */
+
+/* AnimatedNumber styles */
 .animated-number {
-  display: inline-flex;
-  gap: 0.02em;
-  /* Crisp typography with fixed-width numerals */
+  display: inline-block;
   font-variant-numeric: tabular-nums;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  line-height: 1;
+  vertical-align: middle;
 }
 
 .digit-wrapper {
   position: relative;
   display: inline-block;
-  overflow: hidden;              /* hides vertical slide */
-  line-height: 1;                /* tighter vertical rhythm */
-  height: 1em;                   /* clamps slide distance to font size */
+  min-width: 1ch;
+  height: 1.2em;
+  overflow-y: hidden;
+  overflow-x: visible;
+  padding: 0 3px; 
 }
+.qty-inline .digit-wrapper { min-width: 1.2ch; }
 
 .digit {
-  display: inline-block;
-  will-change: transform, opacity, filter;
-  backface-visibility: hidden;
-  transform: translate3d(0,0,0);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  line-height: 1.2em;
+  will-change: transform, filter;
+  transform: translateY(-50%);
+  filter: blur(0);
 }
 
-/* Easing & timing tuned for a soft iOS-like feel */
-:root {
-  --digit-duration: 220ms;
-  --digit-ease: cubic-bezier(.22, .61, .36, 1); /* “standard” ease out */
-  --digit-blur: 4px;
-  --digit-overshoot: 12%;        /* tiny overshoot for character */
-}
-
-/* Slide UP (number increases) */
 .digit-up-enter {
-  transform: translate3d(0, 100%, 0);
-  opacity: 0.001;
-  filter: blur(var(--digit-blur));
+  transform: translateY(50%);
+  filter: blur(3px);
 }
+
+
 .digit-up-enter-active {
-  transform: translate3d(0, 0, 0);
-  opacity: 1;
+  transform: translateY(0);
   filter: blur(0);
-  transition: transform var(--digit-duration) var(--digit-ease),
-              opacity var(--digit-duration) var(--digit-ease),
-              filter var(--digit-duration) var(--digit-ease);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
+
 .digit-up-exit {
-  transform: translate3d(0, 0, 0);
-  opacity: 1;
-}
-.digit-up-exit-active {
-  transform: translate3d(0, -100%, 0);
-  opacity: 0.001;
-  transition: transform var(--digit-duration) var(--digit-ease),
-              opacity var(--digit-duration) var(--digit-ease);
-}
-
-/* Slide DOWN (number decreases) */
-.digit-down-enter {
-  transform: translate3d(0, -100%, 0);
-  opacity: 0.001;
-  filter: blur(var(--digit-blur));
-}
-.digit-down-enter-active {
-  transform: translate3d(0, 0, 0);
-  opacity: 1;
+  transform: translateY(-50%);
   filter: blur(0);
-  transition: transform var(--digit-duration) var(--digit-ease),
-              opacity var(--digit-duration) var(--digit-ease),
-              filter var(--digit-duration) var(--digit-ease);
-}
-.digit-down-exit {
-  transform: translate3d(0, 0, 0);
-  opacity: 1;
-}
-.digit-down-exit-active {
-  transform: translate3d(0, 100%, 0);
-  opacity: 0.001;
-  transition: transform var(--digit-duration) var(--digit-ease),
-              opacity var(--digit-duration) var(--digit-ease);
 }
 
-/* No-op for unchanged chars (punctuation, etc.) */
-.digit-none-enter,
-.digit-none-exit {
-  opacity: 1;
-  transform: translate3d(0,0,0);
-}
-.digit-none-enter-active,
-.digit-none-exit-active {
-  opacity: 1;
-  transform: translate3d(0,0,0);
-  transition: none;
+
+.digit-up-exit-active {
+  transform: translateY(-150%);
+  filter: blur(3px);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-/* Optional tiny overshoot (adds snap on finish) */
-.digit-up-enter-active,
+.digit-down-enter {
+  transform: translateY(-150%);
+  filter: blur(3px);
+}
+
+
 .digit-down-enter-active {
-  transform: translate3d(0, 0, 0) scaleY(1.00);
-}
-.digit-up-exit-active,
-.digit-down-exit-active {
-  transform-origin: center;
+  transform: translateY(-50%);
+  filter: blur(0);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .digit,
-  .digit-up-enter-active,
-  .digit-down-enter-active,
-  .digit-up-exit-active,
-  .digit-down-exit-active {
-    transition: none !important;
-    transform: none !important;
-    filter: none !important;
-  }
+.digit-down-exit {
+  transform: translateY(-50%);
+  filter: blur(0);
+}
+
+
+.digit-down-exit-active {
+  transform: translateY(150%);
+  filter: blur(3px);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
