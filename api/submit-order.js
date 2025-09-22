@@ -1,7 +1,7 @@
 // api/submit-order.js
 
 const { google } = require('googleapis');
-
+const axios = require('axios');
 
 // Since we can't read files like credentials.json in serverless functions, we'll use environment variables
 const credentials = JSON.parse(process.env.GOOGLE_SHEETS_CREDENTIALS);
@@ -284,6 +284,53 @@ module.exports = async (req, res) => {
       },
     });
 
+
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID;
+
+    if (!botToken || !chatId) {
+      throw new Error('Telegram bot configuration is missing.');
+    }
+
+    const formattedOrderTotal = Number.isFinite(orderTotal)
+      ? `${orderTotal.toFixed(2)} ₸`
+      : String(orderTotal);
+
+    const itemLines = items.map((item) => {
+      const name = item.name || item.title || 'Без названия';
+      const quantityValue =
+        item.quantity != null && item.quantity !== '' ? item.quantity : '';
+      const quantityPart = quantityValue !== '' ? ` x${quantityValue}` : '';
+
+      const priceNumber = Number(item.price);
+      const pricePart = Number.isFinite(priceNumber)
+        ? ` (${priceNumber.toFixed(2)} ₸)`
+        : '';
+
+      return `• ${name}${quantityPart}${pricePart}`;
+    });
+
+    const messageLines = [
+      '🛒 Новый заказ',
+      `Покупатель: ${customerName || user_id || 'Не указан'}`,
+      `Телефон: ${phone || 'Не указан'}`,
+      `Адрес: ${address || 'Не указан'}`,
+      `Доставка/самовывоз: ${fulfillmentValue}`,
+      '',
+      'Товары:',
+      ...itemLines,
+      '',
+      `Итог: ${formattedOrderTotal}`,
+    ];
+
+    const messageText = messageLines.join('\n');
+
+    await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      chat_id: chatId,
+      text: messageText,
+    });
+
+    
     res.status(200).json({ message: 'Order submitted successfully!' });
   } catch (error) {
     console.error('Error submitting order:', error);
