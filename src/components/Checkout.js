@@ -10,6 +10,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fulfillmentType, setFulfillmentType] = useState("delivery");
+  const [isPlaceholderAnimating, setIsPlaceholderAnimating] = useState(false);
 
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
   const DELIVERY_THRESHOLD = 30000;
@@ -20,6 +21,12 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       setFulfillmentType('pickup');
     }
   }, [isDeliveryAvailable, fulfillmentType]);
+
+  useEffect(() => {
+    setIsPlaceholderAnimating(true);
+    const timeoutId = setTimeout(() => setIsPlaceholderAnimating(false), 300);
+    return () => clearTimeout(timeoutId);
+  }, [fulfillmentType]);
 
   const handleFulfillmentChange = (type) => {
     if (type === 'delivery' && !isDeliveryAvailable) {
@@ -153,8 +160,8 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       <div style={{ margin: '10px 0' }}>
         <label className="checkout-label">Адрес:</label>
         <textarea
-          className="input-box"
-          rows="3"
+          className={`input-box ${isPlaceholderAnimating ? 'placeholder-animated' : ''}`}
+          rows="2"
           placeholder={
             fulfillmentType === 'delivery'
               ? 'Введите адрес доставки'
