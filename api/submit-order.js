@@ -61,10 +61,12 @@ module.exports = async (req, res) => {
         year: String(gmtPlusFiveDate.getUTCFullYear()),
         hours: String(gmtPlusFiveDate.getUTCHours()).padStart(2, '0'),
         minutes: String(gmtPlusFiveDate.getUTCMinutes()).padStart(2, '0'),
+        milliseconds: String(gmtPlusFiveDate.getUTCMilliseconds()).padStart(3, '0'),
       };
     };
 
-    const { day, month, year, hours, minutes } = formatGmtPlusFiveDate(orderDate);
+    const { day, month, year, hours, minutes, milliseconds } =
+      formatGmtPlusFiveDate(orderDate);;
     const formattedOrderDateTime = `${day}.${month}.${year} ${hours}:${minutes}`;
     
     const sanitizedCustomerName = (customerName || user_id || address || '')
@@ -75,7 +77,7 @@ module.exports = async (req, res) => {
       .slice(0, 80);
 
     const customerPart = sanitizedCustomerName || 'Customer';
-    const baseSheetTitle = `${customerPart}_${day}.${month}_${hours}${minutes}`.slice(
+    const baseSheetTitle = `${milliseconds}#${customerPart}_${day}.${month}_${hours}:${minutes}`.slice(
       0,
       99,
     );
