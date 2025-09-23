@@ -270,7 +270,7 @@ module.exports = async (req, res) => {
       },
     });
 
-    await sheets.spreadsheets.batchUpdate({
+    const formattingPromise = sheets.spreadsheets.batchUpdate({
       spreadsheetId,
       resource: {
         requests: formattingRequests,
@@ -320,10 +320,44 @@ module.exports = async (req, res) => {
 
     const messageText = messageLines.join('\n');
 
-    await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      chat_id: chatId,
-      text: messageText,
-    });
+    const sendMessagePromise = axios.post(
+      `https://api.telegram.org/bot${botToken}/sendMessage`,
+      {
+        chat_id: chatId,
+        text: messageText,
+      },
+    );
+
+    const [formattingResult, telegramResult] = await Promise.allSettled([
+      formattingPromise,
+      sendMessagePromise,
+    ]);
+
+    if (telegramResult.status === 'rejected') {
+      throw telegramResult.reason;
+    }
+
+    const telegramResponse = telegramResult.value;
+
+    if (formattingResult.status === 'rejected') {
+      const messageId = telegramResponse?.data?.result?.message_id;
+      if (messageId) {
+        try {
+          await axios.post(
+            `https://api.telegram.org/bot${botToken}/deleteMessage`,
+            {
+              chat_id: chatId,
+              message_id: messageId,
+            },
+          );
+        } catch (deleteError) {
+          console.error('Failed to delete Telegram message:', deleteError);
+        }
+      }
+
+      throw formattingResult.reason;
+    }
+
 
 
     res.status(200).json({ message: 'Order submitted successfully!' });
