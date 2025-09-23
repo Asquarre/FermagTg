@@ -75,34 +75,12 @@ module.exports = async (req, res) => {
       .slice(0, 80);
 
     const customerPart = sanitizedCustomerName || 'Customer';
-    const baseSheetTitle = `${customerPart}_${day}.${month}`.slice(0, 99);
-
-    const { data: spreadsheetInfo } = await sheets.spreadsheets.get({
-      spreadsheetId,
-      fields: 'sheets.properties.title',
-    });
-
-    const existingTitles = new Set(
-      (spreadsheetInfo.sheets || [])
-        .map((sheet) => sheet.properties?.title)
-        .filter(Boolean),
+    const baseSheetTitle = `${customerPart}_${day}.${month}_${hours}${minutes}`.slice(
+      0,
+      99,
     );
 
-    let sanitizedSheetTitle = baseSheetTitle;
-    const maxSheetTitleLength = 99;
-    if (existingTitles.has(sanitizedSheetTitle)) {
-      let duplicateIndex = 1;
-      while (existingTitles.has(sanitizedSheetTitle)) {
-        const prefix = `(${duplicateIndex})`;
-        const allowedBaseLength = Math.max(
-          maxSheetTitleLength - prefix.length,
-          0,
-        );
-        const truncatedBaseTitle = baseSheetTitle.slice(0, allowedBaseLength);
-        sanitizedSheetTitle = `${prefix}${truncatedBaseTitle}`;
-        duplicateIndex += 1;
-      }
-    }
+    const sanitizedSheetTitle = baseSheetTitle;
 
     const addSheetResponse = await sheets.spreadsheets.batchUpdate({
       spreadsheetId,
