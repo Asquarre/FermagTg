@@ -23,7 +23,7 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [cart, setCart] = useState([]);
-  const [lastOrder, setLastOrder] = useState(null);
+  const [lastOrder, setLastOrder] = useState([]);
   const [view, setView] = useState('categories'); // 'categories', 'products', 'checkout'
   const [pricesLoaded, setPricesLoaded] = useState(false);
   const [priceLoadError, setPriceLoadError] = useState(null);
@@ -82,7 +82,26 @@ const App = () => {
     const saved = localStorage.getItem('lastOrder');
     if (saved) {
       try {
-        setLastOrder(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const normalizedOrder = parsed
+            .map((item) => {
+              if (!item || item.id === undefined || item.id === null) {
+                return null;
+              }
+              const quantity = Number(item.quantity);
+              const numericId = Number(item.id);
+              return {
+                id: Number.isFinite(numericId) ? numericId : item.id,
+                name: typeof item.name === 'string' ? item.name : '',
+                quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
+              };
+            })
+            .filter(Boolean);
+
+          setLastOrder(normalizedOrder);
+          localStorage.setItem('lastOrder', JSON.stringify(normalizedOrder));
+        }
       } catch (e) {
         console.error('Failed to parse saved order', e);
       }
@@ -174,8 +193,22 @@ const handleSearch = (term) => {
       })
       .then(() => {
         alert('Мы приняли ваш заказ!');
-        localStorage.setItem('lastOrder', JSON.stringify(cart));
-        setLastOrder(cart);
+        const orderSnapshot = cart
+          .map((item) => {
+            if (item.id === undefined || item.id === null) {
+              return null;
+            }
+            const numericId = Number(item.id);
+            const quantityValue = Number(item.quantity);
+            return {
+              id: Number.isFinite(numericId) ? numericId : item.id,
+              name: item.name,
+              quantity: Number.isFinite(quantityValue) && quantityValue > 0 ? quantityValue : 1,
+            };
+          })
+          .filter(Boolean);
+        localStorage.setItem('lastOrder', JSON.stringify(orderSnapshot));
+        setLastOrder(orderSnapshot);
         setCart([]);
         setView('categories');
       })
@@ -187,7 +220,58 @@ const handleSearch = (term) => {
 
   const handleRepeatOrder = () => {
     if (lastOrder && lastOrder.length > 0) {
-      setCart(lastOrder);
+      const productMapById = new Map();
+      const productMapByName = new Map();
+
+      Object.values(allProducts).forEach((items = []) => {
+        items.forEach((item) => {
+          productMapById.set(item.id, item);
+          if (item.name) {
+            productMapByName.set(normalizeProductName(item.name), item);
+          }
+          if (item.catalogueName) {
+            productMapByName.set(normalizeProductName(item.catalogueName), item);
+          }
+        });
+      });
+
+      const reconstructedCart = [];
+      const missingItems = [];
+
+      lastOrder.forEach((savedItem) => {
+        const productById = productMapById.get(savedItem.id);
+        let product = productById;
+
+        if (!product && typeof savedItem.name === 'string' && savedItem.name.trim()) {
+          product = productMapByName.get(normalizeProductName(savedItem.name));
+        }
+
+        if (!product) {
+          missingItems.push(savedItem.name || `ID ${savedItem.id}`);
+          return;
+        }
+
+        const quantity = Number(savedItem.quantity);
+        reconstructedCart.push({
+          ...product,
+          quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
+        });
+      });
+
+      if (reconstructedCart.length === 0) {
+        alert(
+          missingItems.length > 0
+            ? `Не удалось повторить заказ. Товары недоступны: ${missingItems.join(', ')}`
+            : 'Предыдущий заказ отсутствует.'
+        );
+        return;
+      }
+
+      if (missingItems.length > 0) {
+        alert(`Некоторые товары недоступны и не были добавлены: ${missingItems.join(', ')}`);
+      }
+
+      setCart(reconstructedCart);
       if (categories.length > 0) {
         const firstCategoryName = categories[0].name;
         setSelectedCategory(firstCategoryName);
