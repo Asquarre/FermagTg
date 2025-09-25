@@ -6,7 +6,7 @@ export const categories = [
 
 export const productsByCategory = {
   'П/ф замороженная продукция❄️': [
-    { id: 101, name: 'Манты с мясом', price: 18 },
+    { id: 101, name: 'ФЕРМАГ МАНТЫ С МЯСОМ 60 Г', price: 18 },
     { id: 102, name: 'Жута нан с мясом', price: 18 },
     { id: 103, name: 'Булочка ачма с сыром', price: 18 },
     { id: 104, name: 'Сосиска в тесте 100г', price: 118 },
