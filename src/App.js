@@ -46,7 +46,7 @@ const App = () => {
               categoryName,
               items.map((item) => {
                 const updatedPrice = priceMap.get(
-                  normalizeProductName(item.name)
+                  normalizeProductName(item.catalogueName ?? item.name)
                 );
                 return updatedPrice !== undefined
                   ? { ...item, price: updatedPrice }

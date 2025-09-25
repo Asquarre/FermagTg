@@ -57,6 +57,7 @@ ProductList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
+      catalogueName: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
     })
   ).isRequired,
@@ -68,6 +69,7 @@ ProductList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
+      catalogueName: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
       quantity: PropTypes.number.isRequired,
     })
