@@ -173,7 +173,7 @@ module.exports = async (req, res) => {
             startIndex: 0,
             endIndex: 1,
           },
-          properties: { pixelSize: 260 },
+          properties: { pixelSize: 312 },
           fields: 'pixelSize',
         },
       },
