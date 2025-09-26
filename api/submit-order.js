@@ -143,7 +143,7 @@ module.exports = async (req, res) => {
       ['', ''],
       ['Наименование', 'Кол-во'],
       ...items.map((item) => [
-        item.name || item.title || '',
+        item.catalogueName || item.name || item.title || '',
         item.quantity != null ? item.quantity : '',
       ]),
       ['ИТОГ:', orderTotal],
