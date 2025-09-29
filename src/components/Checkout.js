@@ -79,7 +79,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                 <li
                   key={item.id}
                   className="checkout-item"
-                  style={{ animationDelay: `${index * 0.16}s` }}
+                  style={{ animationDelay: `${index * 0.14}s` }}
                 >
                   <span className="checkout-item-name">{item.name}</span>
                   <div className="checkout-item-quantity">
