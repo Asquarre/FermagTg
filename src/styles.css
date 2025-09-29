@@ -13,8 +13,8 @@ body {
   font-family: 'Sf Pro Rounded', sans-serif;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
   color: #1d1c1c;
+  min-height: 100vh;
   text-shadow: 2px 2px 9px rgba(240, 240, 240, 0);
   overflow-x: hidden; /* Prevent horizontal scrolling */
   background: #BDA47D url('/background.png') no-repeat top center; 
@@ -26,7 +26,7 @@ body {
   ); /* Preferred background images */
   background-repeat: no-repeat; /* Do not repeat the background image */
   background-position: top center; /* Position the background image at the top center */
-  background-size: cover; /* Default background size */
+  background-size: auto; /* Default background size */
   background-attachment: scroll; /* Ensure the background scrolls with the content */
   background-color: #BDA47D !important; /* Continue BDA47D color beyond the background image */
 }
