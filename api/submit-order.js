@@ -134,19 +134,31 @@ module.exports = async (req, res) => {
 
     const fulfillmentValue = normalizeFulfillmentType(fulfillmentType);
 
+    const resolveItemPrice = (value) => {
+      if (value == null || value === '') {
+        return '';
+      }
+
+      const numberValue = Number(value);
+      return Number.isFinite(numberValue) ? numberValue : value;
+    };
+
+
     const orderRows = [
-      ['Адрес:', address || ''],
-      ['Покупатель:', customerName || user_id || ''],
-      ['Телефон:', phone || ''],
-      ['Доставка/самовывоз:', fulfillmentValue],
-      ['Итог:', orderTotal],
-      ['', ''],
-      ['Наименование', 'Кол-во'],
+      ['Адрес:', address || '', ''],
+      ['Покупатель:', customerName || user_id || '', ''],
+      ['Телефон:', phone || '', ''],
+      ['Доставка/самовывоз:', fulfillmentValue, ''],
+      ['Итог:', '', orderTotal],
+      ['', '', ''],
+      ['Наименование', 'Кол-во', 'Цена'],
       ...items.map((item) => [
         item.catalogueName || item.name || item.title || '',
         item.quantity != null ? item.quantity : '',
+        resolveItemPrice(item.price),
       ]),
       ['ИТОГ:', orderTotal],
+      ['ИТОГ:', '', orderTotal],
     ];
 
     const finalTotalRowIndex = orderRows.length - 1;
