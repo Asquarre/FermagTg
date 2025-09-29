@@ -158,7 +158,7 @@ module.exports = async (req, res) => {
         resolveItemPrice(item.price),
       ]),
       
-      ['ИТОГ:', '', orderTotal],
+      ['ИТОГ:', orderTotal],
     ];
 
     const finalTotalRowIndex = orderRows.length - 1;
@@ -258,8 +258,8 @@ module.exports = async (req, res) => {
             sheetId,
             startRowIndex: initialTotalRowIndex,
             endRowIndex: initialTotalRowIndex + 1,
-            startColumnIndex: 2,
-            endColumnIndex: 3,
+            startColumnIndex: 1,
+            endColumnIndex: 2,
           },
           cell: {
             userEnteredFormat: {
@@ -281,8 +281,8 @@ module.exports = async (req, res) => {
           sheetId,
           startRowIndex: finalTotalRowIndex,
           endRowIndex: finalTotalRowIndex + 1,
-          startColumnIndex: 2,
-          endColumnIndex: 3,
+          startColumnIndex: 1,
+          endColumnIndex: 2,
         },
         cell: {
           userEnteredFormat: {
