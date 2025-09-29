@@ -102,7 +102,9 @@ body {
   border-radius: 50%; /* Make the buttons circular */
   width: 36px; /* Set fixed width */
   height: 36px; /* Set fixed height */
+  flex: 0 0 36px; /* Prevent Safari from squeezing the circle */
   font-size: 1.5rem; /* Font size adjusted */
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
