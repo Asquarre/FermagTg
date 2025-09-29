@@ -157,7 +157,7 @@ module.exports = async (req, res) => {
         item.quantity != null ? item.quantity : '',
         resolveItemPrice(item.price),
       ]),
-      ['ИТОГ:', orderTotal],
+      
       ['ИТОГ:', '', orderTotal],
     ];
 
@@ -202,6 +202,18 @@ module.exports = async (req, res) => {
         },
       },
       {
+        updateDimensionProperties: {
+          range: {
+            sheetId,
+            dimension: 'COLUMNS',
+            startIndex: 2,
+            endIndex: 3,
+          },
+          properties: { pixelSize: 160 },
+          fields: 'pixelSize',
+        },
+      },
+      {
         repeatCell: {
           range: {
             sheetId,
@@ -226,7 +238,7 @@ module.exports = async (req, res) => {
             startRowIndex: 6,
             endRowIndex: 7,
             startColumnIndex: 0,
-            endColumnIndex: 2,
+            endColumnIndex: 3,
           },
           cell: {
             userEnteredFormat: {
@@ -246,8 +258,8 @@ module.exports = async (req, res) => {
             sheetId,
             startRowIndex: initialTotalRowIndex,
             endRowIndex: initialTotalRowIndex + 1,
-            startColumnIndex: 1,
-            endColumnIndex: 2,
+            startColumnIndex: 2,
+            endColumnIndex: 3,
           },
           cell: {
             userEnteredFormat: {
@@ -269,8 +281,8 @@ module.exports = async (req, res) => {
           sheetId,
           startRowIndex: finalTotalRowIndex,
           endRowIndex: finalTotalRowIndex + 1,
-          startColumnIndex: 1,
-          endColumnIndex: 2,
+          startColumnIndex: 2,
+          endColumnIndex: 3,
         },
         cell: {
           userEnteredFormat: {
@@ -283,6 +295,25 @@ module.exports = async (req, res) => {
         fields: 'userEnteredFormat.numberFormat',
       },
     });
+    formattingRequests.push({
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: finalTotalRowIndex,
+          endRowIndex: finalTotalRowIndex + 1,
+          startColumnIndex: 0,
+          endColumnIndex: 3,
+        },
+        cell: {
+          userEnteredFormat: {
+            backgroundColor: { red: 1, green: 1, blue: 0 },
+            textFormat: { bold: true },
+          },
+        },
+        fields: 'userEnteredFormat(backgroundColor,textFormat)',
+      },
+    });
+
 
     const formattingPromise = sheets.spreadsheets.batchUpdate({
       spreadsheetId,
