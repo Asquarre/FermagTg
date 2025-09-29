@@ -34,7 +34,7 @@ body {
 /* Adjust background size for larger screens */
 @media (min-width: 768px) {
   body {
-    background-size: cover; /* Scale image to full width on desktop */
+    background-size: 100% auto; /* Scale image to full width on desktop */
   }
 }
   h1, h2, h3 {
