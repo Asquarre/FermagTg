@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import AnimatedNumber from './AnimatedNumber';
 import { formatPrice } from '../utils';
@@ -13,57 +13,6 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
     }
     return nodeRefs.current.get(id);
   };
-
-   useEffect(() => {
-    const activeIds = new Set(products.map((product) => product.id));
-    nodeRefs.current.forEach((_, key) => {
-      if (!activeIds.has(key)) {
-        nodeRefs.current.delete(key);
-      }
-    });
-  }, [products]);
-
-  const handleEnter = useCallback((node) => {
-    if (!node) return;
-
-    node.style.height = '0px';
-    node.style.opacity = '0';
-    node.style.transform = 'scale(0.98)';
-
-    requestAnimationFrame(() => {
-      node.style.height = `${node.scrollHeight}px`;
-      node.style.opacity = '1';
-      node.style.transform = 'scale(1)';
-    });
-  }, []);
-
-  const handleEntered = useCallback((node) => {
-    if (!node) return;
-    node.style.height = 'auto';
-  }, []);
-
-  const handleExit = useCallback((node) => {
-    if (!node) return;
-
-    node.style.height = `${node.scrollHeight}px`;
-    node.style.opacity = '1';
-    node.style.transform = 'scale(1)';
-
-    requestAnimationFrame(() => {
-      node.style.height = '0px';
-      node.style.opacity = '0';
-      node.style.transform = 'scale(0.92)';
-    });
-  }, []);
-
-  const handleExited = useCallback((node) => {
-    if (!node) return;
-
-    node.style.height = '';
-    node.style.opacity = '';
-    node.style.transform = '';
-  }, []);
-
   const getProductQuantity = (productId) => {
     const item = cart.find((item) => item.id === productId);
     return item ? item.quantity : 0;
@@ -97,10 +46,6 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
                 nodeRef={nodeRef}
                 timeout={300}
                 classNames="product-shrink"
-                onEnter={handleEnter}
-                onEntered={handleEntered}
-                onExit={handleExit}
-                onExited={handleExited}
               >
                 <div ref={nodeRef} className="product-item product-item-animated">
                   <h3>{product.name}</h3>
