@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
 import AnimatedNumber from './AnimatedNumber';
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { formatPrice } from '../utils';
 
 const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
@@ -74,47 +75,49 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
         <h3><strong>Ваш заказ</strong></h3>
         {cart.length ? (
           <>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
+             <TransitionGroup component="ul" className="checkout-list">
               {cart.map((item, index) => (
-                <li
+                <CSSTransition
                   key={item.id}
-                  className="checkout-item"
-                  style={{ animationDelay: `${index * 0.14}s` }}
+                  timeout={280}
+                  classNames="checkout-item-transition"
                 >
-                  <span className="checkout-item-name">{item.name}</span>
-                  <div className="checkout-item-quantity">
+                   <li className="checkout-item">
+                    <span className="checkout-item-name">{item.name}</span>
+                    <div className="checkout-item-quantity">
+                      <button
+                        className="quantity-button"
+                        onClick={() => onRemove(item.id)}
+                      >
+                        -
+                      </button>
+                      <AnimatedNumber
+                        value={item.quantity}
+                        className="quantity-value"
+                      />
+                      <button
+                        className="quantity-button"
+                        onClick={() => onAdd(item.id)}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <span className="checkout-item-price">
+                      ₸
+                      <AnimatedNumber
+                        value={formatPrice(item.quantity * item.price)}
+                      />
+                    </span>
                     <button
-                      className="quantity-button"
-                      onClick={() => onRemove(item.id)}
+                     className="remove-item-button"
+                      onClick={() => onDelete(item.id)}
                     >
-                      -
+                      🗑️
                     </button>
-                    <AnimatedNumber
-                      value={item.quantity}
-                      className="quantity-value"
-                    />
-                    <button
-                      className="quantity-button"
-                      onClick={() => onAdd(item.id)}
-                    >
-                      +
-                    </button>
-                  </div>
-                  <span className="checkout-item-price">
-                    ₸
-                    <AnimatedNumber
-                      value={formatPrice(item.quantity * item.price)}
-                    />
-                  </span>
-                  <button
-                    className="remove-item-button"
-                    onClick={() => onDelete(item.id)}
-                  >
-                    🗑️
-                  </button>
-                </li>
+                      </li>
+                </CSSTransition>
               ))}
-            </ul>
+            </TransitionGroup>
             <div className="total">
               Сумма Заказа: ₸
               <AnimatedNumber value={total.toFixed(2)} />

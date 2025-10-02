@@ -124,6 +124,11 @@ body {
 .quantity-button:focus {
   outline: none;
 }
+.checkout-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
 .checkout-item {
   display: grid;
@@ -134,8 +139,28 @@ body {
   padding: 6px 4px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 12px;
-  animation: fadeIn 0.5s ease;
-  animation-fill-mode: both;
+  transition: transform 0.28s ease, opacity 0.28s ease, box-shadow 0.28s ease;
+  will-change: transform, opacity;
+}
+
+.checkout-item-transition-enter {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+}
+
+.checkout-item-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.checkout-item-transition-exit {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.checkout-item-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.97);
 }
 
 .checkout-item-name {
