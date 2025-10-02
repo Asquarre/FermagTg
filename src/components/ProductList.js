@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import AnimatedNumber from './AnimatedNumber';
 import { formatPrice } from '../utils';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) => {
+  const nodeRefs = useRef(new Map());
+
+  const getNodeRef = (id) => {
+    if (!nodeRefs.current.has(id)) {
+      nodeRefs.current.set(id, React.createRef());
+    }
+    return nodeRefs.current.get(id);
+  };
   const getProductQuantity = (productId) => {
     const item = cart.find((item) => item.id === productId);
     return item ? item.quantity : 0;
@@ -28,25 +37,38 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
       {products.length === 0 ? (
         <p>No products available in this category.</p>
       ) : (
-        <div className="row">
-          {products.map((product) => (
-            <div key={product.id} className="product-item">
-              <h3>{product.name}</h3>
-              <p>Цена: ₸{product.price.toFixed(2)}</p>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <button className="quantity-button" onClick={() => onRemove(product.id)}>
-                  -
-                </button>
-                <span style={{ margin: '0 10px' }}>
-                  <AnimatedNumber className="qty-inline" value={getProductQuantity(product.id)} />
-                </span>
-                <button className="quantity-button" onClick={() => onAdd(product.id)}>
-                  +
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+         <TransitionGroup className="row">
+          {products.map((product) => {
+            const nodeRef = getNodeRef(product.id);
+            return (
+              <CSSTransition
+                key={product.id}
+                nodeRef={nodeRef}
+                timeout={300}
+                classNames="product-shrink"
+              >
+                <div ref={nodeRef} className="product-item product-item-animated">
+                  <h3>{product.name}</h3>
+                  <p>Цена: ₸{formatPrice(product.price)}</p>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <button className="quantity-button" onClick={() => onRemove(product.id)}>
+                      -
+                    </button>
+                    <span style={{ margin: '0 10px' }}>
+                      <AnimatedNumber
+                        className="qty-inline"
+                        value={getProductQuantity(product.id)}
+                      />
+                    </span>
+                    <button className="quantity-button" onClick={() => onAdd(product.id)}>
+                      +
+                    </button>
+                  </div>
+                </div>
+              </CSSTransition>
+            );
+          })}
+        </TransitionGroup>
       )}
     </div>
   );

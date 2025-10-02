@@ -582,8 +582,51 @@ header img:hover {
   margin: 10px 0; /* Spacing between products */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
- 
-  }
+ }
+
+.product-item-animated {
+  overflow: hidden;
+}
+
+.product-shrink-enter {
+  opacity: 0;
+  transform: scale(0.95);
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.product-shrink-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  max-height: 500px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  transition: opacity 300ms ease, transform 300ms ease, max-height 300ms ease,
+    margin 300ms ease, padding 300ms ease;
+}
+
+.product-shrink-exit {
+  opacity: 1;
+  transform: scale(1);
+  max-height: 500px;
+}
+
+.product-shrink-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: opacity 300ms ease, transform 300ms ease, max-height 300ms ease,
+    margin 300ms ease, padding 300ms ease;
+}
 
 /* Product name, price and quantity styling */
 .product-item h3,
