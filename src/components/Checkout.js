@@ -121,59 +121,63 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       <h2 className="checkout-heading">Корзина</h2>
       <div className="checkout-order-summary">
         <h3><strong>Ваш заказ</strong></h3>
-        {cart.length ? (
-          <>
-             <TransitionGroup component="ul" className="checkout-list">
-              {cart.map((item, index) => (
-                <CSSTransition
-                  key={item.id}
-                  timeout={280}
-                  classNames="checkout-item-transition"
-                >
-                   <li className="checkout-item">
-                    <span className="checkout-item-name">{item.name}</span>
-                    <div className="checkout-item-quantity">
-                      <button
-                        className="quantity-button"
-                        onClick={() => onRemove(item.id)}
-                      >
-                        -
-                      </button>
-                      <AnimatedNumber
-                        value={item.quantity}
-                        className="quantity-value"
-                      />
-                      <button
-                        className="quantity-button"
-                        onClick={() => onAdd(item.id)}
-                      >
-                        +
-                      </button>
-                    </div>
-                    <span className="checkout-item-price">
-                      ₸
-                      <AnimatedNumber
-                        value={formatPrice(item.quantity * item.price)}
-                      />
-                    </span>
-                    <button
-                     className="remove-item-button"
-                      onClick={() => onDelete(item.id)}
+         <div className="checkout-list-container" ref={listWrapperRef}>
+          <div ref={listContentRef}>
+            {cart.length ? (
+              <>
+                <TransitionGroup component="ul" className="checkout-list">
+                  {cart.map((item, index) => (
+                    <CSSTransition
+                      key={item.id}
+                      timeout={280}
+                      classNames="checkout-item-transition"
                     >
-                      🗑️
-                    </button>
+                     <li className="checkout-item">
+                        <span className="checkout-item-name">{item.name}</span>
+                        <div className="checkout-item-quantity">
+                          <button
+                            className="quantity-button"
+                            onClick={() => onRemove(item.id)}
+                          >
+                            -
+                          </button>
+                          <AnimatedNumber
+                            value={item.quantity}
+                            className="quantity-value"
+                          />
+                          <button
+                            className="quantity-button"
+                            onClick={() => onAdd(item.id)}
+                          >
+                            +
+                          </button>
+                        </div>
+                        <span className="checkout-item-price">
+                          ₸
+                          <AnimatedNumber
+                            value={formatPrice(item.quantity * item.price)}
+                          />
+                        </span>
+                        <button
+                          className="remove-item-button"
+                          onClick={() => onDelete(item.id)}
+                        >
+                          🗑️
+                        </button>
                       </li>
                 </CSSTransition>
-              ))}
-            </TransitionGroup>
-            <div className="total">
-              Сумма Заказа: ₸
-              <AnimatedNumber value={total.toFixed(2)} />
-            </div>
-          </>
-        ) : (
-          <p>Ваша корзина пуста.</p>
-        )}
+                  ))}
+                </TransitionGroup>
+                <div className="total">
+                  Сумма Заказа: ₸
+                  <AnimatedNumber value={total.toFixed(2)} />
+                </div>
+              </>
+            ) : (
+              <p>Ваша корзина пуста.</p>
+            )}
+          </div>
+        </div>
         </div>
       <div className="delivery-toggle" role="group" aria-label="Способ получения">
         <button
