@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import InputMask from "react-input-mask";
 import AnimatedNumber from './AnimatedNumber';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -11,6 +11,9 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fulfillmentType, setFulfillmentType] = useState("delivery");
+  const listWrapperRef = useRef(null);
+  const listContentRef = useRef(null);
+  const previousHeightRef = useRef(null);
   
 
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
@@ -61,6 +64,51 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       setIsLoading(false);
     }
   };
+
+
+  useLayoutEffect(() => {
+    const wrapper = listWrapperRef.current;
+    const content = listContentRef.current;
+
+    if (!wrapper || !content) {
+      return;
+    }
+
+    const contentHeight = content.getBoundingClientRect().height;
+    const previousHeight = previousHeightRef.current ?? contentHeight;
+    let animationFrameId;
+
+    const handleTransitionEnd = () => {
+      wrapper.style.transition = "";
+      wrapper.style.height = "auto";
+      wrapper.style.overflow = "";
+      wrapper.removeEventListener("transitionend", handleTransitionEnd);
+    };
+
+    if (previousHeight !== contentHeight) {
+      wrapper.style.height = `${previousHeight}px`;
+      wrapper.style.overflow = "hidden";
+
+      animationFrameId = requestAnimationFrame(() => {
+        wrapper.style.transition = "height 300ms ease";
+        wrapper.style.height = `${contentHeight}px`;
+      });
+
+      wrapper.addEventListener("transitionend", handleTransitionEnd);
+    } else {
+      wrapper.style.height = "auto";
+      wrapper.style.overflow = "";
+    }
+
+    previousHeightRef.current = contentHeight;
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      wrapper.removeEventListener("transitionend", handleTransitionEnd);
+    };
+  }, [cart]);
 
   
 
