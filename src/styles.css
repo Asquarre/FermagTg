@@ -158,6 +158,12 @@ body {
   transform: translateY(0) scale(1);
 }
 
+
+.checkout-item-transition-enter-active,
+.checkout-item-transition-exit-active {
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
 .checkout-item-transition-exit-active {
   opacity: 0;
   transform: translateY(-8px) scale(0.97);
