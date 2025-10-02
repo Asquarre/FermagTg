@@ -486,7 +486,7 @@ header img:hover {
   border: none;
   border-radius: 20px; /* Rounded edges */
   padding: 10px 20px;
-  font-size: 1rem;
+  font-size: 1.30rem;
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.3s ease;
   text-transform: uppercase; /* Make text uppercase */
