@@ -686,9 +686,6 @@ header img:hover {
   margin-bottom: 20px; /* Spacing below the box */
   color: #333; /* Text color */
 }
-.checkout-list-container {
-  height: auto;
-}
 
 .checkout-order-summary h3 {
   text-align: center;
