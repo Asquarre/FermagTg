@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import InputMask from "react-input-mask";
 import AnimatedNumber from './AnimatedNumber';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -11,11 +11,63 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fulfillmentType, setFulfillmentType] = useState("delivery");
-  
+  const orderSummaryRef = useRef(null);
+  const previousHeightRef = useRef();
 
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
   const DELIVERY_THRESHOLD = 30000;
   const isDeliveryAvailable = total >= DELIVERY_THRESHOLD;
+const cartSignature = cart.map(item => `${item.id}:${item.quantity}`).join("|");
+
+  useLayoutEffect(() => {
+    const summaryEl = orderSummaryRef.current;
+    if (!summaryEl) {
+      return;
+    }
+
+    const previousHeight = previousHeightRef.current ?? summaryEl.scrollHeight;
+    const nextHeight = summaryEl.scrollHeight;
+
+    previousHeightRef.current = nextHeight;
+
+    if (Math.abs(nextHeight - previousHeight) < 1) {
+      return;
+    }
+
+    const cleanupStyles = () => {
+      summaryEl.style.height = "";
+      summaryEl.style.transition = "";
+      summaryEl.style.overflow = "";
+    };
+
+    summaryEl.style.height = `${previousHeight}px`;
+    summaryEl.style.overflow = "hidden";
+    summaryEl.style.transition = "height 0.28s ease";
+
+    // Force reflow so the browser acknowledges the starting height before transitioning.
+    void summaryEl.offsetHeight;
+
+    requestAnimationFrame(() => {
+      summaryEl.style.height = `${nextHeight}px`;
+    });
+
+    const handleTransitionEnd = event => {
+      if (event.target !== summaryEl || event.propertyName !== "height") {
+        return;
+      }
+
+      cleanupStyles();
+      summaryEl.removeEventListener("transitionend", handleTransitionEnd);
+    };
+
+    summaryEl.addEventListener("transitionend", handleTransitionEnd);
+
+    return () => {
+      summaryEl.removeEventListener("transitionend", handleTransitionEnd);
+      cleanupStyles();
+    };
+  }, [cartSignature]);
+
 
   useEffect(() => {
     if (!isDeliveryAvailable && fulfillmentType === 'delivery') {
@@ -71,7 +123,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       </button>
 
       <h2 className="checkout-heading">Корзина</h2>
-      <div className="checkout-order-summary">
+      <div className="checkout-order-summary" ref={orderSummaryRef}>
         <h3><strong>Ваш заказ</strong></h3>
         {cart.length ? (
           <>
