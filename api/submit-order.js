@@ -155,12 +155,21 @@ module.exports = async (req, res) => {
         : stringValue;
     };
 
+    const formatDateForSheet = (date) => {
+      const pad = (value) => String(value).padStart(2, '0');
+      const day = pad(date.getDate());
+      const month = pad(date.getMonth() + 1);
+      const year = date.getFullYear();
+
+      return `${day}:${month}:${year}`;
+    };
     const baseRows = [
       ['Адрес:', ensurePlainText(address || ''), '', ''],
       ['Покупатель:', ensurePlainText(customerName || user_id || ''), '', ''],
       ['Телефон:', ensurePlainText(phone || ''), '', ''],
       ['Доставка/самовывоз:', fulfillmentValue, '', ''],
       ['Итог:', orderTotal],
+      ['Дата:', formatDateForSheet(new Date()), '', ''],
       ['', '', '', ''],
       ['Наименование', 'Кол-во', 'Цена', 'Сумма'],
     ];
@@ -251,7 +260,7 @@ module.exports = async (req, res) => {
           range: {
             sheetId,
             startRowIndex: 0,
-            endRowIndex: 5,
+            endRowIndex: 6,
             startColumnIndex: 0,
             endColumnIndex: 1,
           },
@@ -268,8 +277,8 @@ module.exports = async (req, res) => {
         repeatCell: {
           range: {
             sheetId,
-            startRowIndex: 6,
-            endRowIndex: 7,
+            startRowIndex: 7,
+            endRowIndex: 8,
             startColumnIndex: 0,
             endColumnIndex: 4,
           },
