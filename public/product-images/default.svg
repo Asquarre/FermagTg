@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="140" viewBox="0 0 200 140">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff5e6" />
+      <stop offset="100%" stop-color="#f0d9b5" />
+    </linearGradient>
+    <linearGradient id="bread" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c67b2d" />
+      <stop offset="100%" stop-color="#e3aa5c" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="140" rx="18" fill="url(#bg)" />
+  <g transform="translate(24 38)">
+    <ellipse cx="76" cy="48" rx="76" ry="48" fill="#f6c97a" opacity="0.3" />
+    <path d="M10 54c0-30 32-54 74-54s74 24 74 54c0 14-8 26-20 34H30C18 80 10 68 10 54z" fill="url(#bread)" />
+    <path d="M34 28c12-10 28-16 50-16s38 6 50 16" fill="none" stroke="#f8d9a1" stroke-width="6" stroke-linecap="round" opacity="0.7" />
+    <path d="M32 46c16-8 36-12 52-12s36 4 52 12" fill="none" stroke="#f8d9a1" stroke-width="6" stroke-linecap="round" opacity="0.6" />
+  </g>
+  <g font-family="'Arial Rounded MT Bold', 'Helvetica', sans-serif" font-size="16" fill="#8a5a20" opacity="0.8">
+    <text x="20" y="30">Изображение продукта</text>
+  </g>
+</svg>

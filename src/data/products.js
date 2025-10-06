@@ -4,8 +4,53 @@ export const categories = [
   { id: 7, name: 'Кондитерские изделия🧁\n/Кулинария🍴' },
 ];
 
+const buildDefaultImagePaths = (item) => {
+  if (!item || typeof item.id !== 'number') {
+    return {};
+  }
+
+  const basePath = `/product-images/${item.id}`;
+  const webpPath = `${basePath}.webp`;
+
+  return {
+    avif: `${basePath}.avif`,
+    webp: webpPath,
+    fallback: webpPath,
+  };
+};
+
+const withImages = (items) =>
+  items.map(({ image, ...rest }) => {
+    const defaults = buildDefaultImagePaths(rest);
+
+    if (!image) {
+      return {
+        ...rest,
+        image: defaults,
+      };
+    }
+
+    if (typeof image === 'string') {
+      return {
+        ...rest,
+        image: {
+          ...defaults,
+          fallback: image,
+        },
+      };
+    }
+
+    return {
+      ...rest,
+      image: {
+        ...defaults,
+        ...image,
+      },
+    };
+  });
+
 export const productsByCategory = {
-  'П/ф замороженная продукция❄️': [
+  'П/ф замороженная продукция❄️': withImages([
     { id: 101, name: 'Манты с мясом', catalogueName: 'ФЕРМАГ МАНТЫ С МЯСОМ 60 Г', price: 18 },
     { id: 102, name: 'Жута нан с мясом', catalogueName: 'ФЕРМАГ ЖУТА НАН С МЯСОМ 150 Г', price: 18 },
     { id: 103, name: 'Булочка ачма с сыром', catalogueName: 'ФЕРМАГ БУЛОЧКА АЧМА С СЫРОМ 130 Г', price: 18 },
@@ -48,7 +93,7 @@ export const productsByCategory = {
     { id: 140, name: 'Слойка с яблоком 120г', catalogueName: 'ФЕРМАГ СЛОЙКА С ЯБЛОКОМ 120 Г', price: 181 },
     { id: 141, name: 'Тесто для баурсаков кг', catalogueName: 'ФЕРМАГ ТЕСТО ДЛЯ БАУРСАКОВ, КГ (1)', price: 18 },
     { id: 142, name: 'Тесто слоеное классическое кг', catalogueName: 'ФЕРМАГ ТЕСТО СЛОЕНОЕ КЛАССИЧЕСКОЕ, КГ', price: 1812 },
-  ],
+  ]),
   'Хлебобулочные изделия🥖': [
    { id: 2401, name: 'Багет 300г', catalogueName: 'ФЕРМАГ БАГЕТ 300 Г', price: 1.8 },
     { id: 2402, name: 'Батон Турецкий 250г', catalogueName: 'ФЕРМАГ БАТОН ТУРЕЦКИЙ 250 Г', price: 1.2 },
