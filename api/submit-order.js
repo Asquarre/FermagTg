@@ -168,7 +168,7 @@ module.exports = async (req, res) => {
     const orderRows = [
       ...baseRows,
       ...productRows,
-      ['ИТОГ:', '', '', orderTotal],
+      ['ИТОГ:', orderTotal],
     ];
 
     const finalTotalRowIndex = orderRows.length - 1;
