@@ -161,7 +161,7 @@ module.exports = async (req, res) => {
       const month = pad(date.getMonth() + 1);
       const year = date.getFullYear();
 
-      return `${day}:${month}:${year}`;
+      return `${day}.${month}.${year}`;
     };
 
     const formattedOrderDate = formatDateForSheet(orderDate);
