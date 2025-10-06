@@ -182,7 +182,7 @@ module.exports = async (req, res) => {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `${sanitizedSheetTitle}!A1`,
-      valueInputOption: 'RAW',
+      valueInputOption: 'USER_ENTERED',
       resource: { values: orderRows },
     });
 
