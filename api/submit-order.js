@@ -160,7 +160,7 @@ module.exports = async (req, res) => {
       ['Покупатель:', ensurePlainText(customerName || user_id || ''), '', ''],
       ['Телефон:', ensurePlainText(phone || ''), '', ''],
       ['Доставка/самовывоз:', fulfillmentValue, '', ''],
-      ['Итог:', '', '', orderTotal],
+      ['Итог:', orderTotal],
       ['', '', '', ''],
       ['Наименование', 'Кол-во', 'Цена', 'Сумма'],
     ];
