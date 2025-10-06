@@ -144,21 +144,31 @@ module.exports = async (req, res) => {
     };
 
 
-    const orderRows = [
-      ['Адрес:', address || '', ''],
-      ['Покупатель:', customerName || user_id || '', ''],
-      ['Телефон:', phone || '', ''],
-      ['Доставка/самовывоз:', fulfillmentValue, ''],
-      ['Итог:', orderTotal],
-      ['', '', ''],
-      ['Наименование', 'Кол-во', 'Цена'],
-      ...items.map((item) => [
+    const baseRows = [
+      ['Адрес:', address || '', '', ''],
+      ['Покупатель:', customerName || user_id || '', '', ''],
+      ['Телефон:', phone || '', '', ''],
+      ['Доставка/самовывоз:', fulfillmentValue, '', ''],
+      ['Итог:', '', '', orderTotal],
+      ['', '', '', ''],
+      ['Наименование', 'Кол-во', 'Цена', 'Сумма'],
+    ];
+
+    const productRows = items.map((item, index) => {
+      const sheetRowNumber = baseRows.length + index + 1;
+
+      return [
         item.catalogueName || item.name || item.title || '',
         item.quantity != null ? item.quantity : '',
         resolveItemPrice(item.price),
-      ]),
-      
-      ['ИТОГ:', orderTotal],
+      `=B${sheetRowNumber}*C${sheetRowNumber}`,
+      ];
+    });
+
+    const orderRows = [
+      ...baseRows,
+      ...productRows,
+      ['ИТОГ:', '', '', orderTotal],
     ];
 
     const finalTotalRowIndex = orderRows.length - 1;
@@ -213,6 +223,18 @@ module.exports = async (req, res) => {
           fields: 'pixelSize',
         },
       },
+       {
+        updateDimensionProperties: {
+          range: {
+            sheetId,
+            dimension: 'COLUMNS',
+            startIndex: 3,
+            endIndex: 4,
+          },
+          properties: { pixelSize: 160 },
+          fields: 'pixelSize',
+        },
+      },
       {
         repeatCell: {
           range: {
@@ -238,7 +260,7 @@ module.exports = async (req, res) => {
             startRowIndex: 6,
             endRowIndex: 7,
             startColumnIndex: 0,
-            endColumnIndex: 3,
+            endColumnIndex: 4,
           },
           cell: {
             userEnteredFormat: {
@@ -258,8 +280,8 @@ module.exports = async (req, res) => {
             sheetId,
             startRowIndex: initialTotalRowIndex,
             endRowIndex: initialTotalRowIndex + 1,
-            startColumnIndex: 1,
-            endColumnIndex: 2,
+            startColumnIndex: 3,
+            endColumnIndex: 4,
           },
           cell: {
             userEnteredFormat: {
@@ -281,8 +303,8 @@ module.exports = async (req, res) => {
           sheetId,
           startRowIndex: finalTotalRowIndex,
           endRowIndex: finalTotalRowIndex + 1,
-          startColumnIndex: 1,
-          endColumnIndex: 2,
+          startColumnIndex: 3,
+          endColumnIndex: 4,
         },
         cell: {
           userEnteredFormat: {
@@ -302,7 +324,7 @@ module.exports = async (req, res) => {
           startRowIndex: finalTotalRowIndex,
           endRowIndex: finalTotalRowIndex + 1,
           startColumnIndex: 0,
-          endColumnIndex: 3,
+          endColumnIndex: 4,
         },
         cell: {
           userEnteredFormat: {
@@ -313,6 +335,29 @@ module.exports = async (req, res) => {
         fields: 'userEnteredFormat(backgroundColor,textFormat)',
       },
     });
+if (productRows.length > 0) {
+      formattingRequests.push({
+        repeatCell: {
+          range: {
+            sheetId,
+            startRowIndex: baseRows.length,
+            endRowIndex: finalTotalRowIndex,
+            startColumnIndex: 3,
+            endColumnIndex: 4,
+          },
+          cell: {
+            userEnteredFormat: {
+              numberFormat: {
+                type: 'CURRENCY',
+                pattern: '[$₸-kk_KZ] #,##0.00',
+              },
+            },
+          },
+          fields: 'userEnteredFormat.numberFormat',
+        },
+      });
+    }
+
 
 
     const formattingPromise = sheets.spreadsheets.batchUpdate({
