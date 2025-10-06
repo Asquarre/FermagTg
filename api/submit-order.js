@@ -144,12 +144,23 @@ module.exports = async (req, res) => {
     };
 
 
+    const ensurePlainText = (value) => {
+      if (value == null) {
+        return '';
+      }
+
+      const stringValue = String(value);
+      return /^[=+\-]/.test(stringValue.trim())
+        ? `'${stringValue}`
+        : stringValue;
+    };
+
     const baseRows = [
-      ['Адрес:', address || '', '', ''],
-      ['Покупатель:', customerName || user_id || '', '', ''],
-      ['Телефон:', phone || '', '', ''],
+      ['Адрес:', ensurePlainText(address || ''), '', ''],
+      ['Покупатель:', ensurePlainText(customerName || user_id || ''), '', ''],
+      ['Телефон:', ensurePlainText(phone || ''), '', ''],
       ['Доставка/самовывоз:', fulfillmentValue, '', ''],
-      ['Итог:', orderTotal],
+      ['Итог:', '', '', orderTotal],
       ['', '', '', ''],
       ['Наименование', 'Кол-во', 'Цена', 'Сумма'],
     ];
