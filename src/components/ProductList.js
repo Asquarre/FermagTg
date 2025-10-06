@@ -5,6 +5,55 @@ import { formatPrice } from '../utils';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const FALLBACK_IMAGE = '/product-images/default.svg';
+const buildImageSources = (src) => {
+  if (!src || src === FALLBACK_IMAGE) {
+    return {
+      avif: undefined,
+      webp: undefined,
+      fallback: FALLBACK_IMAGE,
+    };
+  }
+
+  const [pathWithoutQuery, queryString] = src.split('?');
+  const extensionIndex = pathWithoutQuery.lastIndexOf('.');
+
+  if (extensionIndex === -1) {
+    return {
+      avif: undefined,
+      webp: undefined,
+      fallback: src,
+    };
+  }
+
+  const basePath = pathWithoutQuery.slice(0, extensionIndex);
+  const query = queryString ? `?${queryString}` : '';
+  const extension = pathWithoutQuery.slice(extensionIndex + 1).toLowerCase();
+
+  const avifSource = `${basePath}.avif${query}`;
+  const webpSource = `${basePath}.webp${query}`;
+
+  if (extension === 'avif') {
+    return {
+      avif: src,
+      webp: webpSource,
+      fallback: webpSource,
+    };
+  }
+
+  if (extension === 'webp') {
+    return {
+      avif: avifSource,
+      webp: src,
+      fallback: src,
+    };
+  }
+
+  return {
+    avif: avifSource,
+    webp: webpSource,
+    fallback: src,
+  };
+};
 
 const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) => {
   const nodeRefs = useRef(new Map());
@@ -43,6 +92,7 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
           {products.map((product) => {
             const nodeRef = getNodeRef(product.id);
             const imageSrc = product.image || FALLBACK_IMAGE;
+            const { avif, webp, fallback } = buildImageSources(imageSrc);
             return (
               <CSSTransition
                 key={product.id}
@@ -79,15 +129,19 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
                       </div>
                     </div>
                     <div className="product-image-wrapper">
-                      <img
-                        src={imageSrc}
-                        alt={product.name}
-                        loading="lazy"
-                        onError={(event) => {
-                          event.currentTarget.onerror = null;
-                          event.currentTarget.src = FALLBACK_IMAGE;
-                        }}
-                      />
+                      <picture>
+                        {avif && <source srcSet={avif} type="image/avif" />}
+                        {webp && <source srcSet={webp} type="image/webp" />}
+                        <img
+                          src={fallback}
+                          alt={product.name}
+                          loading="lazy"
+                          onError={(event) => {
+                            event.currentTarget.onerror = null;
+                            event.currentTarget.src = FALLBACK_IMAGE;
+                          }}
+                        />
+                      </picture>
                      </div>
                   </div>
                 </div>
