@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
     };
 
     const { day, month, year, hours, minutes, milliseconds } =
-      formatGmtPlusFiveDate(orderDate);;
+      formatGmtPlusFiveDate(orderDate);
     const formattedOrderDateTime = `${day}.${month}.${year} ${hours}:${minutes}`;
     
     const sanitizedCustomerName = (customerName || user_id || address || '')
@@ -155,7 +155,7 @@ module.exports = async (req, res) => {
         : stringValue;
     };
 
-    const formatDateForSheet = (date) => {
+     const formatDateForSheet = (date) => {
       const pad = (value) => String(value).padStart(2, '0');
       const day = pad(date.getDate());
       const month = pad(date.getMonth() + 1);
@@ -163,13 +163,15 @@ module.exports = async (req, res) => {
 
       return `${day}:${month}:${year}`;
     };
+
+    const formattedOrderDate = formatDateForSheet(orderDate);
     const baseRows = [
       ['Адрес:', ensurePlainText(address || ''), '', ''],
       ['Покупатель:', ensurePlainText(customerName || user_id || ''), '', ''],
       ['Телефон:', ensurePlainText(phone || ''), '', ''],
       ['Доставка/самовывоз:', fulfillmentValue, '', ''],
       ['Итог:', orderTotal],
-      ['Дата:', formatDateForSheet(new Date()), '', ''],
+      ['Дата:', `'${formattedOrderDate}`, '', ''],
       ['', '', '', ''],
       ['Наименование', 'Кол-во', 'Цена', 'Сумма'],
     ];
