@@ -611,8 +611,8 @@ header img:hover {
 
 .product-image-wrapper {
   flex-shrink: 0;
-  width: 120px;
-  height: 96px;
+  width: 140px;
+  height: 110px;
   border-radius: 12px;
   overflow: hidden;
   display: flex;
