@@ -4,50 +4,15 @@ export const categories = [
   { id: 7, name: 'Кондитерские изделия🧁\n/Кулинария🍴' },
 ];
 
-const buildDefaultImagePaths = (item) => {
-  if (!item || typeof item.id !== 'number') {
-    return {};
-  }
-
-  const basePath = `/product-images/${item.id}`;
-  const webpPath = `${basePath}.webp`;
-
-  return {
-    avif: `${basePath}.avif`,
-    webp: webpPath,
-    fallback: webpPath,
-  };
-};
+const buildDefaultImagePath = (item) =>
+  item && typeof item.id === 'number' ? `/product-images/${item.id}.webp` : undefined;
 
 const withImages = (items) =>
-  items.map(({ image, ...rest }) => {
-    const defaults = buildDefaultImagePaths(rest);
+  items.map((item) => ({
+    ...item,
+    image: item.image ?? buildDefaultImagePath(item),
+  }));
 
-    if (!image) {
-      return {
-        ...rest,
-        image: defaults,
-      };
-    }
-
-    if (typeof image === 'string') {
-      return {
-        ...rest,
-        image: {
-          ...defaults,
-          fallback: image,
-        },
-      };
-    }
-
-    return {
-      ...rest,
-      image: {
-        ...defaults,
-        ...image,
-      },
-    };
-  });
 
 export const productsByCategory = {
   'П/ф замороженная продукция❄️': withImages([
