@@ -578,7 +578,7 @@ header img:hover {
   border: none; /* Remove border */
   background-color: #f4e3c3; /* Light beige background */
   border-radius: 10px; /* Add rounded corners */
-  padding: 3px 15px; /* Add padding */
+  padding: 7px 15px; /* Add padding */
   margin: 10px 0; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -654,10 +654,10 @@ header img:hover {
   opacity: 1;
   transform: scale(1);
   max-height: 500px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   transition: opacity 300ms ease, transform 300ms ease, max-height 300ms ease,
     margin 300ms ease, padding 300ms ease;
 }
