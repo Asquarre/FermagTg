@@ -82,7 +82,10 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                   timeout={280}
                   classNames="checkout-item-transition"
                 >
-                   <li className="checkout-item">
+                   <li
+                    className="checkout-item"
+                    style={{ "--stagger-delay": `${index * 90}ms` }}
+                  >
                     <span className="checkout-item-name">{item.name}</span>
                     <div className="checkout-item-quantity">
                       <button
@@ -175,7 +178,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
           mask="+7(999)-999-9999"
           value={phone}
           onChange={e => setPhone(e.target.value)}
-          placeholder="+7(•••)-•••-••••"
+          placeholder="+7(___)-___-____"
         >
           {inputProps => (
             <input

@@ -151,6 +151,7 @@ body {
 .checkout-item-transition-enter-active {
   opacity: 1;
   transform: translateY(0) scale(1);
+  transition-delay: var(--stagger-delay, 0ms);
 }
 
 .checkout-item-transition-exit {
@@ -160,7 +161,7 @@ body {
 
 .checkout-item-transition-exit-active {
   opacity: 0;
-  transform: translateY(-8px) scale(0.97);
+  transition-delay: 0ms !important;
 }
 
 .checkout-item-name {
