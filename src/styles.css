@@ -154,6 +154,18 @@ body {
   transition-delay: var(--stagger-delay, 0ms);
 }
 
+.checkout-item-transition-appear {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+}
+
+.checkout-item-transition-appear-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: var(--stagger-delay, 0ms);
+}
+
+
 .checkout-item-transition-exit {
   opacity: 1;
   transform: translateY(0) scale(1);

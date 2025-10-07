@@ -81,6 +81,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                   key={item.id}
                   timeout={280}
                   classNames="checkout-item-transition"
+                  appear
                 >
                    <li
                     className="checkout-item"
