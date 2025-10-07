@@ -175,7 +175,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
           mask="+7(999)-999-9999"
           value={phone}
           onChange={e => setPhone(e.target.value)}
-          placeholder="+7(___)-___-____"
+          placeholder="+7(•••)-•••-••••"
         >
           {inputProps => (
             <input
