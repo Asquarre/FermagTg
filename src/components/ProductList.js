@@ -4,14 +4,16 @@ import AnimatedNumber from './AnimatedNumber';
 import { formatPrice } from '../utils';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-const FALLBACK_IMAGE = '/product-images/default.svg';
+const FALLBACK_IMAGE = '/product-images/Default.avif';
+const FALLBACK_SOURCES = {
+  avif: FALLBACK_IMAGE,
+  webp: undefined,
+  fallback: FALLBACK_IMAGE,
+};
+
 const buildImageSources = (src) => {
   if (!src || src === FALLBACK_IMAGE) {
-    return {
-      avif: undefined,
-      webp: undefined,
-      fallback: FALLBACK_IMAGE,
-    };
+    return FALLBACK_SOURCES;
   }
 
   const [pathWithoutQuery, queryString] = src.split('?');
