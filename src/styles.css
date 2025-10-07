@@ -578,8 +578,8 @@ header img:hover {
   border: none; /* Remove border */
   background-color: #f4e3c3; /* Light beige background */
   border-radius: 10px; /* Add rounded corners */
-  padding: 15px; /* Add padding */
-  margin: 10px 0; /* Spacing between products */
+  padding: 12px 15px; /* Add padding */
+  margin: 10px 0; 
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
   transition: transform 0.2s ease, box-shadow 0.2s ease;
  }
@@ -599,7 +599,6 @@ header img:hover {
 
 .product-price {
   font-size: 1.2em;
-  color: #333;
 }
 
 
