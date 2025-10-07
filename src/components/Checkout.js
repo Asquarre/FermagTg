@@ -85,7 +85,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                 >
                    <li
                     className="checkout-item"
-                    style={{ "--stagger-delay": `${index * 90}ms` }}
+                    style={{ "--stagger-delay": `${index * 170}ms` }}
                   >
                     <span className="checkout-item-name">{item.name}</span>
                     <div className="checkout-item-quantity">
