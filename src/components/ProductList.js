@@ -57,6 +57,21 @@ const buildImageSources = (src) => {
   };
 };
 
+const handleImageError = (event) => {
+  const img = event.currentTarget;
+  img.onerror = null;
+
+  const picture = img.closest('picture');
+  if (picture) {
+    const sources = picture.querySelectorAll('source');
+    sources.forEach((source) => {
+      source.remove();
+    });
+  }
+
+  img.src = FALLBACK_IMAGE;
+};
+
 const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) => {
   const nodeRefs = useRef(new Map());
 
@@ -138,10 +153,7 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
                           src={fallback}
                           alt={product.name}
                           loading="lazy"
-                          onError={(event) => {
-                            event.currentTarget.onerror = null;
-                            event.currentTarget.src = FALLBACK_IMAGE;
-                          }}
+                          onError={handleImageError}
                         />
                       </picture>
                      </div>
