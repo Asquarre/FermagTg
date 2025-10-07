@@ -597,6 +597,11 @@ header img:hover {
   flex: 1;
 }
 
+.product-price {
+  font-size: 1.2em;
+}
+
+
 .product-quantity-controls {
   display: flex;
   align-items: center;

@@ -121,7 +121,7 @@ const ProductList = ({ products, onAdd, onRemove, onBack, onCheckout, cart }) =>
                   <div className="product-content">
                     <div className="product-details">
                       <h3>{product.name}</h3>
-                      <p>Цена: ₸{formatPrice(product.price)}</p>
+                      <p className="product-price">Цена: ₸{formatPrice(product.price)}</p>
                       <div className="product-quantity-controls">
                         <button
                           className="quantity-button"
