@@ -7,7 +7,11 @@ const STATIC_CACHE_PREFIX = 'fermagtg-static';
 // static cache namespace. Normal deployments install a fresh service worker,
 // repopulate the cache, and take control without requiring a manual version
 // bump.
-const CACHE_VERSION = `${STATIC_CACHE_PREFIX}-v2`;
+
+//IMPORTANT!!!!!!
+//IF NEED TO FORCE UPDATE ON OLD INSTANCES
+//BUMP UP THE V#
+const CACHE_VERSION = `${STATIC_CACHE_PREFIX}-V1`;
 // Any cache names that store user data we must never purge on deploy go here.
 const PERSISTENT_CACHE_WHITELIST = ['fermagtg-user-orders'];
 const APP_SHELL = [
