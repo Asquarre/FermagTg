@@ -38,6 +38,19 @@ export const registerServiceWorker = () => {
     try {
       const registration = await navigator.serviceWorker.register(SERVICE_WORKER_URL);
       attachUpdateHandler(registration);
+      if (registration && typeof registration.update === 'function') {
+        try {
+          await registration.update();
+        } catch (updateError) {
+          console.error('Service Worker update check failed:', updateError);
+        }
+
+        setInterval(() => {
+          registration.update().catch((intervalError) => {
+            console.error('Service Worker periodic update failed:', intervalError);
+          });
+        }, 60 * 1000);
+      }
     } catch (error) {
       console.error('Service Worker registration failed:', error);
     }
