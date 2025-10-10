@@ -16,7 +16,7 @@ const withImages = (items) =>
 
 export const productsByCategory = {
   'П/ф замороженная продукция❄️': withImages([
-    { id: 101, name: 'Манты с мясомы', catalogueName: 'ФЕРМАГ МАНТЫ С МЯСОМ 60 Г', price: 18 },
+    { id: 101, name: 'Манты с мясом', catalogueName: 'ФЕРМАГ МАНТЫ С МЯСОМ 60 Г', price: 18 },
     { id: 102, name: 'Жута нан с мясом', catalogueName: 'ФЕРМАГ ЖУТА НАН С МЯСОМ 150 Г', price: 18 },
     { id: 103, name: 'Булочка ачма с сыром', catalogueName: 'ФЕРМАГ БУЛОЧКА АЧМА С СЫРОМ 130 Г', price: 18 },
     { id: 104, name: 'Сосиска в тесте 100г', catalogueName: 'ФЕРМАГ СОСИСКА В ТЕСТЕ 100 Г', price: 118 },
