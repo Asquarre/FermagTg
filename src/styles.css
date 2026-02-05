@@ -369,7 +369,6 @@ body {
 
   /* Equal button size styles */
   width: 100%; /* Ensure buttons take full width of their container */
-  max-width: 500px;
   text-align: center; /* Center text inside the button */
 }
 
