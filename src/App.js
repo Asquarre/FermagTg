@@ -3,7 +3,6 @@ import './styles.css';
 import React, { useState, useEffect } from 'react';
 import Categories from './components/Categories';
 import ProductList from './components/ProductList';
-import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import SearchBar from './components/SearchBar';
 import axios from 'axios';
