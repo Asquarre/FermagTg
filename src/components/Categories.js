@@ -2,18 +2,9 @@ import React from 'react';
 
 const Categories = ({ categories, onSelectCategory }) => {
   return (
-    <div>
+    <div className="categories-view">
       <h2 className="categories-heading">КАТЕГОРИИ</h2>
-      <ul
-        style={{
-          listStyleType: 'none',
-          padding: 0,
-          display: 'flex', // Enable flexbox
-          flexDirection: 'column', // Stack buttons  vertically
-          alignItems: 'flex-start', // Align to the left (can change to 'center' if needed)
-          gap: '10px', // Add spacing between buttons
-        }}
-      >
+      <ul className="categories-list">
         {categories.map((category, index) => (
           <li
             key={category.id}
