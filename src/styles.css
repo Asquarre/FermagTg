@@ -89,7 +89,7 @@ body {
     width: 100%;
   }
   .repeat-order-button {
-    margin-right: 0;
+    margin-right: calc((100% - min(100%, 500px)) / 2);
   }
 }
 
