@@ -81,7 +81,7 @@ body {
   }
 
   .categories-list {
-    width: min(100%, 500px);
+    width: 100%;
     align-items: stretch;
   }
 
@@ -89,7 +89,7 @@ body {
     width: 100%;
   }
   .repeat-order-button {
-    margin-right: calc((100% - min(100%, 500px)) / 2);
+    margin-right: 0;
   }
 }
 
