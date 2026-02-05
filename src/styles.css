@@ -490,7 +490,7 @@ header img:hover {
 
 .search-input:focus,
 .search-input:hover {
-  width: 75%; /* Slightly increase width */
+  width: 96%; /* Slightly increase width */
   padding: 12px; /* Add more padding */
   border-color: #1d891d; /* Darker blue border on focus/hover */
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5); /* Subtle glow */
