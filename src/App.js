@@ -285,23 +285,15 @@ const handleSearch = (term) => {
   };
 
   return (
-    <div style={{ padding: '16px' }}>
-      <header
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '15px',
-          justifyContent: 'flex-start',
-          marginBottom: '-4px',
-        }}
-      >
+    <div className="app-shell">
+      <header className="app-header">
        <picture>
           <source srcSet="/Logo.avif" type="image/avif" />
           <source srcSet="/Logo.webp" type="image/webp" />
           <img
             src="/Logo.png"
             alt="Grocery Store Logo"
-            style={{ width: "150px", height: "150px", marginLeft: "-30px" }}
+            className="app-logo"
           />
         </picture>
         {view === 'categories' && lastOrder && lastOrder.length > 0 && (
