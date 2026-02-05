@@ -164,9 +164,7 @@ body {
   border-radius: 50%; /* Make the buttons circular */
   width: 36px; /* Set fixed width */
   height: 36px; /* Set fixed height */
-  font-size: 1.55rem; /* Larger symbol while keeping button dimensions unchanged */
-  font-weight: 700;
-  line-height: 1;
+  font-size: 1rem; /* Font size adjusted */
   display: flex;
   align-items: center;
   justify-content: center;
