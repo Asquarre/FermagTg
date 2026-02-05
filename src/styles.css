@@ -7,6 +7,7 @@
 html {
   background-color: #BDA47D;
   height: 100%;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -29,6 +30,7 @@ body {
   background-size: auto; /* Default background size */
   background-attachment: scroll; /* Ensure the background scrolls with the content */
   background-color: #BDA47D !important; /* Continue BDA47D color beyond the background image */
+  overflow-y: scroll;
 }
 
 .app-shell {
