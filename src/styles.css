@@ -66,8 +66,20 @@ body {
 
 @media (min-width: 1024px) {
   .app-shell {
-    max-width: 1240px;
+    max-width: 760px;
     margin: 0 auto;
+  }
+
+  .categories-heading {
+    text-align: center;
+  }
+
+  .categories-list {
+    align-items: center;
+  }
+
+  .app-header {
+    width: 100%;
   }
 }
 
