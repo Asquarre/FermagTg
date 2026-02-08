@@ -9,14 +9,14 @@ import axios from 'axios';
 import AnimatedNumber from './components/AnimatedNumber';
 import { formatPrice } from './utils';
 import { categories as categoriesData, productsByCategory } from './data/products';
-import { readExcelPriceMap, normalizeProductName } from './excel/excelLoader';
+import { readExcelCatalog } from './excel/excelLoader';
 
 
 const App = () => {
     useEffect(() => {
     import('./styles.css');
   }, []);
-  const [categories] = useState(categoriesData);
+  const [categories, setCategories] = useState(categoriesData);
   const [allProducts, setAllProducts] = useState(productsByCategory);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [products, setProducts] = useState([]);
@@ -28,6 +28,30 @@ const App = () => {
   const [priceLoadError, setPriceLoadError] = useState(null);
 
   useEffect(() => {
+     const buildDefaultImagePath = (itemId) =>
+      Number.isFinite(itemId) ? `/product-images/${itemId}.webp` : undefined;
+
+    const withImages = (items) =>
+      items.map((item) => ({
+        ...item,
+        image: item.image ?? buildDefaultImagePath(item.id),
+      }));
+
+    const addImagesToCatalog = (catalog) =>
+      Object.fromEntries(
+        Object.entries(catalog).map(([categoryName, items]) => [
+          categoryName,
+          withImages(items),
+        ])
+      );
+
+    const categoryPrefixMap = {
+      Заморозка: 1,
+      'Хлеб/ хлебобул': 2,
+      кондитерка: 3,
+      кулинария: 4,
+    };
+
     const loadPrices = async () => {
       try {
         const response = await fetch('/Цены.xlsx');
@@ -35,25 +59,13 @@ const App = () => {
           throw new Error('Не удалось загрузить файл с ценами.');
         }
         const arrayBuffer = await response.arrayBuffer();
-        const priceMap = await readExcelPriceMap(arrayBuffer);
-      if (!priceMap || priceMap.size === 0) {
+       const catalog = await readExcelCatalog(arrayBuffer, { categoryPrefixMap });
+        if (!catalog || Object.keys(catalog.productsByCategory).length === 0) {
           throw new Error('Файл цен не содержит данных для обновления.');
         }
-         setAllProducts((previousProducts) =>
-          Object.fromEntries(
-            Object.entries(previousProducts).map(([categoryName, items]) => [
-              categoryName,
-              items.map((item) => {
-                const updatedPrice = priceMap.get(
-                  normalizeProductName(item.catalogueName ?? item.name)
-                );
-                return updatedPrice !== undefined
-                  ? { ...item, price: updatedPrice }
-                  : item;
-              }),
-            ])
-          )
-        );
+         setCategories(catalog.categories);
+        setAllProducts(addImagesToCatalog(catalog.productsByCategory));
+        setSelectedCategory(null);
         setPriceLoadError(null);
       } catch (error) {
         console.error('Failed to load prices from Excel', error);
