@@ -232,7 +232,7 @@ const handleSearch = (term) => {
   const handleRepeatOrder = () => {
     if (lastOrder && lastOrder.length > 0) {
       const productMapById = new Map();
-      const productMapByName = new Map();
+     // const productMapByName = new Map();
 
       
 
