@@ -234,17 +234,7 @@ const handleSearch = (term) => {
       const productMapById = new Map();
       const productMapByName = new Map();
 
-      Object.values(allProducts).forEach((items = []) => {
-        items.forEach((item) => {
-          productMapById.set(item.id, item);
-          if (item.name) {
-            productMapByName.set(normalizeProductName(item.name), item);
-          }
-          if (item.catalogueName) {
-            productMapByName.set(normalizeProductName(item.catalogueName), item);
-          }
-        });
-      });
+      
 
       const reconstructedCart = [];
       const missingItems = [];
@@ -253,9 +243,7 @@ const handleSearch = (term) => {
         const productById = productMapById.get(savedItem.id);
         let product = productById;
 
-        if (!product && typeof savedItem.name === 'string' && savedItem.name.trim()) {
-          product = productMapByName.get(normalizeProductName(savedItem.name));
-        }
+       
 
         if (!product) {
           missingItems.push(savedItem.name || `ID ${savedItem.id}`);

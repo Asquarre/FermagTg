@@ -19,6 +19,40 @@ const parsePriceValue = (rawValue) => {
 
   return Number.isNaN(numeric) ? null : numeric;
 };
+const parseWorkbookSheetNames = (xmlText) => {
+  if (!xmlText) {
+    return [];
+  }
+
+  const document = new DOMParser().parseFromString(xmlText, 'application/xml');
+  const sheets = Array.from(document.getElementsByTagName('sheet'));
+
+  return sheets.map((sheet) => ({
+    name: sheet.getAttribute('name') ?? '',
+    relationId: sheet.getAttribute('r:id') ?? '',
+    sheetId: sheet.getAttribute('sheetId') ?? '',
+  }));
+};
+
+const parseWorkbookRelationships = (xmlText) => {
+  if (!xmlText) {
+    return new Map();
+  }
+
+  const document = new DOMParser().parseFromString(xmlText, 'application/xml');
+  const relationships = Array.from(document.getElementsByTagName('Relationship'));
+  const relationshipMap = new Map();
+
+  relationships.forEach((relationship) => {
+    const id = relationship.getAttribute('Id');
+    const target = relationship.getAttribute('Target');
+    if (id && target) {
+      relationshipMap.set(id, target);
+    }
+  });
+
+  return relationshipMap;
+};
 
 const columnLabelToIndex = (label) => {
   let index = 0;
@@ -244,4 +278,112 @@ export const readExcelPriceMap = async (arrayBuffer) => {
   });
 
   return priceMap;
+};
+
+const resolveSheetEntryName = (target) => {
+  if (!target) {
+    return null;
+  }
+  if (target.startsWith('xl/')) {
+    return target;
+  }
+
+  return `xl/${target.replace(/^\/+/, '')}`;
+};
+
+const buildProductId = (rawId, categoryPrefix) => {
+  if (rawId === undefined || rawId === null) {
+    return null;
+  }
+
+  const trimmedId = rawId.toString().trim();
+  if (!trimmedId) {
+    return null;
+  }
+
+  const prefix = categoryPrefix ? String(categoryPrefix) : '';
+  const combinedId = prefix && !trimmedId.startsWith(prefix) ? `${prefix}${trimmedId}` : trimmedId;
+  const numericId = Number.parseInt(combinedId, 10);
+
+  return Number.isNaN(numericId) ? null : numericId;
+};
+
+export const readExcelCatalog = async (arrayBuffer, options = {}) => {
+  const { categoryPrefixMap = {} } = options;
+  const view = new DataView(arrayBuffer);
+  const endOfCentralDirectoryOffset = findEndOfCentralDirectory(view);
+  const totalEntries = view.getUint16(endOfCentralDirectoryOffset + 10, true);
+  const centralDirectoryOffset = view.getUint32(endOfCentralDirectoryOffset + 16, true);
+
+  const entries = parseCentralDirectory(view, arrayBuffer, centralDirectoryOffset, totalEntries);
+  const sharedStringsXml = await readEntryAsText(entries, 'xl/sharedStrings.xml', arrayBuffer, view);
+  const sharedStrings = parseSharedStrings(sharedStringsXml);
+
+  const workbookXml = await readEntryAsText(entries, 'xl/workbook.xml', arrayBuffer, view);
+  const workbookRelsXml = await readEntryAsText(
+    entries,
+    'xl/_rels/workbook.xml.rels',
+    arrayBuffer,
+    view
+  );
+
+  const sheets = parseWorkbookSheetNames(workbookXml);
+  const relationships = parseWorkbookRelationships(workbookRelsXml);
+
+  const sheetEntries = sheets
+    .map((sheet) => {
+      const target = relationships.get(sheet.relationId);
+      const entryName = resolveSheetEntryName(target) || `xl/worksheets/sheet${sheet.sheetId}.xml`;
+      return {
+        name: sheet.name.trim(),
+        entryName,
+      };
+    })
+    .filter((sheet) => sheet.name);
+
+  if (sheetEntries.length === 0) {
+    throw new Error('Не удалось найти листы с данными в Excel файле.');
+  }
+
+  const categories = [];
+  const productsByCategory = {};
+
+  for (let i = 0; i < sheetEntries.length; i += 1) {
+    const sheet = sheetEntries[i];
+    const worksheetXml = await readEntryAsText(entries, sheet.entryName, arrayBuffer, view);
+    const rows = parseSheetRows(worksheetXml, sharedStrings);
+    const products = [];
+    const categoryPrefix = categoryPrefixMap[sheet.name];
+
+    rows.forEach((row) => {
+      if (!row || row.length === 0) {
+        return;
+      }
+
+      const [idCell, nameCell, priceCell] = row;
+      const productName = nameCell ? nameCell.toString().trim() : '';
+      const price = parsePriceValue(priceCell);
+      const productId = buildProductId(idCell, categoryPrefix);
+
+      if (!productName || price === null || productId === null) {
+        return;
+      }
+
+      products.push({
+        id: productId,
+        name: productName,
+        catalogueName: productName,
+        price,
+      });
+    });
+
+    categories.push({
+      id: categoryPrefix ?? i + 1,
+      name: sheet.name,
+    });
+
+    productsByCategory[sheet.name] = products;
+  }
+
+  return { categories, productsByCategory };
 };
