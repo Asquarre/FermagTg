@@ -9,7 +9,7 @@ import axios from 'axios';
 import AnimatedNumber from './components/AnimatedNumber';
 import { formatPrice } from './utils';
 import { categories as categoriesData, productsByCategory } from './data/products';
-import { readExcelCatalog } from './excel/excelLoader';
+import { normalizeProductName, readExcelCatalog } from './excel/excelLoader';
 
 
 const App = () => {
@@ -232,9 +232,9 @@ const handleSearch = (term) => {
   const handleRepeatOrder = () => {
     if (lastOrder && lastOrder.length > 0) {
       const productMapById = new Map();
-      //const productMapByName = new Map();
+      const productMapByName = new Map();
 
-      /* NORMALIZE COOMENTOUT 1
+      
       Object.values(allProducts).forEach((items = []) => {
         items.forEach((item) => {
           productMapById.set(item.id, item);
@@ -246,7 +246,7 @@ const handleSearch = (term) => {
           }
         });
       });
-      */
+
 
       const reconstructedCart = [];
       const missingItems = [];
@@ -255,11 +255,11 @@ const handleSearch = (term) => {
         const productById = productMapById.get(savedItem.id);
         let product = productById;
 
-        /* NORMALIZE COMMENT OUT
+
         if (!product && typeof savedItem.name === 'string' && savedItem.name.trim()) {
           product = productMapByName.get(normalizeProductName(savedItem.name));
         }
-          */
+
 
         if (!product) {
           missingItems.push(savedItem.name || `ID ${savedItem.id}`);
