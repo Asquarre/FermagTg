@@ -16,6 +16,7 @@ const App = () => {
     useEffect(() => {
     import('./styles.css');
   }, []);
+  
   const [categories, setCategories] = useState(categoriesData);
   const [allProducts, setAllProducts] = useState(productsByCategory);
   const [selectedCategory, setSelectedCategory] = useState(null);
