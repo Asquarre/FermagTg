@@ -16,50 +16,6 @@ const App = () => {
     useEffect(() => {
     import('./styles.css');
   }, []);
-  useEffect(() => {
-    const backgroundImage = new Image();
-    backgroundImage.src = '/background.png';
-
-    const updateBackgroundVars = () => {
-      if (!backgroundImage.naturalWidth || !backgroundImage.naturalHeight) {
-        return;
-      }
-
-      const isWideViewport = window.matchMedia('(min-width: 768px)').matches;
-      const targetWidth = isWideViewport
-        ? window.innerWidth
-        : backgroundImage.naturalWidth;
-      const targetHeight = Math.round(
-        (backgroundImage.naturalHeight / backgroundImage.naturalWidth) * targetWidth
-      );
-
-      document.documentElement.style.setProperty(
-        '--background-image-width',
-        `${targetWidth}px`
-      );
-      document.documentElement.style.setProperty(
-        '--background-image-height',
-        `${targetHeight}px`
-      );
-    };
-
-    const handleResize = () => {
-      updateBackgroundVars();
-    };
-
-    if (backgroundImage.complete) {
-      updateBackgroundVars();
-    } else {
-      backgroundImage.addEventListener('load', updateBackgroundVars);
-    }
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      backgroundImage.removeEventListener('load', updateBackgroundVars);
-    };
-  }, []);
   const [categories, setCategories] = useState(categoriesData);
   const [allProducts, setAllProducts] = useState(productsByCategory);
   const [selectedCategory, setSelectedCategory] = useState(null);

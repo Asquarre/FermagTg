@@ -45,15 +45,15 @@ body::after {
   left: 0;
   right: 0;
   top: var(--background-image-height, 0px);
-  height: var(--background-image-height, 0px);
+  bottom: 0;
   background-image: image-set(
     url('/background.avif') type('image/avif'),
     url('/background.webp') type('image/webp'),
     url('/background.png') type('image/png')
   );
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
   background-position: top center;
-  background-size: var(--background-image-width, auto) auto;
+  background-size: var(--background-image-width, 100%) auto;
   transform: scaleY(-1);
   transform-origin: top;
   z-index: 0;
