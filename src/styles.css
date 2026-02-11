@@ -16,7 +16,6 @@ body {
   padding: 0;
   color: #1d1c1c;
   min-height: 100vh;
-  position: relative;
   text-shadow: 2px 2px 9px rgba(240, 240, 240, 0);
   overflow-x: hidden; /* Prevent horizontal scrolling */
   background: #BDA47D url('/background.png') no-repeat top center; 
@@ -33,33 +32,6 @@ body {
   background-color: #BDA47D !important; /* Continue BDA47D color beyond the background image */
   overflow-y: scroll;
 }
-
-#root {
-  position: relative;
-  z-index: 1;
-}
-
-body::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: var(--background-image-height, 0px);
-  bottom: 0;
-  background-image: image-set(
-    url('/background.avif') type('image/avif'),
-    url('/background.webp') type('image/webp'),
-    url('/background.png') type('image/png')
-  );
-  background-repeat: repeat-y;
-  background-position: top center;
-  background-size: var(--background-image-width, 100%) auto;
-  transform: scaleY(-1);
-  transform-origin: top;
-  z-index: 0;
-  pointer-events: none;
-}
-
 
 .app-shell {
   width: 100%;
@@ -753,6 +725,38 @@ header img:hover {
   margin-bottom: 0;
   padding-top: 0;
   padding-bottom: 0;
+}
+.product-quantity-input-wrap {
+  position: relative;
+  min-width: 38px;
+  display: inline-flex;
+  justify-content: center;
+  cursor: text;
+}
+
+.product-quantity-input {
+  width: 42px;
+  text-align: center;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  border: 1px solid #d5b27e;
+  border-radius: 8px;
+  background: #fff8eb;
+  padding: 2px 4px;
+}
+
+.product-quantity-input:focus {
+  outline: 2px solid #7d5a26;
+  border-color: #7d5a26;
+}
+
+.product-quantity-input--hidden {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  border: 0;
+  padding: 0;
 }
 
 .product-shrink-enter-active {

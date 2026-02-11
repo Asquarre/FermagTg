@@ -162,6 +162,37 @@ const App = () => {
       }
     }
   };
+
+   const handleSetCartQuantity = (productId, nextQuantity) => {
+    const product = products.find((p) => p.id === productId);
+    const normalizedQuantity = Number.parseInt(nextQuantity, 10);
+
+    if (!Number.isFinite(normalizedQuantity)) {
+      return;
+    }
+
+    if (normalizedQuantity <= 0) {
+      setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+      return;
+    }
+
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item.id === productId);
+
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === productId ? { ...item, quantity: normalizedQuantity } : item
+        );
+      }
+
+      if (!product) {
+        return prevCart;
+      }
+
+      return [...prevCart, { ...product, quantity: normalizedQuantity }];
+    });
+  };
+
   const handleDeleteFromCart = (productId) => {
     setCart(cart.filter((item) => item.id !== productId));
   };
@@ -351,6 +382,7 @@ const handleSearch = (term) => {
             products={filteredProducts}
             onAdd={handleAddToCart}
             onRemove={handleRemoveFromCart}
+            onSetQuantity={handleSetCartQuantity}
             onBack={() => setView('categories')}
             onCheckout={handleCheckout} // Pass handleCheckout here
             cart={cart}
