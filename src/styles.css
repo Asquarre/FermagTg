@@ -196,9 +196,9 @@ body {
 
 .checkout-item {
   display: grid;
-  grid-template-columns: 1fr 100px 70px 32px;
+  grid-template-columns: minmax(0, 1fr) auto auto 36px;
   align-items: center;
-  gap: 6px;
+  gap: 9px;
   margin-bottom: 8px;
   padding: 6px 4px;
   background: rgba(255, 255, 255, 0.4);
@@ -248,19 +248,30 @@ body {
 .checkout-item-quantity {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
+  justify-content: flex-end;
+  gap: 8px;
   width: 100%;
+  white-space: nowrap;
 }
 
-.quantity-value {              /* lets 1–3 digits fit without cropping */
-   min-width: 2.6ch;
-   text-align: center;
- }
+quantity-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.4ch;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.quantity-value .digit-wrapper {
+  min-width: 1ch;
+  padding: 0 2px;
+}
 
 .checkout-item-price {
-  min-width: 70px;
+  min-width: 84px;
   text-align: right;
+  white-space: nowrap;
 }
 
 
