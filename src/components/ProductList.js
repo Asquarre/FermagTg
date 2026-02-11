@@ -75,6 +75,7 @@ const handleImageError = (event) => {
 const ProductList = ({ products, onAdd, onRemove, onSetQuantity, onBack, onCheckout, cart }) => {
   const nodeRefs = useRef(new Map());
 const [quantityDrafts, setQuantityDrafts] = useState({});
+  const [focusedProductId, setFocusedProductId] = useState(null);
 
   useEffect(() => {
     const nextDrafts = {};
@@ -149,7 +150,8 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
             const { avif, webp, fallback } = buildImageSources(imageSrc);
             const currentQuantity = getProductQuantity(product.id);
             const draftValue = quantityDrafts[product.id] ?? String(currentQuantity);
-            const showAnimatedValue = draftValue === String(currentQuantity);
+            const isFocused = focusedProductId === product.id;
+            const showAnimatedValue = !isFocused && draftValue === String(currentQuantity);
             return (
               <CSSTransition
                 key={product.id}
@@ -183,7 +185,11 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
                             className={`product-quantity-input ${showAnimatedValue ? 'product-quantity-input--hidden' : ''}`}
                             value={draftValue}
                             onChange={(event) => handleQuantityChange(product.id, event.target.value)}
-                            onBlur={() => applyQuantity(product.id)}
+                            onFocus={() => setFocusedProductId(product.id)}
+                            onBlur={() => {
+                              applyQuantity(product.id);
+                              setFocusedProductId((prev) => (prev === product.id ? null : prev));
+                            }}
                             onKeyDown={(event) => {
                               if (event.key === 'Enter') {
                                 event.currentTarget.blur();
