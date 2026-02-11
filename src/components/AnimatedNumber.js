@@ -1,32 +1,46 @@
-import React, { useRef, useEffect } from 'react';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 const AnimatedNumber = ({ value, className = '' }) => {
-  const previous = useRef(value);
-  const direction = Number(value) >= Number(previous.current) ? 'up' : 'down';
+  const previousValueRef = useRef(value);
+  const nodeRefs = useRef(new Map());
+
+  const stringValue = useMemo(() => value.toString(), [value]);
+  const direction = Number(value) >= Number(previousValueRef.current) ? 'up' : 'down';
 
   useEffect(() => {
-    previous.current = value;
+    previousValueRef.current = value;
   }, [value]);
-
+  
+const getNodeRef = (digitKey) => {
+    if (!nodeRefs.current.has(digitKey)) {
+      nodeRefs.current.set(digitKey, React.createRef());
+    }
+    return nodeRefs.current.get(digitKey);
+  };
   return (
     <span className={`animated-number ${className}`}>
-      {value
-        .toString()
-        .split('')
-        .map((char, index) => (
-          <span key={index} className="digit-wrapper">
-            <TransitionGroup component={null}>
+     {stringValue.split('').map((char, index) => {
+        const digitKey = `${index}-${char}`;
+        const nodeRef = getNodeRef(digitKey);
+
+        return (
+          <span key={`slot-${index}`} className="digit-wrapper">
+            <SwitchTransition mode="out-in">
               <CSSTransition
-                key={`${char}-${index}`}
-                timeout={150}
+                key={digitKey}
+                nodeRef={nodeRef}
+                timeout={300}
                 classNames={`digit-${direction}`}
               >
-                <span className="digit">{char}</span>
+                <span ref={nodeRef} className="digit">
+                  {char}
+                </span>
               </CSSTransition>
-            </TransitionGroup>
+            </SwitchTransition>
           </span>
-        ))}
+        );
+      })}
     </span>
   );
 };
