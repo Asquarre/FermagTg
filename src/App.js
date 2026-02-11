@@ -455,6 +455,7 @@ const handleSearch = (term) => {
           onBack={() => setView('products')}
           onAdd={handleAddToCart}
           onRemove={handleRemoveFromCart}
+          onSetQuantity={handleSetCartQuantity}
           onDelete={handleDeleteFromCart}
         />
       )}

@@ -5,13 +5,14 @@ import AnimatedNumber from './AnimatedNumber';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { formatPrice } from '../utils';
 
-const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
+const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDelete }) => {
   const [customerName, setCustomerName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fulfillmentType, setFulfillmentType] = useState("delivery");
-  
+  const [quantityDrafts, setQuantityDrafts] = useState({});
+  const [focusedItemId, setFocusedItemId] = useState(null);
 
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
   const DELIVERY_THRESHOLD = 30000;
@@ -22,6 +23,59 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
       setFulfillmentType('pickup');
     }
   }, [isDeliveryAvailable, fulfillmentType]);
+
+
+  useEffect(() => {
+    const nextDrafts = {};
+    cart.forEach((item) => {
+      nextDrafts[item.id] = String(item.quantity).replace('.', ',');
+    });
+    setQuantityDrafts(nextDrafts);
+  }, [cart]);
+
+  const handleQuantityChange = (itemId, value) => {
+    const normalizedValue = value.replace(/\./g, ',').replace(/\s+/g, '');
+    const isValidQuantityFormat = /^\d*(?:,\d?)?$/.test(normalizedValue);
+
+    if (!isValidQuantityFormat) {
+      return;
+    }
+
+    setQuantityDrafts((prev) => ({
+      ...prev,
+      [itemId]: normalizedValue,
+    }));
+  };
+
+  const applyQuantity = (itemId, fallbackQuantity) => {
+    const rawValue = quantityDrafts[itemId] ?? '';
+
+    if (rawValue === '') {
+      onSetQuantity(itemId, 0);
+      return;
+    }
+
+    if (!/^\d+(?:,\d)?$/.test(rawValue)) {
+      setQuantityDrafts((prev) => ({
+        ...prev,
+        [itemId]: String(fallbackQuantity).replace('.', ','),
+      }));
+      return;
+    }
+
+    const parsedValue = Number.parseFloat(rawValue.replace(',', '.'));
+
+    if (!Number.isFinite(parsedValue)) {
+      setQuantityDrafts((prev) => ({
+        ...prev,
+        [itemId]: String(fallbackQuantity).replace('.', ','),
+      }));
+      return;
+    }
+
+    onSetQuantity(itemId, parsedValue);
+  };
+
 
   const handleFulfillmentChange = (type) => {
     if (type === 'delivery' && !isDeliveryAvailable) {
@@ -76,7 +130,12 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
         {cart.length ? (
           <>
              <TransitionGroup component="ul" className="checkout-list">
-              {cart.map((item, index) => (
+              {cart.map((item, index) => {
+                const draftValue = quantityDrafts[item.id] ?? String(item.quantity).replace('.', ',');
+                const isFocused = focusedItemId === item.id;
+                const showAnimatedValue = !isFocused;
+
+                return (
                 <CSSTransition
                   key={item.id}
                   timeout={280}
@@ -95,10 +154,32 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                       >
                         -
                       </button>
-                      <AnimatedNumber
-                        value={item.quantity}
-                        className="quantity-value"
-                      />
+                       <label className="product-quantity-input-wrap" aria-label={`Количество ${item.name}`}>
+                        {showAnimatedValue ? (
+                          <span className="product-quantity-value">
+                            <AnimatedNumber value={item.quantity} className="qty-inline" />
+                          </span>
+                        ) : null}
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          pattern="[0-9]+([,][0-9])?"
+                          className={`product-quantity-input ${showAnimatedValue ? 'product-quantity-input--hidden' : ''}`}
+                          value={draftValue}
+                          onChange={(event) => handleQuantityChange(item.id, event.target.value)}
+                          onFocus={() => setFocusedItemId(item.id)}
+                          onBlur={() => {
+                            applyQuantity(item.id, item.quantity);
+                            setFocusedItemId((prev) => (prev === item.id ? null : prev));
+                          }}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                              event.currentTarget.blur();
+                            }
+                          }}
+                          aria-label={`Введите количество для ${item.name}`}
+                        />
+                      </label>
                       <button
                         className="quantity-button"
                         onClick={() => onAdd(item.id)}
@@ -120,7 +201,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onDelete }) => {
                     </button>
                       </li>
                 </CSSTransition>
-              ))}
+              );})}
             </TransitionGroup>
             <div className="total">
               Сумма Заказа: ₸
