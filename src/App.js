@@ -165,7 +165,7 @@ const App = () => {
 
    const handleSetCartQuantity = (productId, nextQuantity) => {
     const product = products.find((p) => p.id === productId);
-    const normalizedQuantity = Number.parseInt(nextQuantity, 10);
+    const normalizedQuantity = Number.parseFloat(nextQuantity);
 
     if (!Number.isFinite(normalizedQuantity)) {
       return;

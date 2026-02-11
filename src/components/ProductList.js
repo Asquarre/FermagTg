@@ -96,10 +96,15 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
   };
 
   const handleQuantityChange = (productId, value) => {
-    const digitsOnly = value.replace(/\D/g, '');
+    const normalizedValue = value.replace(/\./g, ',').replace(/\s+/g, '');
+    const isValidQuantityFormat = /^\d*(?:,\d?)?$/.test(normalizedValue);
+
+    if (!isValidQuantityFormat) {
+      return;
+    }
     setQuantityDrafts((prev) => ({
       ...prev,
-      [productId]: digitsOnly,
+      [productId]: normalizedValue,
     }));
   };
 
@@ -111,7 +116,15 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
       return;
     }
 
-    const parsedValue = Number.parseInt(rawValue, 10);
+    if (!/^\d+(?:,\d)?$/.test(rawValue)) {
+      setQuantityDrafts((prev) => ({
+        ...prev,
+        [productId]: String(getProductQuantity(productId)).replace('.', ','),
+      }));
+      return;
+    }
+
+    const parsedValue = Number.parseFloat(rawValue.replace(',', '.'));
 
     if (!Number.isFinite(parsedValue)) {
       setQuantityDrafts((prev) => ({
@@ -149,7 +162,7 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
             const imageSrc = product.image || FALLBACK_IMAGE;
             const { avif, webp, fallback } = buildImageSources(imageSrc);
             const currentQuantity = getProductQuantity(product.id);
-            const draftValue = quantityDrafts[product.id] ?? String(currentQuantity);
+            const draftValue = (quantityDrafts[product.id] ?? String(currentQuantity)).replace('.', ',');
             const isFocused = focusedProductId === product.id;
             const showAnimatedValue = !isFocused;
             return (
@@ -180,8 +193,8 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
                           ) : null}
                           <input
                             type="text"
-                            inputMode="numeric"
-                            pattern="[0-9]*"
+                            inputMode="decimal"
+                            pattern="[0-9]+([,][0-9])?"
                             className={`product-quantity-input ${showAnimatedValue ? 'product-quantity-input--hidden' : ''}`}
                             value={draftValue}
                             onChange={(event) => handleQuantityChange(product.id, event.target.value)}
