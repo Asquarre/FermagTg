@@ -151,7 +151,7 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
             const currentQuantity = getProductQuantity(product.id);
             const draftValue = quantityDrafts[product.id] ?? String(currentQuantity);
             const isFocused = focusedProductId === product.id;
-            const showAnimatedValue = !isFocused && draftValue === String(currentQuantity);
+            const showAnimatedValue = !isFocused;
             return (
               <CSSTransition
                 key={product.id}
