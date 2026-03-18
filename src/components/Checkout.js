@@ -15,7 +15,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
   const [focusedItemId, setFocusedItemId] = useState(null);
 
   const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
-  const DELIVERY_THRESHOLD = 30000;
+  const DELIVERY_THRESHOLD = 39000;
   const isDeliveryAvailable = total >= DELIVERY_THRESHOLD;
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
 
   const handleFulfillmentChange = (type) => {
     if (type === 'delivery' && !isDeliveryAvailable) {
-      alert('Доставка доступна только для заказов на сумму от 30 000 тенге.');
+      alert('Доставка доступна только для заказов на сумму от 40 000 тенге.');
       return;
     }
     setFulfillmentType(type);
