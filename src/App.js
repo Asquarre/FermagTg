@@ -26,7 +26,6 @@ const App = () => {
   const [lastOrder, setLastOrder] = useState(loadLastOrder);
   const [view, setView] = useState('categories'); // 'categories', 'products', 'checkout'
   const [pendingOrder, setPendingOrder] = useState(loadPendingOrder);
-  const [orderStatus, setOrderStatus] = useState('');
 
   useEffect(() => {
     if (!pendingOrder) return undefined;
@@ -36,7 +35,6 @@ const App = () => {
     let failures = 0;
     const check = async () => {
       try {
-        setOrderStatus('Оформляем заказ. Подтверждение появится после записи и оформления таблицы.');
         const response = submit
           ? await axios.post('/api/submit-order', pendingOrder, { timeout: 45000 })
           : await axios.get('/api/order-status', { params: { orderId: pendingOrder.orderId }, timeout: 45000 });
@@ -49,7 +47,6 @@ const App = () => {
           setCart([]);
           setView('categories');
           setPendingOrder(null);
-          setOrderStatus('');
           alert(response.data.testMode
             ? 'Тестовый заказ сохранён на компьютере. В Telegram и Google Sheets ничего не отправлено.'
             : 'Мы приняли ваш заказ!');
@@ -69,7 +66,6 @@ const App = () => {
           failures++;
           // The result of POST may be unknown: first check the same ID, never generate another.
           submit = false;
-          setOrderStatus('Связь задерживается. Проверяем тот же заказ автоматически — повторная отправка не нужна.');
         }
       }
       if (!stopped) timer = setTimeout(check, submit ? 100 : Math.min(30000, 5000 * (failures + 1)));
@@ -249,11 +245,21 @@ const handleSearch = (term) => {
   };
 
   if (pendingOrder) return (
-    <div className="app-shell">
-      <h2>Оформление заказа</h2>
-      <p role="status">{orderStatus || 'Проверяем состояние заказа…'}</p>
-      <p>После перезагрузки страницы проверка продолжится автоматически.</p>
-    </div>
+    <main className="app-shell order-pending">
+      <section className="order-pending-card" aria-labelledby="order-pending-title">
+        <div className="order-pending-loader" aria-hidden="true">
+          <span className="order-pending-ring" />
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M10 19h28l-3 20H13l-3-20Z" />
+            <path d="m16 19 8-11 8 11M19 26v6m10-6v6" />
+          </svg>
+        </div>
+        <h2 id="order-pending-title" className="checkout-heading">Оформляем заказ</h2>
+        <p className="order-pending-status" role="status" aria-live="polite">
+          Ваш заказ обрабатывается
+        </p>
+      </section>
+    </main>
   );
 
   return (

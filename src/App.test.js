@@ -31,7 +31,10 @@ test('pending Sheets operation is not shown as a successful order', async () => 
   const alert = jest.spyOn(window, 'alert').mockImplementation(() => {});
   const view = render(<App />);
   await act(async () => { await Promise.resolve(); });
-  expect(screen.getByRole('status')).toHaveTextContent('Оформляем заказ');
+  expect(screen.getByRole('status')).toHaveTextContent('Ваш заказ обрабатывается');
+  expect(screen.queryByText(/После перезагрузки страницы/)).not.toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: 'Оформляем заказ' })).toHaveClass('checkout-heading');
+  expect(document.querySelector('.order-pending-loader')).toHaveAttribute('aria-hidden', 'true');
   expect(alert).not.toHaveBeenCalled();
   expect(localStorage.getItem(PENDING_ORDER_KEY)).not.toBeNull();
   view.unmount(); alert.mockRestore(); jest.useRealTimers();

@@ -154,6 +154,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
                     <div className="checkout-item-quantity">
                       <button
                         className="quantity-button"
+                        aria-label={`Уменьшить количество ${item.name}`}
                         onClick={() => onRemove(item.id)}
                       >
                         -
@@ -186,6 +187,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
                       </label>
                       <button
                         className="quantity-button"
+                        aria-label={`Увеличить количество ${item.name}`}
                         onClick={() => onAdd(item.id)}
                       >
                         +
@@ -199,6 +201,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
                     </span>
                     <button
                      className="remove-item-button"
+                      aria-label={`Удалить ${item.name} из корзины`}
                       onClick={() => onDelete(item.id)}
                     >
                       🗑️
@@ -208,8 +211,8 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
               );})}
             </TransitionGroup>
             <div className="total">
-              Сумма Заказа: ₸
-              <AnimatedNumber value={total.toFixed(2)} />
+              <span>Сумма заказа:</span>
+              <span className="checkout-total-amount">₸<AnimatedNumber value={total.toFixed(2)} /></span>
             </div>
           </>
         ) : (

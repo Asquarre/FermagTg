@@ -3,11 +3,15 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const AnimatedNumber = ({ value, className = '' }) => {
   const previous = useRef(value);
-  const direction = Number(value) >= Number(previous.current) ? 'up' : 'down';
+  const previousDirection = useRef('up');
+  const direction = Number(value) === Number(previous.current)
+    ? previousDirection.current
+    : Number(value) > Number(previous.current) ? 'up' : 'down';
 
   useEffect(() => {
     previous.current = value;
-  }, [value]);
+    previousDirection.current = direction;
+  }, [value, direction]);
 
   return (
     <span className={`animated-number ${className}`}>
@@ -16,10 +20,14 @@ const AnimatedNumber = ({ value, className = '' }) => {
         .split('')
         .map((char, index) => (
           <span key={index} className="digit-wrapper">
-            <TransitionGroup component={null}>
+            <TransitionGroup
+              component={null}
+              // Exiting children otherwise retain the direction from their last render.
+              childFactory={(child) => React.cloneElement(child, { classNames: `digit-${direction}` })}
+            >
               <CSSTransition
                 key={`${char}-${index}`}
-                timeout={150}
+                timeout={300}
                 classNames={`digit-${direction}`}
               >
                 <span className="digit">{char}</span>
