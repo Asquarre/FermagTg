@@ -22,10 +22,17 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "test:orders": "node --test scripts/order-service.test.cjs scripts/build-catalog.test.cjs",
+    "dev": "node scripts/dev.cjs",
+    "predev": "npm run catalog:build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "catalog:build": "node scripts/build-catalog.cjs",
+    "prebuild": "node scripts/check-order-config.cjs && npm run catalog:build",
+    "prestart": "npm run catalog:build",
+    "pretest": "npm run catalog:build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "exceljs": "^4.4.0",
     "prettier": "3.3.3"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",

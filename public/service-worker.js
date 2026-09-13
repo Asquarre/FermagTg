@@ -68,6 +68,9 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  if (['localhost', '127.0.0.1', '[::1]'].includes(self.location.hostname)) {
+    return;
+  }
   if (event.request.method !== 'GET') {
     return;
   }

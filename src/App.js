@@ -8,8 +8,9 @@ import SearchBar from './components/SearchBar';
 import axios from 'axios';
 import AnimatedNumber from './components/AnimatedNumber';
 import { formatPrice } from './utils';
-import { categories as categoriesData, productsByCategory } from './data/products';
-import { normalizeProductName, readExcelCatalog } from './excel/excelLoader';
+import catalog from './data/catalog.generated.json';
+import { loadLastOrder, saveLastOrder } from './orderStorage';
+import { loadPendingOrder, preparePendingOrder, clearPendingOrder } from './pendingOrder';
 
 
 const App = () => {
@@ -17,111 +18,66 @@ const App = () => {
     import('./styles.css');
   }, []);
   
-  const [categories, setCategories] = useState(categoriesData);
-  const [allProducts, setAllProducts] = useState(productsByCategory);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const categories = catalog.categories;
+  const allProducts = catalog.productsByCategory;
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [cart, setCart] = useState([]);
-  const [lastOrder, setLastOrder] = useState([]);
+  const [lastOrder, setLastOrder] = useState(loadLastOrder);
   const [view, setView] = useState('categories'); // 'categories', 'products', 'checkout'
-  const [pricesLoaded, setPricesLoaded] = useState(false);
-  const [priceLoadError, setPriceLoadError] = useState(null);
+  const [pendingOrder, setPendingOrder] = useState(loadPendingOrder);
+  const [orderStatus, setOrderStatus] = useState('');
 
   useEffect(() => {
-     const buildDefaultImagePath = (itemId) =>
-      Number.isFinite(itemId) ? `/product-images/${itemId}.webp` : undefined;
-
-    const withImages = (items) =>
-      items.map((item) => ({
-        ...item,
-        image: item.image ?? buildDefaultImagePath(item.id),
-      }));
-
-    const addImagesToCatalog = (catalog) =>
-      Object.fromEntries(
-        Object.entries(catalog).map(([categoryName, items]) => [
-          categoryName,
-          withImages(items),
-        ])
-      );
-
-    const categoryPrefixMap = {
-      Заморозка: 11,
-      'хлебобулочные изделия': 22,
-      кондитерка: 33,
-      кулинария: 44,
-    };
-
-    const loadPrices = async () => {
+    if (!pendingOrder) return undefined;
+    let stopped = false;
+    let timer;
+    let submit = false;
+    let failures = 0;
+    const check = async () => {
       try {
-        const response = await fetch('/Цены.xlsx');
-        if (!response.ok) {
-          throw new Error('Не удалось загрузить файл с ценами.');
+        setOrderStatus('Оформляем заказ. Подтверждение появится после записи и оформления таблицы.');
+        const response = submit
+          ? await axios.post('/api/submit-order', pendingOrder, { timeout: 45000 })
+          : await axios.get('/api/order-status', { params: { orderId: pendingOrder.orderId }, timeout: 45000 });
+        if (stopped) return;
+        submit = false;
+        failures = 0;
+        if (response.data.status === 'confirmed') {
+          clearPendingOrder(pendingOrder.orderId);
+          setLastOrder(saveLastOrder(pendingOrder.items));
+          setCart([]);
+          setView('categories');
+          setPendingOrder(null);
+          setOrderStatus('');
+          alert(response.data.testMode
+            ? 'Тестовый заказ сохранён на компьютере. В Telegram и Google Sheets ничего не отправлено.'
+            : 'Мы приняли ваш заказ!');
+          return;
         }
-        const arrayBuffer = await response.arrayBuffer();
-       const catalog = await readExcelCatalog(arrayBuffer, { categoryPrefixMap });
-        if (!catalog || Object.keys(catalog.productsByCategory).length === 0) {
-          throw new Error('Файл цен не содержит данных для обновления.');
-        }
-         setCategories(catalog.categories);
-        setAllProducts(addImagesToCatalog(catalog.productsByCategory));
-        setSelectedCategory(null);
-        setPriceLoadError(null);
       } catch (error) {
-        console.error('Failed to load prices from Excel', error);
-        const fallbackMessage =
-          'Не удалось автоматически обновить цены. Используются сохраненные значения.';
-        const errorDetails =
-          error instanceof Error && error.message ? ` (${error.message})` : '';
-        setPriceLoadError(`${fallbackMessage}${errorDetails}`);
-      } finally {
-        setPricesLoaded(true);
-      }
-    };
-    loadPrices();
-  }, []);
-  
-
-   useEffect(() => {
-    if (selectedCategory && allProducts[selectedCategory]) {
-      setProducts(allProducts[selectedCategory]);
-      setFilteredProducts(allProducts[selectedCategory]);
-    }
-  }, [allProducts, selectedCategory]);
-
-   useEffect(() => {
-    const saved = localStorage.getItem('lastOrder');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) {
-          const normalizedOrder = parsed
-            .map((item) => {
-              if (!item || item.id === undefined || item.id === null) {
-                return null;
-              }
-              const quantity = Number(item.quantity);
-              const numericId = Number(item.id);
-              return {
-                id: Number.isFinite(numericId) ? numericId : item.id,
-                name: typeof item.name === 'string' ? item.name : '',
-                quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
-              };
-            })
-            .filter(Boolean);
-
-          setLastOrder(normalizedOrder);
-          localStorage.setItem('lastOrder', JSON.stringify(normalizedOrder));
+        if (stopped) return;
+        if (error.response?.status === 404) submit = true;
+        else if (submit && [400, 409].includes(error.response?.status)) {
+          clearPendingOrder(pendingOrder.orderId);
+          setPendingOrder(null);
+          setCart(pendingOrder.items);
+          setView('checkout');
+          alert(error.response.data?.error || 'Проверьте заказ.');
+          return;
+        } else {
+          failures++;
+          // The result of POST may be unknown: first check the same ID, never generate another.
+          submit = false;
+          setOrderStatus('Связь задерживается. Проверяем тот же заказ автоматически — повторная отправка не нужна.');
         }
-      } catch (e) {
-        console.error('Failed to parse saved order', e);
       }
-    }
-  }, []);
-
+      if (!stopped) timer = setTimeout(check, submit ? 100 : Math.min(30000, 5000 * (failures + 1)));
+    };
+    check();
+    return () => { stopped = true; clearTimeout(timer); };
+  }, [pendingOrder]);
   const handleSelectCategory = (categoryName) => {
-    setSelectedCategory(categoryName);
     const categoryProducts = allProducts[categoryName] || [];
     setProducts(categoryProducts);
     setFilteredProducts(categoryProducts);
@@ -223,59 +179,28 @@ const handleSearch = (term) => {
     setView('checkout');
   };
 
-  const handleOrderSubmit = (orderDetails) => {
-    return axios
-      .post('/api/submit-order', {
-        customerName: orderDetails.customerName || '',
-        user_id: orderDetails.user_id || '', // Include user_id
-        address: orderDetails.address,
-        phone: orderDetails.phone,
-        fulfillmentType: orderDetails.fulfillmentType || '',
-        items: cart,
-        timestamp: orderDetails.timestamp,
-      })
-      .then(() => {
-        alert('Мы приняли ваш заказ!');
-        const orderSnapshot = cart
-          .map((item) => {
-            if (item.id === undefined || item.id === null) {
-              return null;
-            }
-            const numericId = Number(item.id);
-            const quantityValue = Number(item.quantity);
-            return {
-              id: Number.isFinite(numericId) ? numericId : item.id,
-              name: item.name,
-              quantity: Number.isFinite(quantityValue) && quantityValue > 0 ? quantityValue : 1,
-            };
-          })
-          .filter(Boolean);
-        localStorage.setItem('lastOrder', JSON.stringify(orderSnapshot));
-        setLastOrder(orderSnapshot);
-        setCart([]);
-        setView('categories');
-      })
-      .catch(() => {
-        alert('Ошибка!');
-        throw new Error('Order submission failed');
+  const handleOrderSubmit = async (orderDetails) => {
+    try {
+      const pending = await preparePendingOrder({
+        customerName: orderDetails.customerName || '', address: orderDetails.address,
+        phone: orderDetails.phone, fulfillmentType: orderDetails.fulfillmentType,
+        items: cart, timestamp: orderDetails.timestamp,
       });
+      setPendingOrder(pending);
+    } catch {
+      alert('Не удалось сохранить запрос в браузере. Разрешите локальное хранение данных и повторите оформление. Заказ не отправлен.');
+    }
   };
 
   const handleRepeatOrder = () => {
     if (lastOrder && lastOrder.length > 0) {
       const productMapById = new Map();
-      const productMapByName = new Map();
+
 
       
       Object.values(allProducts).forEach((items = []) => {
         items.forEach((item) => {
           productMapById.set(item.id, item);
-          if (item.name) {
-            productMapByName.set(normalizeProductName(item.name), item);
-          }
-          if (item.catalogueName) {
-            productMapByName.set(normalizeProductName(item.catalogueName), item);
-          }
         });
       });
 
@@ -284,14 +209,7 @@ const handleSearch = (term) => {
       const missingItems = [];
 
       lastOrder.forEach((savedItem) => {
-        const productById = productMapById.get(savedItem.id);
-        let product = productById;
-
-
-        if (!product && typeof savedItem.name === 'string' && savedItem.name.trim()) {
-          product = productMapByName.get(normalizeProductName(savedItem.name));
-        }
-
+        const product = productMapById.get(savedItem.id);
 
         if (!product) {
           missingItems.push(savedItem.name || `ID ${savedItem.id}`);
@@ -321,7 +239,6 @@ const handleSearch = (term) => {
       setCart(reconstructedCart);
       if (categories.length > 0) {
         const firstCategoryName = categories[0].name;
-        setSelectedCategory(firstCategoryName);
         setProducts(allProducts[firstCategoryName]);
         setFilteredProducts(allProducts[firstCategoryName]);
       }
@@ -331,8 +248,21 @@ const handleSearch = (term) => {
     }
   };
 
+  if (pendingOrder) return (
+    <div className="app-shell">
+      <h2>Оформление заказа</h2>
+      <p role="status">{orderStatus || 'Проверяем состояние заказа…'}</p>
+      <p>После перезагрузки страницы проверка продолжится автоматически.</p>
+    </div>
+  );
+
   return (
     <div className="app-shell">
+      {process.env.NODE_ENV === 'development' && process.env.REACT_APP_LOCAL_ORDER_TEST === 'true' && (
+        <div role="status" style={{ padding: '12px', background: '#fff3cd', color: '#664d03', textAlign: 'center' }}>
+          Тестовый режим — заказы сохраняются только на этом компьютере. Telegram и Google Sheets отключены.
+        </div>
+      )}
       <header className="app-header">
        <picture>
           <source srcSet="/Logo.avif" type="image/avif" />
@@ -352,22 +282,6 @@ const handleSearch = (term) => {
           </button>
         )}
       </header>
-      {!pricesLoaded && (
-        <div
-          className="price-status-message"
-          style={{ marginBottom: '12px', color: '#555' }}
-        >
-          Загрузка актуальных цен...
-        </div>
-      )}
-      {priceLoadError && (
-        <div
-          className="price-status-message"
-          style={{ marginBottom: '12px', color: '#b3261e' }}
-        >
-          {priceLoadError}
-        </div>
-      )}
       {view === 'categories' && (
         <Categories
           categories={categories}

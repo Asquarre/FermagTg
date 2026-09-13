@@ -7,9 +7,12 @@
 
 # testing
 /coverage
+/.local-test-orders
 
 # production
 /build
+/src/data/catalog.generated.json
+~$*.xlsx
 
 # misc
 .DS_Store

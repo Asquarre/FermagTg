@@ -33,6 +33,11 @@ export const registerServiceWorker = () => {
   if (!('serviceWorker' in navigator)) {
     return;
   }
+  // Dev bundles keep the same URL; a cache-first worker can serve obsolete checkout code.
+  if (process.env.NODE_ENV === 'development') {
+    navigator.serviceWorker.getRegistration().then((registration) => registration?.unregister()).catch(() => {});
+    return;
+  }
 
   const register = async () => {
     try {

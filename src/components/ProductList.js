@@ -246,7 +246,7 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
 ProductList.propTypes = {
   products: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       catalogueName: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
@@ -260,7 +260,7 @@ ProductList.propTypes = {
   onCheckout: PropTypes.func.isRequired, // Added this line
   cart: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       catalogueName: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,

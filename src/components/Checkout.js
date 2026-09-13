@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import InputMask from "react-input-mask";
 import AnimatedNumber from './AnimatedNumber';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -10,6 +10,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const submitting = useRef(false);
   const [fulfillmentType, setFulfillmentType] = useState("delivery");
   const [quantityDrafts, setQuantityDrafts] = useState({});
   const [focusedItemId, setFocusedItemId] = useState(null);
@@ -85,6 +86,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
     setFulfillmentType(type);
   };
   const handleSubmit = async () => {
+    if (submitting.current) return;
     if (cart.length === 0) {
       alert('Ваша корзина пуста.');
       return;
@@ -102,6 +104,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
       );
       return;
     }
+    submitting.current = true;
     setIsLoading(true);
     try {
       await onSubmit({
@@ -112,6 +115,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
         timestamp: new Date().toISOString(),
       });
       } finally {
+      submitting.current = false;
       setIsLoading(false);
     }
   };
