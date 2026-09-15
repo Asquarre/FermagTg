@@ -131,6 +131,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
       <h2 className="checkout-heading">Корзина</h2>
       <div className="checkout-order-summary">
         <h3><strong>Ваш заказ</strong></h3>
+        <p className="receipt-caption">Проверьте перед оформлением</p>
         {cart.length ? (
           <>
              <TransitionGroup component="ul" className="checkout-list">
@@ -204,7 +205,9 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
                       aria-label={`Удалить ${item.name} из корзины`}
                       onClick={() => onDelete(item.id)}
                     >
-                      🗑️
+                      <svg className="receipt-remove-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="m7 7 10 10M17 7 7 17" />
+                      </svg>
                     </button>
                       </li>
                 </CSSTransition>
@@ -218,6 +221,7 @@ const Checkout = ({ onSubmit, cart, onBack, onAdd, onRemove, onSetQuantity, onDe
         ) : (
           <p>Ваша корзина пуста.</p>
         )}
+        <div className="receipt-footer">Спасибо, что выбираете Фермаг</div>
         </div>
       <div className="delivery-toggle" role="group" aria-label="Способ получения">
         <button

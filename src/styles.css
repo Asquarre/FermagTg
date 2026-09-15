@@ -11,27 +11,47 @@ html {
 }
 
 body {
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: var(--font-sans);
   margin: 0;
   padding: 0;
   color: #1d1c1c;
   min-height: 100vh;
   text-shadow: 2px 2px 9px rgba(240, 240, 240, 0);
   overflow-x: hidden; /* Prevent horizontal scrolling */
-  background: #BDA47D url('/background.png') no-repeat top center; 
-  background-image: url('/background.png'); /* Fallback background image */
+  background-color: #BDA47D !important; /* Continue BDA47D color beyond the background image */
+  overflow-y: scroll;
+}
+
+#root {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+}
+
+.page-background {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.page-background-tile {
+  display: block;
+  /* Source artwork is 800 × 1400; preserve the existing mobile scale. */
+  height: 1400px;
+  background: url('/background.png') no-repeat center / auto 100%;
   background-image: image-set(
     url('/background.avif') type('image/avif'),
     url('/background.webp') type('image/webp'),
     url('/background.png') type('image/png')
-  ); /* Preferred background images */
-  background-repeat: no-repeat; /* Do not repeat the background image */
-  background-position: top center; /* Position the background image at the top center */
-  background-size: auto; /* Default background size */
-  background-attachment: scroll; /* Ensure the background scrolls with the content */
-  background-color: #BDA47D !important; /* Continue BDA47D color beyond the background image */
-  overflow-y: scroll;
+  );
 }
+
+.page-background-tile:nth-child(even) {
+  transform: scaleY(-1);
+}
+
 
 .app-shell {
   width: 100%;
@@ -52,7 +72,7 @@ body {
   min-height: 80svh;
   display: grid;
   place-items: center;
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .order-pending-card {
@@ -176,8 +196,9 @@ body {
 
 /* Adjust background size for larger screens */
 @media (min-width: 768px) {
-  body {
-    background-size: 100% auto; /* Scale image to full width on desktop */
+  .page-background-tile {
+    height: auto;
+    aspect-ratio: 800 / 1400;
   }
 }
   h1, h2, h3 {
@@ -185,20 +206,20 @@ body {
     text-shadow: 2px 2px 9px rgba(240, 240, 240, 0.); /* Add shadow to text */
 
   }.categories-heading {
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: var(--font-sans);
   color: #ffffff;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.85);
   font-weight: bold;
   margin: 0 0 12px;
 }
 .products-heading{
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: var(--font-sans);
   color: #ffffff;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.85);
   font-weight: bold;
 }
 .checkout-heading {
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: var(--font-sans);
   color: #ffffff;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.85);
   font-weight: bold;
@@ -206,7 +227,7 @@ body {
 }
 
 .checkout-label {
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: var(--font-sans);
   color: #ffffff;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.85);
   font-weight: bold;
@@ -245,7 +266,9 @@ body {
   border-radius: 50%; /* Make the buttons circular */
   width: 36px; /* Set fixed width */
   height: 36px; /* Set fixed height */
-  font-size: 1rem; /* Font size adjusted */
+  font-size: 1.5rem; /* Larger +/- symbols without resizing the buttons */
+  line-height: 1;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -277,9 +300,9 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto 40px;
   align-items: center;
-  gap: 16px 12px;
-  margin-bottom: 8px;
-  padding: 18px 0;
+  gap: 8px 12px;
+  margin-bottom: 4px;
+  padding: 10px 0;
   border-bottom: 1px solid #eee7dc;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 12px;
@@ -435,7 +458,7 @@ quantity-value {
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  font-family: 'Sf Pro Rounded', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .delivery-toggle-option .delivery-toggle-label {
@@ -963,17 +986,109 @@ header img:hover {
 
 /* Checkout Order Summary Styling */
 .checkout-order-summary {
-  background-color: #ffffff; /* White background */
-  padding: 20px 16px;
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  margin-bottom: 20px; /* Spacing below the box */
-  color: #333; /* Text color */
+  position: relative;
+  background: #fffdf5;
+  padding: 22px 18px 18px;
+  border-radius: 2px;
+  box-shadow: 0 8px 18px rgba(55, 41, 22, 0.16);
+  margin-bottom: 32px;
+  color: #39362f;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.checkout-order-summary::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background:
+    linear-gradient(135deg, #fffdf5 50%, transparent 51%) 0 0 / 16px 10px repeat-x,
+    linear-gradient(225deg, #fffdf5 50%, transparent 51%) 0 0 / 16px 10px repeat-x;
+  pointer-events: none;
+}
+
+.receipt-remove-icon {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.receipt-caption {
+  margin: 0 0 6px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed #aaa18f;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+}
+
+.receipt-footer {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px dashed #aaa18f;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.checkout-order-summary .checkout-item {
+  background: transparent;
+  border-radius: 0;
+  border-bottom: 1px dashed #c8c0af;
+}
+
+.checkout-order-summary .quantity-button {
+  background: transparent;
+  color: #39362f;
+  border: 1px solid #aaa18f;
+  box-shadow: none;
+}
+
+.checkout-order-summary .remove-item-button {
+  background: transparent;
+  color: #39362f;
+  border: 1px dashed #aaa18f;
+  box-shadow: none;
+}
+
+.checkout-order-summary .quantity-button:hover {
+  background: #eee9dc;
+}
+
+.checkout-order-summary .remove-item-button:hover,
+.checkout-order-summary .remove-item-button:focus-visible {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
+}
+
+.checkout-order-summary .product-quantity-input:focus {
+  outline-color: #8d8069;
+}
+
+.checkout-order-summary .product-quantity-value,
+.checkout-order-summary .product-quantity-input {
+  font-size: 1.1em;
+  font-weight: 700;
 }
 
 .checkout-order-summary h3 {
   text-align: center;
-  margin: 0 0 8px;
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   
 }
 
@@ -983,20 +1098,21 @@ header img:hover {
 }
 
 .checkout-order-summary li {
-  margin-bottom: 10px; /* Add spacing between list items */
+  margin-bottom: 4px;
 }
 
 .checkout-order-summary .total {
   font-size: 1.2rem; /* Larger font for total */
   font-weight: bold;
-  margin-top: 15px; /* Space above total */
+  margin-top: 10px;
   text-align: right; /* Align total to the right */
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   flex-wrap: wrap;
   gap: 8px 16px;
-  padding-top: 16px;
+  padding-top: 10px;
+  border-top: 3px double #aaa18f;
 }
 
 .checkout-total-amount {

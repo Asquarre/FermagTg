@@ -23,8 +23,7 @@ const APP_SHELL = [
   '/Logo.avif',
   '/Logo.webp',
   '/logo192.png',
-  '/logo512.png',
-  '/fonts.css'
+  '/logo512.png'
 ];
 
 self.addEventListener('install', (event) => {

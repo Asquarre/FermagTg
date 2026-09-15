@@ -1,5 +1,3 @@
-import './styles.css';
-
 import React, { useState, useEffect } from 'react';
 import Categories from './components/Categories';
 import ProductList from './components/ProductList';
@@ -14,10 +12,6 @@ import { loadPendingOrder, preparePendingOrder, clearPendingOrder } from './pend
 
 
 const App = () => {
-    useEffect(() => {
-    import('./styles.css');
-  }, []);
-  
   const categories = catalog.categories;
   const allProducts = catalog.productsByCategory;
   const [products, setProducts] = useState([]);
