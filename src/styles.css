@@ -1018,6 +1018,19 @@ header img:hover {
   stroke-linecap: round;
 }
 
+@media (max-width: 767px) {
+  .receipt-remove-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    stroke-width: 3;
+  }
+
+  .checkout-order-summary .remove-item-button {
+    padding: 0;
+  }
+}
+
 .receipt-caption {
   margin: 0 0 6px;
   padding-bottom: 16px;
