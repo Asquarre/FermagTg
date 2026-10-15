@@ -22,6 +22,10 @@
 
 Проверка преобразования: `node --test scripts/build-catalog.test.cjs`.
 
+Фотографии версионируются автоматически по содержимому файлов при сборке. Добавление или замена фото меняет его URL (`?v=…`); неизменённые фото сохраняют адрес и продолжают браться из кэша. Используются только существующие AVIF/WebP/PNG/JPG/JPEG-файлы. Для отсутствующих фото сразу записывается адрес заглушки. Чтобы увидеть новые фото во время локальной разработки, выполните `npm run catalog:build`.
+
+Переход на технический кэш `fermagtg-static-V2` однократно удаляет старый статический кэш при обновлении service worker. `lastOrder:v2`, `pendingOrder:v1` и кэш `fermagtg-user-orders` сохраняются. HTML и ответы с ошибками не кэшируются как фотографии. Проверка: `npm run test:cache`.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

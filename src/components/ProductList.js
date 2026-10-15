@@ -3,62 +3,28 @@ import PropTypes from 'prop-types';
 import AnimatedNumber from './AnimatedNumber';
 import { formatPrice } from '../utils';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import catalog from '../data/catalog.generated.json';
 
-const FALLBACK_IMAGE = '/product-images/Default.avif';
+const FALLBACK_IMAGE = catalog.fallbackImage || '/product-images/Default.avif';
 const FALLBACK_SOURCES = {
   avif: FALLBACK_IMAGE,
   webp: undefined,
   fallback: FALLBACK_IMAGE,
 };
 
-const buildImageSources = (src) => {
+const buildImageSources = (src, sources) => {
+  if (sources?.fallback) return sources;
   if (!src || src === FALLBACK_IMAGE) {
     return FALLBACK_SOURCES;
   }
 
-  const [pathWithoutQuery, queryString] = src.split('?');
-  const extensionIndex = pathWithoutQuery.lastIndexOf('.');
-
-  if (extensionIndex === -1) {
-    return {
-      avif: undefined,
-      webp: undefined,
-      fallback: src,
-    };
-  }
-
-  const basePath = pathWithoutQuery.slice(0, extensionIndex);
-  const query = queryString ? `?${queryString}` : '';
-  const extension = pathWithoutQuery.slice(extensionIndex + 1).toLowerCase();
-
-  const avifSource = `${basePath}.avif${query}`;
-  const webpSource = `${basePath}.webp${query}`;
-
-  if (extension === 'avif') {
-    return {
-      avif: src,
-      webp: webpSource,
-      fallback: webpSource,
-    };
-  }
-
-  if (extension === 'webp') {
-    return {
-      avif: avifSource,
-      webp: src,
-      fallback: src,
-    };
-  }
-
-  return {
-    avif: avifSource,
-    webp: webpSource,
-    fallback: src,
-  };
+  // Do not invent alternate extensions: the build lists only existing files.
+  return { fallback: src };
 };
 
 const handleImageError = (event) => {
   const img = event.currentTarget;
+  if (img.currentSrc === new URL(FALLBACK_IMAGE, window.location.href).href) return;
   img.onerror = null;
 
   const picture = img.closest('picture');
@@ -160,7 +126,7 @@ const [quantityDrafts, setQuantityDrafts] = useState({});
           {products.map((product) => {
             const nodeRef = getNodeRef(product.id);
             const imageSrc = product.image || FALLBACK_IMAGE;
-            const { avif, webp, fallback } = buildImageSources(imageSrc);
+            const { avif, webp, fallback } = buildImageSources(imageSrc, product.imageSources);
             const currentQuantity = getProductQuantity(product.id);
             const draftValue = (quantityDrafts[product.id] ?? String(currentQuantity)).replace('.', ',');
             const isFocused = focusedProductId === product.id;

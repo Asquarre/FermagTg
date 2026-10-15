@@ -1,7 +1,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const ExcelJS = require('exceljs');
-const { makeCatalog } = require('./build-catalog.cjs');
+const { makeCatalog, attachImages } = require('./build-catalog.cjs');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const os = require('node:os');
@@ -18,6 +18,8 @@ test('CLI creates the catalog directory in a clean checkout and supports rebuild
   try {
     await fs.mkdir(path.join(root, 'scripts'));
     await fs.mkdir(path.join(root, 'public'));
+    await fs.mkdir(path.join(root, 'public/product-images'));
+    await fs.copyFile(path.join(__dirname, '../public/product-images/Default.avif'), path.join(root, 'public/product-images/Default.avif'));
     const script = path.join(root, 'scripts/build-catalog.cjs');
     await fs.copyFile(path.join(__dirname, 'build-catalog.cjs'), script);
     await workbook([['0012', 'Хлеб', 150]]).xlsx.writeFile(path.join(root, 'public/Цены.xlsx'));
@@ -69,4 +71,32 @@ test('moving a product between categories does not change its code', () => {
   const book = new ExcelJS.Workbook();
   book.addWorksheet('Новая').addRow(['12', 'Хлеб', 200]);
   assert.equal(before.productsByCategory.Категория[0].id, makeCatalog(book).productsByCategory.Новая[0].id);
+});
+
+test('photo versions change only with file contents; missing photos use a versioned placeholder', async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'catalog-images-test-'));
+  try {
+    await fs.writeFile(path.join(directory, 'Default.avif'), 'placeholder');
+    await fs.writeFile(path.join(directory, '0012.avif'), 'photo one');
+    const build = () => attachImages(makeCatalog(workbook([['0012', 'Хлеб', 100], ['0020', 'Торт', 200]])), directory);
+    const first = await build();
+    const [photo, missing] = first.productsByCategory.Категория;
+    assert.match(photo.image, /^\/product-images\/0012\.avif\?v=[a-f0-9]{16}$/);
+    assert.equal(photo.imageSources.avif, photo.image);
+    assert.equal(photo.imageSources.webp, undefined);
+    assert.equal(missing.image, first.fallbackImage);
+    assert.match(first.fallbackImage, /Default\.avif\?v=/);
+    assert.equal((await build()).productsByCategory.Категория[0].image, photo.image);
+    await fs.writeFile(path.join(directory, '0012.avif'), 'photo two');
+    await fs.writeFile(path.join(directory, '0020.webp'), 'new photo');
+    const next = await build();
+    assert.notEqual(next.productsByCategory.Категория[0].image, photo.image);
+    assert.equal(next.fallbackImage, first.fallbackImage);
+    assert.match(next.productsByCategory.Категория[1].image, /0020\.webp\?v=/);
+    assert.equal(next.productsByCategory.Категория[1].imageSources.avif, undefined);
+    const repriced = await attachImages(makeCatalog(workbook([['0012', 'Новое имя', 999]])), directory);
+    assert.equal(repriced.productsByCategory.Категория[0].image, next.productsByCategory.Категория[0].image);
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
 });

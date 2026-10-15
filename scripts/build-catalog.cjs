@@ -1,6 +1,7 @@
 const ExcelJS = require('exceljs');
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const { createHash } = require('node:crypto');
 
 const text = (value) => {
   if (value === null || value === undefined) return '';
@@ -63,14 +64,44 @@ async function main() {
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.readFile(path.join(root, 'public/Цены.xlsx'));
   const catalog = makeCatalog(workbook);
+  await attachImages(catalog, path.join(root, 'public/product-images'));
   const destination = path.join(root, 'src/data/catalog.generated.json');
   await fs.mkdir(path.dirname(destination), { recursive: true });
   await fs.writeFile(destination, JSON.stringify(catalog, null, 2) + '\n');
   console.log(`Каталог подготовлен: ${catalog.categories.length} категории, ${Object.values(catalog.productsByCategory).flat().length} товаров.`);
 }
 
+async function attachImages(catalog, directory) {
+  const assets = new Map();
+  const asset = (filename) => {
+    if (!assets.has(filename)) assets.set(filename, fs.readFile(path.join(directory, filename)).then((data) => {
+      const version = createHash('sha256').update(data).digest('hex').slice(0, 16);
+      return `/product-images/${encodeURIComponent(filename)}?v=${version}`;
+    }).catch((error) => {
+      if (error.code === 'ENOENT') return undefined;
+      throw error;
+    }));
+    return assets.get(filename);
+  };
+  const sourcesFor = async (code) => {
+    const [avif, webp, png, jpg, jpeg] = await Promise.all(
+      ['avif', 'webp', 'png', 'jpg', 'jpeg'].map((extension) => asset(`${code}.${extension}`)),
+    );
+    const fallback = webp || png || jpg || jpeg || avif;
+    return fallback ? { avif, webp, fallback } : null;
+  };
+  const placeholder = await sourcesFor('Default');
+  if (!placeholder) throw new Error('Не найдена заглушка public/product-images/Default');
+  catalog.fallbackImage = placeholder.fallback;
+  await Promise.all(Object.values(catalog.productsByCategory).flat().map(async (product) => {
+    product.imageSources = await sourcesFor(product.id) || placeholder;
+    product.image = product.imageSources.fallback;
+  }));
+  return catalog;
+}
+
 if (require.main === module) main().catch((error) => {
   console.error(`Ошибка каталога: ${error.message}`);
   process.exitCode = 1;
 });
-module.exports = { makeCatalog };
+module.exports = { makeCatalog, attachImages };
