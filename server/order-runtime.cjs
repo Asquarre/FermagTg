@@ -1,10 +1,11 @@
 const { createOrderService } = require('./order-service.cjs');
 const { createIntegrations } = require('./order-integrations.cjs');
+const { getCatalog } = require('./catalog-runtime.cjs');
 let service;
 function getService() {
   if (!service) {
     service = createOrderService({ ...createIntegrations(),
-      catalog: require('../src/data/catalog.generated.json') });
+      catalog: getCatalog });
   }
   return service;
 }

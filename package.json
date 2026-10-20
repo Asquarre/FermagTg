@@ -6,11 +6,13 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@vercel/blob": "^2.8.2",
     "axios": "^1.7.7",
     "body-parser": "^1.20.3",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
     "express": "^4.21.1",
     "googleapis": "^144.0.0",
     "react": "^18.3.1",
@@ -22,6 +24,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "catalog:prepare-sync": "node scripts/prepare-catalog-sync.cjs",
+    "catalog:upload-local": "node scripts/upload-local-catalog.cjs",
+    "test:catalog-sync": "node --test scripts/catalog-sync.test.cjs",
+    "test:catalog-sync-http": "node --test scripts/catalog-sync-http.test.cjs",
     "test:cache": "node --test scripts/build-catalog.test.cjs scripts/service-worker.test.cjs",
     "test:orders": "node --test scripts/order-service.test.cjs scripts/build-catalog.test.cjs",
     "dev": "node scripts/dev.cjs",
@@ -54,7 +60,6 @@
     ]
   },
   "devDependencies": {
-    "exceljs": "^4.4.0",
     "prettier": "3.3.3"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",

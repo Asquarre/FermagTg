@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Categories from './components/Categories';
 import ProductList from './components/ProductList';
 import Checkout from './components/Checkout';
@@ -6,20 +6,38 @@ import SearchBar from './components/SearchBar';
 import axios from 'axios';
 import AnimatedNumber from './components/AnimatedNumber';
 import { formatPrice } from './utils';
-import catalog from './data/catalog.generated.json';
+import { useLiveCatalog, updateCartPrices, pricesDiffer } from './liveCatalog';
 import { loadLastOrder, saveLastOrder } from './orderStorage';
 import { loadPendingOrder, preparePendingOrder, clearPendingOrder } from './pendingOrder';
 
 
 const App = () => {
-  const categories = catalog.categories;
-  const allProducts = catalog.productsByCategory;
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [lastOrder, setLastOrder] = useState(loadLastOrder);
   const [view, setView] = useState('categories'); // 'categories', 'products', 'checkout'
   const [pendingOrder, setPendingOrder] = useState(loadPendingOrder);
+  const { catalog, refresh: refreshCatalog } = useLiveCatalog(Boolean(pendingOrder));
+  const categories = catalog.categories;
+  const allProducts = catalog.productsByCategory;
+  const [priceNotice, setPriceNotice] = useState(false);
+  const cartRef = useRef(cart);
+  cartRef.current = cart;
+
+  useEffect(() => {
+    const byId = new Map(Object.values(catalog.productsByCategory).flat().map((p) => [p.id, p]));
+    setProducts((items) => items.map((item) => byId.get(item.id) || item));
+    setFilteredProducts((items) => items.map((item) => byId.get(item.id) || item));
+    // Never change the frozen request while its acceptance is being checked.
+    if (!pendingOrder) {
+      const updated = updateCartPrices(cartRef.current, catalog);
+      if (pricesDiffer(cartRef.current, updated)) {
+        setPriceNotice(true);
+        setCart(updated);
+      }
+    }
+  }, [catalog, pendingOrder]);
 
   useEffect(() => {
     if (!pendingOrder) return undefined;
@@ -54,6 +72,7 @@ const App = () => {
           setPendingOrder(null);
           setCart(pendingOrder.items);
           setView('checkout');
+          refreshCatalog().catch(() => {});
           alert(error.response.data?.error || 'Проверьте заказ.');
           return;
         } else {
@@ -66,7 +85,7 @@ const App = () => {
     };
     check();
     return () => { stopped = true; clearTimeout(timer); };
-  }, [pendingOrder]);
+  }, [pendingOrder, refreshCatalog]);
   const handleSelectCategory = (categoryName) => {
     const categoryProducts = allProducts[categoryName] || [];
     setProducts(categoryProducts);
@@ -170,11 +189,30 @@ const handleSearch = (term) => {
   };
 
   const handleOrderSubmit = async (orderDetails) => {
+    let current;
+    try {
+      current = await refreshCatalog();
+      if (!current) throw new Error('Catalog unavailable');
+    } catch {
+      alert('Не удалось проверить актуальные цены. Заказ не отправлен. Проверьте подключение и попробуйте ещё раз.');
+      return;
+    }
+    const refreshedCart = updateCartPrices(cartRef.current, current);
+    if (!refreshedCart.length) {
+      alert('Ваша корзина пуста.');
+      return;
+    }
+    if (pricesDiffer(cart, updateCartPrices(cart, current))) {
+      setCart(refreshedCart);
+      setPriceNotice(true);
+      alert('Цены обновились. Проверьте сумму и нажмите оформить заказ ещё раз.');
+      return;
+    }
     try {
       const pending = await preparePendingOrder({
         customerName: orderDetails.customerName || '', address: orderDetails.address,
         phone: orderDetails.phone, fulfillmentType: orderDetails.fulfillmentType,
-        items: cart, timestamp: orderDetails.timestamp,
+        items: refreshedCart, timestamp: orderDetails.timestamp,
       });
       setPendingOrder(pending);
     } catch {
@@ -258,6 +296,9 @@ const handleSearch = (term) => {
 
   return (
     <div className="app-shell">
+      {priceNotice && <p role="status" style={{ padding: '10px', background: '#fff3cd', color: '#664d03' }}>
+        Цены обновились. Проверьте сумму заказа.
+      </p>}
       {process.env.NODE_ENV === 'development' && process.env.REACT_APP_LOCAL_ORDER_TEST === 'true' && (
         <div role="status" style={{ padding: '12px', background: '#fff3cd', color: '#664d03', textAlign: 'center' }}>
           Тестовый режим — заказы сохраняются только на этом компьютере. Telegram и Google Sheets отключены.

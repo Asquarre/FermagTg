@@ -8,6 +8,8 @@
 # testing
 /coverage
 /.local-test-orders
+/.catalog-sync
+/.vercel
 
 # production
 /build

@@ -6,8 +6,10 @@ import axios from 'axios';
 import { PENDING_ORDER_KEY } from './pendingOrder';
 
 jest.mock('axios', () => ({ post: jest.fn(), get: jest.fn() }));
-jest.mock('./components/Checkout', () => ({ cart }) => (
-  <div data-testid="restored-cart">{JSON.stringify(cart)}</div>
+jest.mock('./components/Checkout', () => ({ cart, onSubmit }) => (
+  <><div data-testid="restored-cart">{JSON.stringify(cart)}</div>
+    <button onClick={() => onSubmit({ customerName: 'Тест', phone: '+77001234567', address: '', fulfillmentType: 'Самовывоз' })}>Тестовая отправка</button>
+  </>
 ));
 
 beforeEach(() => localStorage.clear());
@@ -64,4 +66,28 @@ test('does not match a missing code by product name', () => {
   expect(alert).toHaveBeenCalledWith(expect.stringContaining('Товары недоступны'));
   expect(screen.queryByTestId('restored-cart')).not.toBeInTheDocument();
   alert.mockRestore();
+});
+
+test('repeat uses fetched prices; a price change on submit requires reconfirmation without posting', async () => {
+  const product = Object.values(catalog.productsByCategory).flat()[0];
+  const changed = JSON.parse(JSON.stringify(catalog));
+  Object.values(changed.productsByCategory).flat()[0].price = product.price + 10;
+  const wasFetch = global.fetch;
+  global.fetch = jest.fn()
+    .mockResolvedValueOnce({ ok: true, json: async () => catalog })
+    .mockResolvedValueOnce({ ok: true, json: async () => changed });
+  saveLastOrder([{ ...product, quantity: 2 }]);
+  axios.post.mockClear();
+  const alert = jest.spyOn(window, 'alert').mockImplementation(() => {});
+  const view = render(<App />);
+  try {
+    await act(async () => { await Promise.resolve(); });
+    fireEvent.click(screen.getByRole('button', { name: /Повторить прошлый заказ/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Тестовая отправка' }));
+    await waitFor(() => expect(alert).toHaveBeenCalledWith('Цены обновились. Проверьте сумму и нажмите оформить заказ ещё раз.'));
+    expect(JSON.parse(screen.getByTestId('restored-cart').textContent)[0]).toEqual({ ...product, price: product.price + 10, quantity: 2 });
+    expect(axios.post).not.toHaveBeenCalled();
+    expect(localStorage.getItem(PENDING_ORDER_KEY)).toBeNull();
+    expect(localStorage.getItem('lastOrder:v2')).not.toBeNull();
+  } finally { view.unmount(); global.fetch = wasFetch; alert.mockRestore(); }
 });

@@ -51,7 +51,9 @@ function createOrderService({ sheets, telegram, catalog, now = Date.now }) {
       if (existing.hash && existing.hash !== hash) throw new OrderError(409, 'Этот запрос уже принят с другим составом.');
       return existing;
     }
-    const products = new Map(Object.values(catalog.productsByCategory).flat().map((item) => [item.id, item]));
+    // Confirm an already accepted ID even if the price store is temporarily offline.
+    const currentCatalog = typeof catalog === 'function' ? await catalog() : catalog;
+    const products = new Map(Object.values(currentCatalog.productsByCategory).flat().map((item) => [item.id, item]));
     const items = payload.items.map((item) => {
       const product = products.get(item.id);
       if (!product || product.price !== item.price) throw new OrderError(409, 'Каталог изменился. Обновите страницу и проверьте корзину.');

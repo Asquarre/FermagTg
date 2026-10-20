@@ -1,0 +1,42 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs/promises');
+const path = require('node:path');
+const os = require('node:os');
+const { randomUUID } = require('node:crypto');
+const ExcelJS = require('exceljs');
+const { createLocalOrdersApp } = require('./local-orders.cjs');
+const built = require('../src/data/catalog.generated.json');
+
+test('HTTP: XLSX → isolated disk store → catalog JSON → local test order; restart keeps prices', async (t) => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'fermag-sync-test-'));
+  const secret = 'local-test-only-'.repeat(4);
+  const server = createLocalOrdersApp(directory, { catalogSecret: secret }).listen(0, '127.0.0.1');
+  await new Promise((resolve, reject) => { server.once('listening', resolve); server.once('error', reject); });
+  t.after(async () => { await new Promise((resolve) => server.close(resolve)); await fs.rm(directory, { recursive: true }); });
+  const origin = `http://127.0.0.1:${server.address().port}`;
+  const book = new ExcelJS.Workbook(), sheet = book.addWorksheet('Prices');
+  const products = Object.values(built.productsByCategory).flat();
+  sheet.addRows(products.map((p) => [p.id, p.name, p.price + 1]));
+  const body = Buffer.from(await book.xlsx.writeBuffer());
+  const headers = { Authorization: `Bearer ${secret}`, 'Content-Type': 'application/octet-stream', 'X-Catalog-Updated-At': new Date().toISOString() };
+  const upload = await fetch(`${origin}/api/catalog-sync`, { method: 'POST', headers, body });
+  assert.equal(upload.status, 200); assert.equal((await upload.json()).matchedProducts, products.length);
+  const replay = await fetch(`${origin}/api/catalog-sync`, { method: 'POST', headers, body });
+  assert.equal((await replay.json()).unchanged, true);
+  const current = await (await fetch(`${origin}/api/catalog`)).json();
+  const first = Object.values(current.productsByCategory).flat()[0];
+  assert.equal(first.price, products[0].price + 1);
+  const orderId = randomUUID();
+  const order = await fetch(`${origin}/api/submit-order`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ orderId, items: [{ ...first, quantity: 2 }] }) });
+  assert.equal((await order.json()).testMode, true);
+  const saved = JSON.parse(await fs.readFile(path.join(directory, `${orderId}.json`), 'utf8'));
+  assert.equal(saved.total, first.price * 2);
+  assert.deepEqual(saved.delivery, { telegram: 'not_sent', googleSheets: 'not_sent' });
+  const { createLocalCatalog } = require('../server/catalog-local.cjs');
+  const restarted = createLocalCatalog(path.join(directory, 'catalog'), secret);
+  let data;
+  await restarted.read({ method: 'GET' }, { setHeader() {}, json(value) { data = value; } });
+  assert.equal(Object.values(data.productsByCategory).flat()[0].price, first.price);
+});

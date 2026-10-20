@@ -3,9 +3,14 @@ const express = require('express');
 const { mkdir, writeFile, readFile } = require('node:fs/promises');
 const path = require('node:path');
 const { validId } = require('../server/order-service.cjs');
+const { createLocalCatalog } = require('../server/catalog-local.cjs');
 
-function createLocalOrdersApp(directory) {
+function createLocalOrdersApp(directory, { catalogSecret } = {}) {
   const app = express();
+  const catalog = createLocalCatalog(path.join(directory, 'catalog'), catalogSecret);
+  app.all('/api/catalog', catalog.read);
+  // Register before express.json: the receiver expects a bounded binary XLSX body.
+  app.all('/api/catalog-sync', catalog.upload);
   app.use(express.json({ limit: '1mb' }));
   app.post('/api/submit-order', async (req, res) => {
     const { items } = req.body || {};

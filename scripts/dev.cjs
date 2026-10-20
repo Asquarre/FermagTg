@@ -1,11 +1,15 @@
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { createLocalOrdersApp } = require('./local-orders.cjs');
+const fs = require('node:fs');
 
 const root = path.resolve(__dirname, '..');
 const directory = path.join(root, '.local-test-orders');
 let frontend;
-const api = createLocalOrdersApp(directory).listen(0, '127.0.0.1', () => {
+let catalogSecret;
+try { catalogSecret = JSON.parse(fs.readFileSync(path.join(root, '.catalog-sync/local-config.json'), 'utf8')).key; }
+catch (error) { if (error.code !== 'ENOENT') throw error; }
+const api = createLocalOrdersApp(directory, { catalogSecret }).listen(0, '127.0.0.1', () => {
   console.log(`ТЕСТОВЫЙ РЕЖИМ: заказы записываются только в ${directory}`);
   console.log('Telegram и Google Sheets не подключаются. Открыть: http://localhost:3000');
   frontend = spawn(process.execPath, [require.resolve('react-scripts/scripts/start')], {

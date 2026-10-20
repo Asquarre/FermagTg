@@ -1,0 +1,9 @@
+.catalog-sync
+.local-test-orders
+credentials.json
+backend/credentials.json
+backend/.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
